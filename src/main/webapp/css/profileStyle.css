@@ -1,0 +1,91 @@
+
+#profile{
+	height: 100%;
+}
+
+#firstRow{
+	width: 100%;
+	height: 100%;
+	margin-top: 0%;
+	margin-bottom: 0%;
+}
+
+#divProfileMenu{
+	background-color: rgb(25,25,112);
+	margin-left: 0%;
+	margin-right: 0%;
+}
+
+
+#photoProfile{
+	margin-bottom: 2%;
+	margin-top: 2%;
+	margin-right: 10%;
+	margin-left: 10%;
+}
+
+h6{
+	color: rgb(0,0,255);
+}
+
+#inputFile{
+	background-color: rgb(0,123,255);
+	margin-left: 15%;
+	margin-right: 15%;
+	font-size: 90%;
+	width: 70%;
+}
+
+#uploadBtn{
+	font-size: 110%;
+	margin-top: 6%;
+	width: 25%;
+}
+
+#tableJumbotron{
+	width: 100%;
+	margin-bottom: 0%;
+	margin-top: 1%;
+	padding: 0%;
+}
+
+#divTable{
+	padding-top: 2%;
+}
+
+.field-name{
+	width: 30%;
+	color: rgb(0,0,255);
+	font-size: 140%;
+}
+
+.btn-color{
+	background-color: rgb(255,165,0) !important;
+}
+
+#saveBtn{
+	font-size: 120%;
+	margin-top: 5%;
+	width: 20%;
+}
+
+#secondRow{
+	margin-top: 5%;
+}
+
+
+#h1Fiends{
+	margin-top: -2%;
+	color: rgb(0,0,255);
+}
+
+#friendsList{
+	margin-top: 1%;
+	margin-bottom: 1%;
+}
+
+#addFriend{
+	font-size: 120%;
+	margin-top: 1%;
+	width: 20%;
+}
