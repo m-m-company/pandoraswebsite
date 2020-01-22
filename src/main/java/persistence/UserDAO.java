@@ -118,8 +118,7 @@ public class UserDAO {
 
     public User getUserByEmail(String email){
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT * FROM public.user WHERE email = ?";
-        System.out.println(email);
+        String query = "SELECT * FROM user WHERE email = ?";
         try {
             statement = connection.prepareStatement(query);
             statement.setString(1, email);
