@@ -1,22 +1,18 @@
 package persistence;
 
-import model.Game;
-import model.User;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 public class HoursPlayedDAO {
+
     private PreparedStatement statement;
 
     public TreeMap<Integer, Integer> getHoursPlayedFromIdUser(int id)
     {
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         String query = "SELECT * FROM public.hours_played WHERE hours_played.user = ?::integer";
         try {
             statement = connection.prepareStatement(query);
@@ -33,9 +29,6 @@ public class HoursPlayedDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-        finally{
-            DataSource.getInstance().closeConnection();
         }
         return null;
     }

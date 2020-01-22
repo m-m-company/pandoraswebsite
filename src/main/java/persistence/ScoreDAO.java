@@ -14,7 +14,7 @@ public class ScoreDAO {
 
     public ArrayList<Pair<Integer, String>> getScoresFromIdUser(int id)
     {
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         String query = "SELECT score.value, game.name FROM public.score, public.game WHERE score.game = game.idgame and score.user = ?::integer";
         try {
             statement = connection.prepareStatement(query);
@@ -31,15 +31,12 @@ public class ScoreDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        finally{
-            DataSource.getInstance().closeConnection();
-        }
         return null;
     }
 
     public ArrayList<Score> getScoresFromIdGame(int id)
     {
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         String query = "SELECT * FROM public.score WHERE score.game = ? ORDER BY value DESC LIMIT 5";
         try {
             statement = connection.prepareStatement(query);
@@ -61,9 +58,6 @@ public class ScoreDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-        finally{
-            DataSource.getInstance().closeConnection();
         }
         return null;
     }

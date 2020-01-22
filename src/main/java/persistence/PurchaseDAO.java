@@ -13,11 +13,12 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class PurchaseDAO {
+
     private PreparedStatement statement;
 
     public TreeMap<Integer,Integer> getGamesYearFromIdUser(int id)
     {
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         String query = "SELECT * FROM public.purchase WHERE purchase.user = ?::integer";
         try {
             statement = connection.prepareStatement(query);
@@ -51,15 +52,12 @@ public class PurchaseDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        finally{
-            DataSource.getInstance().closeConnection();
-        }
         return null;
     }
 
     public SoldGames getSoldGamesFromIdUser(int id)
     {
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         TreeMap<Integer,Integer> soldGPerYear = new TreeMap<Integer,Integer>();
         TreeMap<Integer,Double> earnedMoneyPerYear = new TreeMap<Integer,Double>();
         String queryYears = "SELECT EXTRACT(YEAR FROM date) FROM public.purchase;";
@@ -107,16 +105,12 @@ public class PurchaseDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        finally
-        {
-            DataSource.getInstance().closeConnection();
-        }
         return null;
     }
 
     public ArrayList<Game> getBestThreeSoldGames()
     {
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         String query = "SELECT previewimg.link, previewimg.game FROM public.previewimg WHERE previewimg.front = true and previewimg.game IN (SELECT purchase.game FROM public.purchase GROUP BY purchase.game ORDER BY count(*) DESC LIMIT 3);";
         try
         {
@@ -135,15 +129,11 @@ public class PurchaseDAO {
         {
             e.printStackTrace();
         }
-        finally
-        {
-            DataSource.getInstance().closeConnection();
-        }
         return null;
     }
 
     public void insertNewPurchase(Acquisto acquisto) {
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         int nextId = getPurchaseNextId(connection);
         String query = "INSERT INTO public.purchase values(?,?,?,?)";
         try {
@@ -156,9 +146,6 @@ public class PurchaseDAO {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-        finally{
-            DataSource.getInstance().closeConnection();
         }
     }
 
@@ -176,4 +163,5 @@ public class PurchaseDAO {
         }
         return 0;
     }
+
 }

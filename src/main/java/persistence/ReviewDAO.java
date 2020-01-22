@@ -1,7 +1,6 @@
 package persistence;
 
 
-import model.Game;
 import model.Review;
 
 import java.sql.Connection;
@@ -14,7 +13,7 @@ public class ReviewDAO {
     private PreparedStatement statement;
 
     public void addCommentForGame(int id, int stars, String comment, int author, String username){
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         String query = "INSERT INTO public.review(idreview, stars, comment, author, game, username) VALUES (default,?,?,?,?,?)";
         try {
             statement = connection.prepareStatement(query);
@@ -28,14 +27,11 @@ public class ReviewDAO {
         catch (SQLException e) {
             e.printStackTrace();
         }
-        finally{
-            DataSource.getInstance().closeConnection();
-        }
     }
 
     public ArrayList<Review> getReviewsFromIdGame(int id)
     {
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         String query = "SELECT * FROM public.review WHERE game = ?::integer";
         try {
             statement = connection.prepareStatement(query);
@@ -59,11 +55,7 @@ public class ReviewDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        finally{
-            DataSource.getInstance().closeConnection();
-        }
         return null;
     }
-
 
 }

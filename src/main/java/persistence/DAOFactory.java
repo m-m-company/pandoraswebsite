@@ -2,11 +2,12 @@ package persistence;
 
 
 public class DAOFactory {
+
     static private DAOFactory instance = null;
+
     private DAOFactory() {
         try {
             Class.forName("org.postgresql.Driver");
-
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -47,4 +48,5 @@ public class DAOFactory {
     {
         return new ScoreDAO();
     }
+    
 }

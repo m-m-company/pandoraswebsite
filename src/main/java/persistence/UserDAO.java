@@ -17,11 +17,9 @@ public class UserDAO {
 
     public ArrayList<Game> refreshLibrary(User u){
         try {
-            return this.getGames(DataSource.getInstance().getConnection(), u);
+            return this.getGames(DbAccess.getConnection(), u);
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            DataSource.getInstance().closeConnection();
         }
         return null;
     }
@@ -91,7 +89,7 @@ public class UserDAO {
     }
 
     public void insertUser(User user){
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         String query = "INSERT INTO public.user (iduser,username,email,password,description) values(default,?,?,?,?)";
         try {
             statement = connection.prepareStatement(query);
@@ -103,13 +101,10 @@ public class UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        finally {
-            DataSource.getInstance().closeConnection();
-        }
     }
 
     public void changePassword(User user, String newPassword){
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         String query = "UPDATE public.user SET password=? WHERE iduser=?";
         try {
             statement = connection.prepareStatement(query);
@@ -119,13 +114,10 @@ public class UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        finally {
-            DataSource.getInstance().closeConnection();
-        }
     }
 
     public User getUserByEmail(String email){
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         String query = "SELECT * FROM public.user WHERE email = ?";
         System.out.println(email);
         try {
@@ -138,15 +130,13 @@ public class UserDAO {
             return user;
         }catch (SQLException e){
             e.printStackTrace();
-        }finally {
-            DataSource.getInstance().closeConnection();
         }
         return new User();
     }
 
     public User getUserByIdUser(int id)
     {
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         String query = "SELECT * FROM public.user WHERE idUser = ?::integer";
         try {
             statement = connection.prepareStatement(query);
@@ -158,15 +148,12 @@ public class UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        finally{
-            DataSource.getInstance().closeConnection();
-        }
         return null;
     }
 
     public User getUserByUsernameUser(String username)
     {
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         String query = "SELECT * FROM public.user WHERE username = ?";
         try {
             statement = connection.prepareStatement(query);
@@ -178,14 +165,11 @@ public class UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        finally{
-            DataSource.getInstance().closeConnection();
-        }
         return null;
     }
 
     public void changeUserDetails(User u) {
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         String query = "UPDATE public.user SET username = ?, email = ?, description = ?, password = ?  WHERE iduser = ?::integer";
         try {
             statement = connection.prepareStatement(query);
@@ -198,13 +182,10 @@ public class UserDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        finally{
-            DataSource.getInstance().closeConnection();
-        }
     }
 
     public void addUserFriend(int friend, int main) {
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         int nextId = getFriendNextId(connection);
         String query = "INSERT INTO user_friend(iduser1,iduser2,id) values(?::integer,?::integer,?::integer)";
         try {
@@ -222,9 +203,6 @@ public class UserDAO {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-        finally{
-            DataSource.getInstance().closeConnection();
         }
     }
 
@@ -244,7 +222,7 @@ public class UserDAO {
     }
 
     public void changeProfileImageUser(int idUser, InputStream fileContent) {
-        Connection connection = DataSource.getInstance().getConnection();
+        Connection connection = DbAccess.getConnection();
         String query = "UPDATE public.user SET image = ? WHERE iduser = ?::integer";
         try {
             statement = connection.prepareStatement(query);
@@ -254,8 +232,6 @@ public class UserDAO {
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
-        finally{
-            DataSource.getInstance().closeConnection();
-        }
     }
+
 }
