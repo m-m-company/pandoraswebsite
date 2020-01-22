@@ -244,7 +244,7 @@
     </div>
     </div>
     </div>
-    <h1>ANTONIOOOOO SPATTY SPATAAAROOOOOOO</h1>
+    <h1>ANTONIOOOOO SPATTSPATAAAROOOOOOO</h1>
     <jsp:include page="footer.html" />
 </body>
 
