@@ -12,7 +12,7 @@ variables:
   azureSubscription: '662713ee-92e3-4125-a32f-9cb5135906ca'
   
   # Web app name
-  webAppName: 'pandorasjar'
+  webAppName: 'ROOT'
 
   # Environment name
   environmentName: 'pandorasjar'
