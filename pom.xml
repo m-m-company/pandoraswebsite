@@ -10,7 +10,6 @@
   <packaging>war</packaging>
 
   <name>pandorasjar Maven Webapp</name>
-  <!-- FIXME change it to the project's website -->
   <url>https://www.pandorasjar.games/</url>
 
   <properties>
@@ -61,6 +60,12 @@
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>42.2.9</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/javax.servlet.jsp.jstl/jstl-api -->
+    <dependency>
+      <groupId>jstl</groupId>
+      <artifactId>jstl</artifactId>
+      <version>1.2</version>
     </dependency>
   </dependencies>
 
