@@ -10,13 +10,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet(value = "/forgotPassword", name = "forgotPassword")
 public class ForgotPassword extends HttpServlet {
 
     private boolean checkEmail(String email){
-        User user = DAOFactory.getInstance().makeUserDAO().getUserByEmail(email);
-        return user.getEmail() == null;
+        User user = null;
+        try {
+            user = DAOFactory.getInstance().makeUserDAO().getUserByEmail(email);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user == null;
     }
 
     @Override

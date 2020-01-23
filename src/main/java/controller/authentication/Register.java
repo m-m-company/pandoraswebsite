@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.SQLException;
 
 
 @WebServlet(value = "/register", name = "register")
@@ -48,8 +49,13 @@ public class Register extends HttpServlet {
     }
 
     private boolean checkUniqueEmail(HttpServletRequest req){
-        User user = DAOFactory.getInstance().makeUserDAO().getUserByEmail(req.getParameter("email"));
-        return user.getEmail() == null;
+        User user = null;
+        try {
+            user = DAOFactory.getInstance().makeUserDAO().getUserByEmail(req.getParameter("email"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user == null;
     }
 
     @Override

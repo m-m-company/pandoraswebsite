@@ -10,9 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet(value = "/resetPassword", name = "resetPassword")
 public class ResetPassword extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("header.jsp");
@@ -27,8 +29,18 @@ public class ResetPassword extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = (String) req.getSession().getAttribute("email");
         String newPassword = req.getParameter("password");
-        User user = DAOFactory.getInstance().makeUserDAO().getUserByEmail(email);
-        DAOFactory.getInstance().makeUserDAO().changePassword(user, newPassword);
+        User user = null;
+        try {
+            user = DAOFactory.getInstance().makeUserDAO().getUserByEmail(email);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            DAOFactory.getInstance().makeUserDAO().changePassword(user, newPassword);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         resp.sendRedirect("/");
     }
+
 }

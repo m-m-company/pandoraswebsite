@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet(value = "/register/insertDatabase", name = "insertUserToDatabase")
 public class InsertDatabase extends HttpServlet {
@@ -18,8 +19,7 @@ public class InsertDatabase extends HttpServlet {
         String email = (String) session.getAttribute("email");
         String username = (String) session.getAttribute("username");
         String password = (String) session.getAttribute("password");
-        User user = new User(username, password, "ciao sono" + username, null, email, null);
-        return user;
+        return new User(username, password, "Ciao sono " + username, null, email, null);
     }
 
     @Override
@@ -30,7 +30,12 @@ public class InsertDatabase extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = createUser(req.getSession());
-        DAOFactory.getInstance().makeUserDAO().insertUser(user);
+        try {
+            DAOFactory.getInstance().makeUserDAO().insertUser(user);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         resp.sendRedirect("/?registered=true");
     }
+
 }

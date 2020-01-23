@@ -125,7 +125,7 @@ public class UserDAO {
         return null;
     }
 
-    public void insertUser(User user) {
+    public void insertUser(User user) throws SQLException {
         Connection connection = DbAccess.getConnection();
         String query = "INSERT INTO public.user(id, email, username, password, description) values(default,?,?,?,?)";
         try {
@@ -137,10 +137,12 @@ public class UserDAO {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            connection.close();
         }
     }
 
-    public void changePassword(User user, String newPassword) {
+    public void changePassword(User user, String newPassword) throws SQLException {
         Connection connection = DbAccess.getConnection();
         String query = "UPDATE public.user SET password=? WHERE id=?";
         try {
@@ -150,6 +152,8 @@ public class UserDAO {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            connection.close();
         }
     }
 

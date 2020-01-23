@@ -76,7 +76,8 @@
                         <label id="errorLabel" style="display: none"> Email o password errate! Riprova </label>
                         <button type="button" class="btn btn-primary btn-block" id="loginBtn">Log In</button>
                     </div>
-                    <a class="forgot" href="forgotPassword">Hai dimenticato la tua password?</a></form>
+                    <a class="forgot" href="forgotPassword">Hai dimenticato la tua password?</a>
+                    <a class="forgot" href="register">Non hai un account? Registrati</a></form>
             </div>
         </div>
     </div>

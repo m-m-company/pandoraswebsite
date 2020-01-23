@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 @WebServlet(value = "/getUserForComment", name = "getUserForComment")
 public class GetUserForComment extends HttpServlet {
@@ -24,7 +25,12 @@ public class GetUserForComment extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
         this.log(Integer.toString(id));
-        User user = DAOFactory.getInstance().makeUserDAO().getUserByIdUser(id);
+        User user = null;
+        try {
+            user = DAOFactory.getInstance().makeUserDAO().getUserById(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         Gson gson = new Gson();
         String response = gson.toJson(user);
         PrintWriter printWriter = resp.getWriter();

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -30,7 +31,12 @@ public class Homepage extends HttpServlet {
 
     private void setGamesCategory(String category, HttpServletRequest req)
     {
-        ArrayList<Game> games = DAOFactory.getInstance().makeGameDAO().getAllGamesFromCategory(category);
+        ArrayList<Game> games = null;
+        try {
+            games = DAOFactory.getInstance().makeGameDAO().getAllGamesFromCategory(category);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         if(games == null)
             return;
         ArrayList<Integer> lengthGamesDiv6 = new ArrayList<Integer>();

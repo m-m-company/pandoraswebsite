@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
@@ -26,12 +27,23 @@ public class GameDataSheet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int gameId = Integer.parseInt(req.getParameter("gameId"));
         DAOFactory factory = DAOFactory.getInstance();
-        Game game = factory.makeGameDAO().getGameFromIdWithPreviews(gameId);
-        String usernameDeveloper = factory.makeUserDAO().getUserByIdUser(game.getIdDeveloper()).getUsername();
+        Game game = null;
+        //Game game = factory.makeGameDAO().getGameFromIdWithPreviews(gameId);
+        String usernameDeveloper = null;
+        try {
+            usernameDeveloper = factory.makeUserDAO().getUserById(game.getIdDeveloper()).getUsername();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         ArrayList<Review> reviews = factory.makeReviewDAO().getReviewsFromIdGame(gameId);
         ArrayList<Score> scores = factory.makeScoreDAO().getScoresFromIdGame(gameId);
         if(req.getSession().getAttribute("userId") != null) {
-            boolean canBuy = factory.makeGameDAO().isGamePurchased(gameId,(int) req.getSession().getAttribute("userId"));
+            boolean canBuy = false;
+            try {
+                canBuy = factory.makeGameDAO().isGamePurchased(gameId,(int) req.getSession().getAttribute("userId"));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             req.setAttribute("canBuy", canBuy);
         }
         sortScores(scores);

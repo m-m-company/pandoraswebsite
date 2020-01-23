@@ -1,6 +1,7 @@
 package controller.profile;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,7 +22,11 @@ public class GeneralProfile extends HttpServlet{
 		User principale = null;
 		if(req.getSession().getAttribute("userId") != null){
 			idUser = (int) req.getSession().getAttribute("userId");
-			principale = DAOFactory.getInstance().makeUserDAO().getUserByIdUser(idUser);
+			try {
+				principale = DAOFactory.getInstance().makeUserDAO().getUserById(idUser);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			req.setAttribute("canSee", true);
 		}
 		else if(req.getParameter("id") != null)
@@ -41,7 +46,12 @@ public class GeneralProfile extends HttpServlet{
 		else
 		{
 			int idFriend = Integer.parseInt(req.getParameter("id"));
-			User friend = DAOFactory.getInstance().makeUserDAO().getUserByIdUser(idFriend);
+			User friend = null;
+			try {
+				friend = DAOFactory.getInstance().makeUserDAO().getUserById(idFriend);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			req.setAttribute("user", friend);
 			req.setAttribute("friend", true);
 		}

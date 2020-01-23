@@ -18,7 +18,8 @@ public class GetGameLinks extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Gson gson = new Gson();
-        Game g = DAOFactory.getInstance().makeGameDAO().getGameFromIdWithPreviews(Integer.parseInt(req.getParameter("gameID")));
+        //Game g = DAOFactory.getInstance().makeGameDAO().getGameFromIdWithPreviews(Integer.parseInt(req.getParameter("gameID")));
+        Game g = null;
         ArrayList<String> preview = g.getPreviewsVID();
         String json = gson.toJson(preview);
         PrintWriter printWriter = resp.getWriter();

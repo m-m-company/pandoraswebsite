@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,7 +34,11 @@ public class PaymentRegister extends HttpServlet
         String json = req.getParameter("data");
         Acquisto acquisto = gson.fromJson(json, Acquisto.class);
         DAOFactory.getInstance().makePurchaseDAO().insertNewPurchase(acquisto);
-        DAOFactory.getInstance().makeGameDAO().insertNewGameIntoLibrary(acquisto.getIdGame(), acquisto.getIdUser());
+        try {
+            DAOFactory.getInstance().makeGameDAO().insertNewGameIntoLibrary(acquisto.getIdGame(), acquisto.getIdUser());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         RequestDispatcher rd = req.getRequestDispatcher("/library");
         rd.forward(req,resp);
     }

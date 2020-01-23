@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Properties;
 
@@ -81,7 +82,11 @@ public class GeneralHelp extends HttpServlet
 		if(req.getSession().getAttribute("userId") != null)
 		{
 			int idUser = (int) req.getSession().getAttribute("userId");
-			loggedUser = DAOFactory.getInstance().makeUserDAO().getUserByIdUser(idUser);
+			try {
+				loggedUser = DAOFactory.getInstance().makeUserDAO().getUserById(idUser);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			String name = loggedUser.getUsername();
 			String email = loggedUser.getEmail();
 			req.setAttribute("name", name);

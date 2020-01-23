@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 @WebServlet(value="/Search")
@@ -19,7 +20,12 @@ public class SearchGame extends HttpServlet {
         String gameName = req.getParameter("ricerca");
         if(gameName != null)
         {
-            ArrayList<Game> games = DAOFactory.getInstance().makeGameDAO().getGamesFromNameLike(gameName);
+            ArrayList<Game> games = null;
+            try {
+                games = DAOFactory.getInstance().makeGameDAO().getGamesFromNameLike(gameName);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             req.setAttribute("games", games);
             RequestDispatcher rd = req.getRequestDispatcher("searchGame.jsp");
             rd.forward(req, resp);

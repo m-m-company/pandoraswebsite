@@ -17,7 +17,7 @@ public class Library extends HttpServlet {
 
     private void refreshGame(HttpServletRequest req){
         User u = (User) req.getSession().getAttribute("user");
-        u.setLibrary(DAOFactory.getInstance().makeUserDAO().refreshLibrary(u));
+        //u.setLibrary(DAOFactory.getInstance().makeUserDAO().refreshLibrary(u));
         this.log(String.valueOf(u.getLibrary()));
         req.getSession().setAttribute("user",u);
     }
