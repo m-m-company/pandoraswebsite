@@ -18,6 +18,14 @@ public class User {
 
 	public User() {}
 
+	public User(int id, String username, String password, String description, String email) {
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.description = description;
+		this.email = email;
+	}
+
 	public User(String username, String password, String description, ArrayList<User> friends, String email, ArrayList<Game> library) {
 		id = contId++;
 		this.username = username;

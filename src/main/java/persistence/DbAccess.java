@@ -7,7 +7,7 @@ import java.sql.Connection;
 
 public class DbAccess {
 
-    static Connection connection = null;
+    private static Connection connection = null;
 
     static{
         try{

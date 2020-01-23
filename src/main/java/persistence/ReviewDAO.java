@@ -12,6 +12,16 @@ import java.util.ArrayList;
 public class ReviewDAO {
     private PreparedStatement statement;
 
+    public Review createSimpleReview(ResultSet resultSet){
+        try {
+            return new Review(resultSet.getInt("id_user"), resultSet.getInt("id_game"),
+                    resultSet.getInt("stars"), resultSet.getDate("date"), resultSet.getString("content"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void addCommentForGame(int id, int stars, String comment, int author, String username){
         Connection connection = DbAccess.getConnection();
         String query = "INSERT INTO public.review(idreview, stars, comment, author, game, username) VALUES (default,?,?,?,?,?)";
