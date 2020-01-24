@@ -15,9 +15,9 @@ import persistence.DAOFactory;
 public class GeneralProfile extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		//fatto nel login
-		//req.getSession().setAttribute("userId", 1);
-		//
+		RequestDispatcher rd = null;
+		rd = req.getRequestDispatcher("header.jsp");
+		rd.include(req, resp);
 		Integer idUser = null;
 		User principale = null;
 		if(req.getSession().getAttribute("userId") != null){
@@ -47,10 +47,10 @@ public class GeneralProfile extends HttpServlet{
 			req.setAttribute("user", friend);
 			req.setAttribute("friend", true);
 		}
-		RequestDispatcher rd = null;
 		rd = req.getRequestDispatcher("profile.jsp");
-		rd.forward(req, resp);
-
+		rd.include(req, resp);
+		rd = req.getRequestDispatcher("footer.html");
+		rd.include(req, resp);
 	}
 
 }

@@ -13,7 +13,7 @@
               maxActive="100"
               minIdle="10"
               maxWait="10000"
-              initialSize="10"
+              initialSize="2"
               logAbandoned="true"
               minEvictableIdleTimeMillis="30000"
               jmxEnabled="true"
