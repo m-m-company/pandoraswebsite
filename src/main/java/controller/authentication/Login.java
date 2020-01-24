@@ -33,7 +33,6 @@ public class Login extends HttpServlet {
             resp.setStatus(301);
             return;
         }
-
         if(user.getPassword().equals(req.getParameter("password")) && user.getEmail().equals(req.getParameter("email"))){
             req.getSession().setAttribute("logged",true);
             req.getSession().setAttribute("userId", user.getId()); //WHY? WE ALREADY HAVE THE USER

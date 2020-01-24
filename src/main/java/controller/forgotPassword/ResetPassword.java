@@ -35,11 +35,7 @@ public class ResetPassword extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        try {
-            DAOFactory.getInstance().makeUserDAO().changePassword(user, newPassword);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        DAOFactory.getInstance().makeUserDAO().changePassword(user, newPassword);
         resp.sendRedirect("/");
     }
 

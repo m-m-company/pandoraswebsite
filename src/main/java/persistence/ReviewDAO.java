@@ -24,14 +24,13 @@ public class ReviewDAO {
 
     public void addCommentForGame(int id, int stars, String comment, int author, String username){
         Connection connection = DbAccess.getConnection();
-        String query = "INSERT INTO public.review(idreview, stars, comment, author, game, username) VALUES (default,?,?,?,?,?)";
+        String query = "INSERT INTO public.reviews(id, id_game, id_user, content, stars, date) VALUES (default,?,?,?,?,default)";
         try {
             statement = connection.prepareStatement(query);
-            statement.setInt(1, stars);
-            statement.setString(2, comment);
-            statement.setInt(3, author);
-            statement.setInt(4, id);
-            statement.setString(5, username);
+            statement.setInt(1, id);
+            statement.setInt(2, author);
+            statement.setString(3, comment);
+            statement.setInt(4, stars);
             statement.executeUpdate();
         }
         catch (SQLException e) {
@@ -42,7 +41,7 @@ public class ReviewDAO {
     public ArrayList<Review> getReviewsFromIdGame(int id)
     {
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT * FROM public.review WHERE game = ?::integer";
+        String query = "SELECT * FROM public.reviewuser WHERE id_game = ?::integer";
         try {
             statement = connection.prepareStatement(query);
             statement.setString(1,Integer.toString(id));
@@ -51,17 +50,9 @@ public class ReviewDAO {
                 return null;
             ArrayList<Review> reviews = new ArrayList<Review>();
             while(result.next()) {
-                Review review = new Review();
-                review.setIdGame(id);
-                review.setUsername(result.getString("username"));
-                review.setAuthor(result.getInt("author"));
-                review.setComment(result.getString("comment"));
-                review.setStars(result.getInt("stars"));
-                reviews.add(review);
+                reviews.add(createSimpleReview(result));
             }
-
             return reviews;
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

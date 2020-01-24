@@ -26,11 +26,7 @@ public class GetUserForComment extends HttpServlet {
         int id = Integer.parseInt(req.getParameter("id"));
         this.log(Integer.toString(id));
         User user = null;
-        try {
-            user = DAOFactory.getInstance().makeUserDAO().getUserById(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        user = DAOFactory.getInstance().makeUserDAO().getUserById(id);
         Gson gson = new Gson();
         String response = gson.toJson(user);
         PrintWriter printWriter = resp.getWriter();

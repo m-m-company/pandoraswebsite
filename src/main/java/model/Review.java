@@ -8,6 +8,15 @@ public class Review {
     private int idGame;
     private int stars;
     private String comment;
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     private Date date;
 
     public Review(int author, int idGame, int stars, Date date, String comment) {

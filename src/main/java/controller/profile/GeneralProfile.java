@@ -22,11 +22,7 @@ public class GeneralProfile extends HttpServlet{
 		User principale = null;
 		if(req.getSession().getAttribute("userId") != null){
 			idUser = (int) req.getSession().getAttribute("userId");
-			try {
-				principale = DAOFactory.getInstance().makeUserDAO().getUserById(idUser);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			principale = DAOFactory.getInstance().makeUserDAO().getUserById(idUser);
 			req.setAttribute("canSee", true);
 		}
 		else if(req.getParameter("id") != null)
@@ -47,11 +43,7 @@ public class GeneralProfile extends HttpServlet{
 		{
 			int idFriend = Integer.parseInt(req.getParameter("id"));
 			User friend = null;
-			try {
-				friend = DAOFactory.getInstance().makeUserDAO().getUserById(idFriend);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			friend = DAOFactory.getInstance().makeUserDAO().getUserById(idFriend);
 			req.setAttribute("user", friend);
 			req.setAttribute("friend", true);
 		}

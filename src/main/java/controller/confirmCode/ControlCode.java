@@ -16,6 +16,7 @@ public class ControlCode extends HttpServlet {
         RequestDispatcher rd = req.getRequestDispatcher("header.jsp");
         rd.include(req, resp);
         rd = req.getRequestDispatcher("controlCode.html");
+        this.log((String) req.getSession().getAttribute("secretCode"));
         rd.include(req, resp);
         rd = req.getRequestDispatcher("footer.html");
         rd.include(req, resp);

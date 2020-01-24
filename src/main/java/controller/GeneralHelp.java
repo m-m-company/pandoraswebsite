@@ -73,7 +73,7 @@ public class GeneralHelp extends HttpServlet
 
 	private void getPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
-		to = (String) req.getParameter("emailTo");
+		to = req.getParameter("emailTo");
 		if(to == null)
 		{
 			to = "pandorasjar2019@gmail.com";
@@ -82,11 +82,7 @@ public class GeneralHelp extends HttpServlet
 		if(req.getSession().getAttribute("userId") != null)
 		{
 			int idUser = (int) req.getSession().getAttribute("userId");
-			try {
-				loggedUser = DAOFactory.getInstance().makeUserDAO().getUserById(idUser);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			loggedUser = DAOFactory.getInstance().makeUserDAO().getUserById(idUser);
 			String name = loggedUser.getUsername();
 			String email = loggedUser.getEmail();
 			req.setAttribute("name", name);

@@ -15,22 +15,26 @@ import java.util.ArrayList;
 
 public class UserDAO {
     private PreparedStatement statement;
-    public ArrayList<User> getFriends(User user) throws SQLException {
+    public ArrayList<User> getFriends(User user) {
         ArrayList<User> friends = new ArrayList<User>();
         Connection connection = DbAccess.getConnection();
         String query = "SELECT u.* FROM public.user as u, public.friends as uf WHERE uf.id_user1 = ?::integer and u.id = uf.id_user2";
-        statement = connection.prepareStatement(query);
-        statement.setString(1, Integer.toString(user.getId()));
-        ResultSet resultSet = statement.executeQuery();
-        if (resultSet.isClosed())
-            return null;
-        while (resultSet.next()) {
-            friends.add(createSimpleUser(resultSet));
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setString(1, Integer.toString(user.getId()));
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.isClosed())
+                return null;
+            while (resultSet.next()) {
+                friends.add(createSimpleUser(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return friends;
     }
 
-    public byte[] getProfilePicture(User u) throws SQLException {
+    public byte[] getProfilePicture(User u) {
         Connection connection = DbAccess.getConnection();
         String query = "SELECT profileimage FROM public.user where id = ?";
         try {
@@ -42,13 +46,11 @@ public class UserDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            connection.close();
         }
         return null;
     }
 
-    public ArrayList<Game> getGames(User u) throws SQLException {
+    public ArrayList<Game> getGames(User u) {
         Connection connection = DbAccess.getConnection();
         ArrayList<Game> library = new ArrayList<>();
         String query = "SELECT * FROM public.library where id_user= ?";
@@ -62,8 +64,6 @@ public class UserDAO {
             return library;
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            connection.close();
         }
         return null;
     }
@@ -76,7 +76,7 @@ public class UserDAO {
                 resultSet.getString("email"));
     }
 
-    public User getUserById(int id) throws SQLException {
+    public User getUserById(int id) {
         Connection connection = DbAccess.getConnection();
         String query = "SELECT * FROM public.user where id=?";
         try {
@@ -88,8 +88,6 @@ public class UserDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            connection.close();
         }
         return null;
     }
@@ -106,8 +104,6 @@ public class UserDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally {
-            connection.close();
         }
         return null;
     }
@@ -125,10 +121,11 @@ public class UserDAO {
         return null;
     }
 
-    public void insertUser(User user) throws SQLException {
+    public void insertUser(User user) {
         Connection connection = DbAccess.getConnection();
         String query = "INSERT INTO public.user(id, email, username, password, description) values(default,?,?,?,?)";
         try {
+            System.out.println(connection.isClosed());
             statement = connection.prepareStatement(query);
             statement.setString(1, user.getEmail());
             statement.setString(2, user.getUsername());
@@ -137,12 +134,10 @@ public class UserDAO {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            connection.close();
         }
     }
 
-    public void changePassword(User user, String newPassword) throws SQLException {
+    public void changePassword(User user, String newPassword) {
         Connection connection = DbAccess.getConnection();
         String query = "UPDATE public.user SET password=? WHERE id=?";
         try {
@@ -152,8 +147,6 @@ public class UserDAO {
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            connection.close();
         }
     }
 

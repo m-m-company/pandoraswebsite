@@ -32,11 +32,7 @@ public class Homepage extends HttpServlet {
     private void setGamesCategory(String category, HttpServletRequest req)
     {
         ArrayList<Game> games = null;
-        try {
-            games = DAOFactory.getInstance().makeGameDAO().getAllGamesFromCategory(category);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        games = DAOFactory.getInstance().makeGameDAO().getAllGamesFromCategory(category);
         if(games == null)
             return;
         ArrayList<Integer> lengthGamesDiv6 = new ArrayList<Integer>();

@@ -30,20 +30,12 @@ public class GameDataSheet extends HttpServlet {
         Game game = null;
         //Game game = factory.makeGameDAO().getGameFromIdWithPreviews(gameId);
         String usernameDeveloper = null;
-        try {
-            usernameDeveloper = factory.makeUserDAO().getUserById(game.getIdDeveloper()).getUsername();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        usernameDeveloper = factory.makeUserDAO().getUserById(game.getIdDeveloper()).getUsername();
         ArrayList<Review> reviews = factory.makeReviewDAO().getReviewsFromIdGame(gameId);
         ArrayList<Score> scores = factory.makeScoreDAO().getScoresFromIdGame(gameId);
         if(req.getSession().getAttribute("userId") != null) {
             boolean canBuy = false;
-            try {
-                canBuy = factory.makeGameDAO().isGamePurchased(gameId,(int) req.getSession().getAttribute("userId"));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            canBuy = factory.makeGameDAO().isGamePurchased(gameId,(int) req.getSession().getAttribute("userId"));
             req.setAttribute("canBuy", canBuy);
         }
         sortScores(scores);

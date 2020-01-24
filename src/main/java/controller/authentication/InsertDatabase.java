@@ -30,11 +30,7 @@ public class InsertDatabase extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = createUser(req.getSession());
-        try {
-            DAOFactory.getInstance().makeUserDAO().insertUser(user);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        DAOFactory.getInstance().makeUserDAO().insertUser(user);
         resp.sendRedirect("/?registered=true");
     }
 

@@ -17,11 +17,7 @@ public class PrintImage extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int userId = Integer.parseInt(req.getParameter("id"));
         User u = null;
-        try {
-            u = DAOFactory.getInstance().makeUserDAO().getUserById(userId);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        u = DAOFactory.getInstance().makeUserDAO().getUserById(userId);
         byte[] imageBytes = u.getImage();
 
         resp.setContentType("image/jpeg");

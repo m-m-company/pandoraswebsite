@@ -16,11 +16,7 @@ public class ChangeProfileDetails  extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int userId = (int) req.getSession().getAttribute("userId");
         User u = null;
-        try {
-            u = DAOFactory.getInstance().makeUserDAO().getUserById(userId);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        u = DAOFactory.getInstance().makeUserDAO().getUserById(userId);
         int change = Integer.parseInt(req.getParameter("change"));
         if(change == 1)
         {

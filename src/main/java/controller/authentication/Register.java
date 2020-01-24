@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 
 
@@ -30,12 +31,12 @@ public class Register extends HttpServlet {
         http.setRequestProperty("Content-Type",
                 "application/x-www-form-urlencoded; charset=UTF-8");
         OutputStream out = http.getOutputStream();
-        out.write(params.getBytes("UTF-8"));
+        out.write(params.getBytes(StandardCharsets.UTF_8));
         out.flush();
         out.close();
 
         InputStream res = http.getInputStream();
-        BufferedReader rd = new BufferedReader(new InputStreamReader(res, "UTF-8"));
+        BufferedReader rd = new BufferedReader(new InputStreamReader(res, StandardCharsets.UTF_8));
 
         StringBuilder sb = new StringBuilder();
         int cp;
