@@ -4,12 +4,8 @@ package persistence;
 import model.Game;
 import model.Review;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class GameDAO {
 
@@ -22,13 +18,9 @@ public class GameDAO {
             statement = connection.prepareStatement(query);
             statement.setString(1, name);
             ResultSet result = statement.executeQuery();
-            if (result.isClosed())
-                return null;
-            Game game = null;
-            while (result.next()) {
-                game = createSimpleGame(result);
+            if (result.next()) {
+                return createSimpleGame(result);
             }
-            return game;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -36,16 +28,18 @@ public class GameDAO {
     }
 
     public Game createSimpleGame(ResultSet result) throws SQLException {
-        Game game = new Game();
-        game.setName(result.getString("name"));
-        game.setRelease(result.getDate("release"));
-        game.setDescription(result.getString("description"));
-        game.setCategory(result.getString("category"));
-        game.setHelpEmail(result.getString("helpemail"));
-        game.setIdDeveloper(result.getInt("developer"));
-        game.setPayment(result.getString("paymentscoord"));
-        game.setPrice(result.getDouble("price"));
-        return game;
+        int id = result.getInt("id");
+        String name = result.getString("name");
+        String front_img = result.getString("front_img");
+        String payment_email = result.getString("payment_email");
+        String support_email = result.getString("support_email");
+        double price = result.getDouble("price");
+        double sale = result.getDouble("sale");
+        Date release_date = result.getDate("release_date");
+        int id_developer = result.getInt("id_developer");
+        String description = result.getString("description");
+        String specifics = result.getString("specifics");
+        return new Game(id, name, front_img, payment_email, support_email, price, sale, release_date, id_developer, description, specifics);
     }
 
     public Game getGameById(int id) {
@@ -62,7 +56,7 @@ public class GameDAO {
                 game.setId(id);
                 createSimpleGame(result);
             }
-            game.setReviews(DAOFactory.getInstance().makeReviewDAO().getReviewsFromIdGame(game.getId()));
+            //game.setReviews(DAOFactory.getInstance().makeReviewDAO().getReviewsFromIdGame(game.getId()));
             return game;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,7 +64,7 @@ public class GameDAO {
         return null;
     }
 
-    public ArrayList<Review> getReviews(Game g){
+    public ArrayList<Review> getReviews(Game g) {
         Connection connection = DbAccess.getConnection();
         ArrayList<Review> reviews = new ArrayList<>();
         String query = "select r.* from public.reviews as r, public.game as g WHERE r.id_game = g.id AND g.id = ?";
@@ -78,7 +72,7 @@ public class GameDAO {
             statement = connection.prepareStatement(query);
             statement.setInt(1, g.getId());
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 reviews.add(DAOFactory.getInstance().makeReviewDAO().createSimpleReview(resultSet));
             }
             return reviews;
@@ -142,20 +136,28 @@ public class GameDAO {
         return null;
     }
 
-    public void insertGame(int id, String name, int idDeveloper, String category, String helpEmail, double price, String payment, String description) throws SQLException {
+    public void insertGame(String name, String frontImage, String paymentEmail, String supportEmail, double price, int idDeveloper, String description, String specifics, ArrayList<String> tags, ArrayList<String> externalLinks) throws SQLException {
         Connection connection = DbAccess.getConnection();
-        String query = "INSERT INTO public.game(idgame, name, price, description, helpemail, paymentscoord, developer, category, release) values(default,?,?,?,?,?,?,?,?)";
+        String query = "INSERT INTO game(id, name, front_img, payment_email, support_email, price, sale, release_date, id_developer, description, specifics) " +
+                "VALUES(default, ?, ?, ?, ?, ?, default , default , ?, ?, ?) ";
         try {
             statement = connection.prepareStatement(query);
             statement.setString(1, name);
-            statement.setDouble(2, price);
-            statement.setString(3, description);
-            statement.setString(4, helpEmail);
-            statement.setString(5, payment);
+            statement.setString(2, frontImage);
+            statement.setString(3, paymentEmail);
+            statement.setString(4, supportEmail);
+            statement.setDouble(5, price);
             statement.setInt(6, idDeveloper);
-            statement.setString(7, category);
-            statement.setDate(8, new java.sql.Date(new Date().getTime()));
+            statement.setString(7, description);
+            statement.setString(8, specifics);
             statement.executeUpdate();
+            int id = this.getGameByName(name).getId();
+            for(String tag : tags){
+                this.insertTag(connection, tag, id);
+            }
+            for(String link : externalLinks){
+                this.insertLink(connection, link, id);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -230,6 +232,22 @@ public class GameDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    private void insertTag(Connection connection, String tag, int id_game) throws SQLException {
+        String query = "INSERT INTO categories(id, id_game, id_tag) VALUES (default, ?, ?)";
+        statement = connection.prepareStatement(query);
+        statement.setInt(1, id_game);
+        statement.setInt(2, DAOFactory.getInstance().makeTagDao().getIdTagByName(connection, tag));
+        statement.executeUpdate();
+    }
+
+    private void insertLink(Connection connection, String link, int id_game) throws SQLException {
+        String query = "INSERT INTO external_links (id, id_game, link) VALUES (default, ?, ?)";
+        statement = connection.prepareStatement(query);
+        statement.setInt(1, id_game);
+        statement.setString(2, link);
+        statement.executeUpdate();
     }
 
 }

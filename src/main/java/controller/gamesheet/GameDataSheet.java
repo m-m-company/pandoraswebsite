@@ -43,8 +43,8 @@ public class GameDataSheet extends HttpServlet {
             scores = (ArrayList<Score>) scores.subList(0,9);
 
         ArrayList<Integer> totalSize = new ArrayList<Integer>();
-        for(int i = 0; i < game.getPreviewsVID().size()+game.getPreviewsIMG().size();i++)
-            totalSize.add(i);
+        /*for(int i = 0; i < game.getPreviewsVID().size()+game.getPreviewsIMG().size();i++)
+            totalSize.add(i);*/
         req.setAttribute("game", game);
         req.setAttribute("totalSize", totalSize);
         req.setAttribute("developer", usernameDeveloper);

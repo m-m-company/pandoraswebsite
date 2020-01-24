@@ -42,5 +42,7 @@ public class DAOFactory {
     {
         return new ScoreDAO();
     }
-    
+
+    public TagDAO makeTagDao() { return new TagDAO(); }
+
 }

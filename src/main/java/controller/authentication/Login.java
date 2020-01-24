@@ -35,7 +35,6 @@ public class Login extends HttpServlet {
         }
         if(user.getPassword().equals(req.getParameter("password")) && user.getEmail().equals(req.getParameter("email"))){
             req.getSession().setAttribute("logged",true);
-            req.getSession().setAttribute("userId", user.getId()); //WHY? WE ALREADY HAVE THE USER
             resp.addCookie(new Cookie("logged", "true"));
             req.getSession().setAttribute("user", user);
             resp.setStatus(201);
