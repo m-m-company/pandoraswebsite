@@ -1,3 +1,4 @@
+<%@ page import="model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -15,88 +16,83 @@
 </head>
 
 <body>
-<div id="wrapper">
-    <div id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <li class="sidebar-brand"><a href="#">Home </a></li>
-            <li><a href="#">Dashboard </a></li>
-            <li><a href="#">Dashboard </a></li>
-            <li><a href="#">Dashboard </a></li>
-        </ul>
-    </div>
-    <div class="page-content-wrapper">
-        <div class="container-fluid"><a class="btn btn-dark" role="button" id="menu-toggle" href="#menu-toggle"><i
-                class="fa fa-bars"></i></a>
-            <div class="row">
-                <div class="col-md-12">
-                    <div>
-                        <h1>User <small>menu </small></h1>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<jsp:include page="profileMenu.html"></jsp:include>
 <div class="container profile profile-view" id="profile">
-    <c:if test="${param['id']} != null && ${user.getId()} != ${param['id']}">
+    <c:if test="${param.get('id') != null && user.getId() != param.get('id')}">
         <button class="btn btn-primary float-right" type="button"><i class="fa fa-user-plus" aria-hidden="true"></i>Add
             as a friend
         </button>
     </c:if>
-    <form>
+    <form method="POST">
         <div class="form-row profile-row">
             <div class="col-md-4 relative">
                 <div class="avatar">
-                    <div class="avatar-bg center"></div>
+                    <div class="avatar-bg center">
+
+                    </div>
                 </div>
-                <input type="file" class="form-control" name="avatar-file"></div>
+                <input type="file" class="form-control" name="avatar-file" onclick="$('#saveCancel').show()">
+            </div>
             <div class="col-md-8">
                 <h1>Profile </h1>
                 <hr>
                 <div class="form-row">
-                    <div class="col-sm-10 col-md-10" id="profile">
-                        <div class="form-group"><label>Username</label><input class="form-control" type="text"
-                                                                              name="firstname" id="inputUsername"
-                                                                              value="${user.getUsername()}" readonly>
+                    <div class="col-sm-10 col-md-10">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input class="form-control" type="text"
+                                   name="firstname" id="inputUsername"
+                                   value="${toShow.getUsername()}" readonly>
                         </div>
                     </div>
                     <div class="col text-center align-self-center col-2" style="padding-top: 30px;">
-                        <button class="btn btn-dark btn-sm" id="btnChangeUsername"><i class="fa fa-edit"
-                                                                                      aria-hidden="true"></i></button>
+                        <button type="button" class="btn btn-dark btn-sm" id="btnChangeUsername">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="col-10">
-                        <div class="form-group"><label>Email </label><input class="form-control" type="email"
-                                                                            autocomplete="off" id="inputEmail"
-                                                                            name="email" value="${user.getEmail()}"
-                                                                            readonly>
+                        <div class="form-group">
+                            <label>Email </label>
+                            <input class="form-control" type="email"
+                                   autocomplete="off" id="inputEmail"
+                                   name="email" value="${toShow.getEmail()}"
+                                   readonly>
                         </div>
                     </div>
                     <div class="col text-center align-self-center col-2" style="padding-top: 30px;">
-                        <button class="btn btn-dark btn-sm" id="btnChangeEmail"><i class="fa fa-edit"
-                                                                                   aria-hidden="true"></i></button>
+                        <button type="button" class="btn btn-dark btn-sm" id="btnChangeEmail">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="col-sm-10 col-md-10">
-                        <div class="form-group"><label>Password </label><input class="form-control" type="password"
-                                                                               name="password" autocomplete="off"
-                                                                               value="${user.getPassword()}"
-                                                                               id="inputPassword" readonly></div>
+                        <div class="form-group">
+                            <label>Password </label>
+                            <input class="form-control" type="password"
+                                   name="password" autocomplete="off"
+                                   value="${toShow.getPassword()}"
+                                   id="inputPassword" readonly/>
+                        </div>
                     </div>
                     <div class="col text-center align-self-center col-2" style="padding-top: 30px;">
-                        <button class="btn btn-dark btn-sm" id="btnChangePassword"><i class="fa fa-edit"
-                                                                                      aria-hidden="true"></i></button>
+                        <button type="button" class="btn btn-dark btn-sm" id="btnChangePassword">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="col-10"><label>Description</label><input id="inputDescription" class="form-control"
-                                                                         type="text" value="${user.getDescription()}"
-                                                                         readonly></div>
+                    <div class="col-10">
+                        <label>Description</label>
+                        <input id="inputDescription" class="form-control"
+                               type="text" value="${toShow.getDescription()}"
+                               readonly>
+                    </div>
                     <div class="col text-center align-self-center col-2" style="padding-top: 30px;">
-                        <button class="btn btn-dark btn-sm" id="btnChangeDescription"><i class="fa fa-edit"
-                                                                                         aria-hidden="true"></i>
+                        <button type="button" class="btn btn-dark btn-sm" id="btnChangeDescription">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
                         </button>
                     </div>
                 </div>
@@ -113,7 +109,15 @@
     <div class="jumbotron">
         <h1>Friends</h1>
         <div class="container">
-            <ul class="list-inline text-center"></ul>
+            <ul class="list-inline text-center">
+                <!-- List of friends -->
+                <c:forEach items="${toShow.getFriends()}" var="friend">
+                    <li class="list-inline-item">
+                        <!-- A friend -->
+                        <a href="/profile?id=${friend.getId()}">${friend.getUsername()}</a>
+                    </li>
+                </c:forEach>
+            </ul>
         </div>
     </div>
 </div>

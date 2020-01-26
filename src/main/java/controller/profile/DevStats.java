@@ -1,6 +1,7 @@
 package controller.profile;
 
 import model.SoldGames;
+import model.User;
 import persistence.DAOFactory;
 
 import javax.servlet.RequestDispatcher;
@@ -18,9 +19,12 @@ public class DevStats extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
-        int idUser = 1;
-
-        SoldGames tempSG = DAOFactory.getInstance().makePurchaseDAO().getSoldGamesFromIdUser(idUser);
+        RequestDispatcher rd = null;
+        User loggedUser = (User) req.getSession().getAttribute("user");
+        rd = req.getRequestDispatcher("header.jsp");
+        this.log(rd.toString());
+        rd.include(req, resp);
+        /*SoldGames tempSG = DAOFactory.getInstance().makePurchaseDAO().getSoldGamesFromIdUser(loggedUser.getId());
         TreeMap<Integer, Integer> soldGPerYear = tempSG.getSoldGPerYear();
         TreeMap<Integer, Double> earnedMoneyPerYear = tempSG.getEarnedMoneyPerYear();
         int totalSoldGames = 0;
@@ -39,8 +43,8 @@ public class DevStats extends HttpServlet
 
         req.getSession().setAttribute("totalSold", totalSoldGames);
         req.getSession().setAttribute("totalMoney", totalMoneyEarned);
-
-        RequestDispatcher rd = req.getRequestDispatcher("devStats.jsp");
-        rd.forward(req, resp);
+*/
+        rd = req.getRequestDispatcher("devStats.jsp");
+        rd.include(req, resp);
     }
 }

@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    $("#saveCancel").hide();
     $("#btnChangeUsername").click(function () {
         $("#inputUsername").attr("readonly", false);
         $("#saveCancel").show();

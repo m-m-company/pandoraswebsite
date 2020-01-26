@@ -19,7 +19,7 @@ import java.util.*;
 public class UserStats extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int id = (int) req.getSession().getAttribute("userId");
+        int id = ((User)req.getSession().getAttribute("user")).getId();
         float totalHours = 0f;
         TreeMap<Integer, Integer> hoursPlayedYear = DAOFactory.getInstance().makeHoursPlayedDAO().getHoursPlayedFromIdUser(id);
         for(Integer year: hoursPlayedYear.keySet())
