@@ -30,24 +30,57 @@
             <div class="row">
                 <div class="col">
                     <div class="bg-dark border rounded border-info">
-                        <p class="text-center">Total sells</p>
-                        <p class="text-center"></p>
+                        <p class="text-center">Hours Played</p>
+                        <p class="text-center">Total: </p>
                     </div>
                 </div>
                 <div class="col-7">
-                    <canvas id="soldGamesChart" class="canvas-size"></canvas>
+                    <canvas id="hoursChart" class="canvas-size"></canvas>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-5">
+                    <div class="bg-dark border rounded border-info">
+                        <p class="text-center">Best ranks</p>
+                        <p class="text-center"></p>
+                    </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <div class="bg-dark border rounded border-info">
-                        <p class="text-center">Total earnings</p>
-                        <p class="text-center"></p>
-                    </div>
-                </div>
-                <div class="col-7">
-                    <div>
-                        <canvas id="moneyEarnedChart" class="canvas-size"></canvas>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>I tuoi commenti e recensioni</h3>
+                        </div>
+                        <div class="card-body" style="height: auto; width: auto">
+                            <ul class="list-group" id="commentList">
+                                <li class="list-group-item" style="margin-bottom:6px;">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <div class="media" style="overflow:visible;">
+                                                <div><img class="mr-3" style="width: 25px; height:25px;"
+                                                          src="assets/logo.png"></div>
+                                                <div class="media-body" style="overflow:visible;">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <a href="#">Sara Doe</a>
+                                                            <div>
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                                <span></span>
+                                                            </div>
+                                                            <p><br>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -56,78 +89,61 @@
             <div class="row">
                 <div class="col">
                     <div class="bg-dark border rounded border-info">
-                        <p class="text-center">Review starrings</p>
-                        <p class="text-center">Average:</p>
+                        <p class="text-center">Hours Played</p>
+                        <p class="text-center">Total: </p>
                     </div>
                 </div>
                 <div class="col-7">
-                    <div>
-                        <canvas id="starringsGame-1" class="canvas-size"></canvas>
-                    </div>
+                    <canvas id="hoursPlayedGame-1" class="canvas-size"></canvas>
                 </div>
             </div>
             <div class="row">
                 <div class="col">
                     <div class="bg-dark border rounded border-info">
-                        <p class="text-center">Sells</p>
-                        <p class="text-center"></p>
+                        <p class="text-center">Your scores</p>
                     </div>
                 </div>
+
                 <div class="col-7">
-                    <div>
-                        <canvas id="sellsGame-1" class="canvas-size"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="bg-dark border rounded border-info">
-                        <p class="text-center">Price</p>
-                    </div>
-                </div>
-                <div class="col-7">
-                    <div>
-                        <canvas id="priceGame-1" class="canvas-size"></canvas>
-                    </div>
+                    <canvas id="scoresGame-1" class="canvas-size"></canvas>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- script for charts -->
-<script>
-    var ctx = document.getElementById('hoursChart').getContext('2d');
-    var chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ${hoursPlayedKeys},
-            datasets: [{
-                label: 'Hours',
-                backgroundColor: 'rgb(173, 216, 240)',
-                borderColor: 'rgb(255, 165, 0)',
-                data: ${hoursPlayedValues}
-            }]
-        },
-        options: {}
-    });
-    var ctx = document.getElementById('gamesChart').getContext('2d');
-    var chart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ${gamesPlayedKeys},
-            datasets: [{
-                label: 'Games',
-                backgroundColor: 'rgb(173, 216, 240)',
-                borderColor: 'rgb(255, 165, 0)',
-                data: ${gamesPlayedValues}
-            }]
-        },
-        options: {}
-    });
-</script>
+    <!-- script for charts -->
+    <script>
+        var ctx = document.getElementById('hoursChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ${hoursPlayedKeys},
+                datasets: [{
+                    label: 'Hours',
+                    backgroundColor: 'rgb(173, 216, 240)',
+                    borderColor: 'rgb(255, 165, 0)',
+                    data: ${hoursPlayedValues}
+                }]
+            },
+            options: {}
+        });
+        var ctx = document.getElementById('gamesChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ${gamesPlayedKeys},
+                datasets: [{
+                    label: 'Games',
+                    backgroundColor: 'rgb(173, 216, 240)',
+                    borderColor: 'rgb(255, 165, 0)',
+                    data: ${gamesPlayedValues}
+                }]
+            },
+            options: {}
+        });
+    </script>
 
 
-<jsp:include page="footer.html"></jsp:include>
+    <jsp:include page="footer.html"></jsp:include>
 </body>
 </html>
