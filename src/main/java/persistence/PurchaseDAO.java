@@ -19,7 +19,7 @@ public class PurchaseDAO {
     public TreeMap<Integer,Integer> getGamesYearFromIdUser(int id)
     {
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT * FROM public.purchase WHERE purchase.user = ?::integer";
+        String query = "SELECT * FROM public.purchase WHERE purchase.id_user = ?::integer";
         try {
             statement = connection.prepareStatement(query);
             statement.setString(1,Integer.toString(id));
@@ -32,7 +32,7 @@ public class PurchaseDAO {
             Calendar calendar = Calendar.getInstance();
             while(result.next()) {
                 calendar.setTime(result.getDate("date"));
-                Pair<Integer, Integer> pair = new Pair<Integer,Integer>(calendar.get(Calendar.YEAR),result.getInt("game"));
+                Pair<Integer, Integer> pair = new Pair<Integer,Integer>(calendar.get(Calendar.YEAR),result.getInt("id_game"));
                 yearGames.add(pair);
                 years.add(calendar.get(Calendar.YEAR));
             }
@@ -57,6 +57,7 @@ public class PurchaseDAO {
 
     public SoldGames getSoldGamesFromIdUser(int id)
     {
+        //FIXME: Se hai buona volontà cerca di capirci qualcosa tu, io non riesco.
         Connection connection = DbAccess.getConnection();
         TreeMap<Integer,Integer> soldGPerYear = new TreeMap<Integer,Integer>();
         TreeMap<Integer,Double> earnedMoneyPerYear = new TreeMap<Integer,Double>();
@@ -74,7 +75,7 @@ public class PurchaseDAO {
         {
             e.printStackTrace();
         }
-        String querySoldGames = "SELECT EXTRACT(YEAR FROM date), game FROM public.purchase;";
+        String querySoldGames = "SELECT EXTRACT(YEAR FROM date), id_game FROM public.purchase;";
         try
         {
             statement = connection.prepareStatement(querySoldGames);
@@ -88,7 +89,7 @@ public class PurchaseDAO {
             {
                 idGame = result.getInt("game");
                 String currentYear = result.getString(1);
-                String queryGame = "SELECT * FROM public.game WHERE idGame = " + idGame + " AND developer = " + id + ";";
+                String queryGame = "SELECT * FROM public.game WHERE id = " + idGame + " AND id_developer = " + id + ";";
                 PreparedStatement statementGame = connection.prepareStatement(queryGame);
                 ResultSet resultGame = statementGame.executeQuery();
                 if(resultGame.next())
@@ -134,34 +135,17 @@ public class PurchaseDAO {
 
     public void insertNewPurchase(Acquisto acquisto) {
         Connection connection = DbAccess.getConnection();
-        int nextId = getPurchaseNextId(connection);
-        String query = "INSERT INTO public.purchase values(?,?,?,?)";
+        String query = "INSERT INTO public.purchase(id, id_user, id_game, price, date) VALUES (default,?,?,?,default)";
         try {
             Date date = new Date(100);
             statement = connection.prepareStatement(query);
-            statement.setInt(1,nextId);
-            statement.setDate(2, new java.sql.Date(System.currentTimeMillis()));
-            statement.setInt(3,acquisto.getIdUser());
-            statement.setInt(4,acquisto.getIdGame());
+            statement.setInt(1, acquisto.getIdUser());
+            statement.setInt(2, acquisto.getIdGame());
+            statement.setDouble(3, acquisto.getPrice());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    private int getPurchaseNextId(Connection conn)
-    {
-        String query = "SELECT nextval('purchase_sequence') AS id";
-        PreparedStatement stmt = null;
-        try {
-            stmt = conn.prepareStatement(query);
-            ResultSet set = stmt.executeQuery();
-            set.next();
-            return set.getInt("id");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
     }
 
 }

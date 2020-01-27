@@ -1,122 +1,136 @@
+<%@ page import="model.User" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>profile</title>
-    <link rel="stylesheet" href="css/profileStyle.css">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="css/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="css/bootstrap-4.4.1-dist/css/bootstrap.css">
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <script src="scripts/profileScript.js"></script>
-    <script src="scripts/changeHeight.js"></script>
+    <title>Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/Profile-Edit-Form-1.css">
+    <link rel="stylesheet" href="css/Profile-Edit-Form.css">
+    <link rel="stylesheet" href="css/Sidebar-Menu-1.css">
+    <link rel="stylesheet" href="css/Sidebar-Menu.css">
 </head>
 
-<body id="profile">
-    <c:if test="${canSee}">
-        <jsp:include page="header.jsp" />
-        <div class="row" id="firstRow">
-            <div class="col-3" id="divProfileMenu">
-                <jsp:include page="profileMenu.html"></jsp:include>
-            </div>
-            <div class="col" >
-                <div class="row text-center">
-                    <div class="col-xl-5 text-center">
-                        <div id="photoProfile">
-                            <c:if test="${empty user.image}">
-                                <img src="http://ssl.gstatic.com/accounts/ui/avatar_2x.png" class="avatar img-circle img-thumbnail" alt="avatar">
-                            </c:if>
-                            <c:if test="${not empty user.image}">
-                                <img src="/PrintImage?id=${user.id}" height="220" width="220">
-                            </c:if>
-                        </div>
-                        <c:if test="${not friend}">
-                            <h6 class="text-center">Upload a different photo...</h6>
-                            <form class="text-center d-block" id="profileDetails" method="post" action="UploadImage" enctype="multipart/form-data">
-                                <input class="border rounded d-block" type="file" id="inputFile" name="inputFile">
-                                <button class="btn btn-primary border rounded btn-color" type="submit" id="uploadBtn">Upload</button>
-                            </form>
-                        </c:if>
-                    </div>
-                    <div class="col">
-                        <form class="text-center" id="profileDetails" method="post" action="changeProfileDetails?change=1">
-                            <div class="jumbotron" id="tableJumbotron">
-                                <div class="table-responsive text-center" id="divTable">
-                                    <table class="table">
-                                        <tbody>
-                                            <tr>
-                                                <td class="text-center field-name">Username:</td>
-                                                <td><input class="form-control" type="text" name="inputUsername" id="inputUsername" readonly value="${user.username}"></td>
-                                                <c:if test="${not friend}">
-                                                    <td style="width: 127px;"><button class="btn btn-primary fas fa-edit btn-color" type="button" id="btnChangeUsername"></button></td>
-                                                </c:if>
-                                            </tr>
-                                            <tr>
-                                                <td class="field-name">Email:</td>
-                                                <td><input class="form-control" type="email" name="inputEmail" id="inputEmail" readonly value="${user.email}"></td>
-                                                <c:if test="${not friend}">
-                                                    <td><button class="btn btn-primary fas fa-edit btn-color" type="button" id="btnChangeEmail"></button></td>
-                                                </c:if>
-                                            </tr>
-                                            <c:if test="${not friend}">
-                                            <tr>
-                                                <td class="field-name">Password:</td>
-                                                <td><input class="form-control" type="text" name="inputPassword" id="inputPassword" readonly value="${user.password}"></td>
+<body>
+<jsp:include page="profileMenu.html"></jsp:include>
+<div class="container profile profile-view" id="profile">
+    <c:if test="${param.get('id') != null && user.getId() != param.get('id')}">
+        <button class="btn btn-primary float-right" type="button"><i class="fa fa-user-plus" aria-hidden="true"></i>Add
+            as a friend
+        </button>
+    </c:if>
+    <form method="POST">
+        <div class="form-row profile-row">
+            <div class="col-md-4 relative">
+                <div class="avatar">
+                    <div class="avatar-bg center">
 
-                                                    <td><button class="btn btn-primary fas fa-edit btn-color" type="button" id="btnChangePassword"></button></td>
-
-                                            </tr>
-                                            </c:if>
-                                            <tr>
-                                                <td class="field-name">Description:</td>
-                                                <td><input class="form-control" type="text" name="inputDescription" id="inputDescription" readonly value="${user.description}"></td>
-                                                <c:if test="${not friend}">
-                                                    <td><button class="btn btn-primary fas fa-edit btn-color" type="button" id="btnChangeDescription"></button></td>
-                                                </c:if>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <c:if test="${not friend}">
-                                <button class="btn btn-primary text-center border rounded btn-color" type="sumbit" id="saveBtn">Save</button>
-                            </c:if>
-                        </form>
                     </div>
                 </div>
-                <div class="row" id="secondRow">
-                    <div class="col">
-                        <div class="jumbotron text-center" id="friendsJumbotron">
-                            <h1 class="text-center" id="h1Fiends">Friends:</h1>
-                            <div id="friendsList">
-                                <c:forEach items="${user.friends}" var="friend">
-                                    <a href="profile?id=${friend.id}">${friend.username}</a>,
-                                </c:forEach>
-                            </div>
-                            <div id="divAddFriend">
-                                <c:if test="${not friend}">
-                                    <button class="btn btn-primary text-center border rounded btn-color" type="button" id="addFriend">Add friend</button>
-                                    <form id="formAddFriend" method="post" action="changeProfileDetails?change=2">
-                                        <div id="insideForm">
-                                        </div>
-                                    </form>
-                                </c:if>
-                            </div>
+                <input type="file" class="form-control" name="avatar-file" onclick="$('#saveCancel').show()">
+            </div>
+            <div class="col-md-8">
+                <h1>Profile </h1>
+                <hr>
+                <div class="form-row">
+                    <div class="col-sm-10 col-md-10">
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input class="form-control" type="text"
+                                   name="firstname" id="inputUsername"
+                                   value="${toShow.getUsername()}" readonly>
                         </div>
+                    </div>
+                    <div class="col text-center align-self-center col-2" style="padding-top: 30px;">
+                        <button type="button" class="btn btn-dark btn-sm" id="btnChangeUsername">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-10">
+                        <div class="form-group">
+                            <label>Email </label>
+                            <input class="form-control" type="email"
+                                   autocomplete="off" id="inputEmail"
+                                   name="email" value="${toShow.getEmail()}"
+                                   readonly>
+                        </div>
+                    </div>
+                    <div class="col text-center align-self-center col-2" style="padding-top: 30px;">
+                        <button type="button" class="btn btn-dark btn-sm" id="btnChangeEmail">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-sm-10 col-md-10">
+                        <div class="form-group">
+                            <label>Password </label>
+                            <input class="form-control" type="password"
+                                   name="password" autocomplete="off"
+                                   value="${toShow.getPassword()}"
+                                   id="inputPassword" readonly/>
+                        </div>
+                    </div>
+                    <div class="col text-center align-self-center col-2" style="padding-top: 30px;">
+                        <button type="button" class="btn btn-dark btn-sm" id="btnChangePassword">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-10">
+                        <label>Description</label>
+                        <input id="inputDescription" class="form-control"
+                               type="text" value="${toShow.getDescription()}"
+                               readonly>
+                    </div>
+                    <div class="col text-center align-self-center col-2" style="padding-top: 30px;">
+                        <button type="button" class="btn btn-dark btn-sm" id="btnChangeDescription">
+                            <i class="fa fa-edit" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </div>
+                <hr>
+                <div class="form-row" id="saveCancel">
+                    <div class="col-md-12 content-right">
+                        <button class="btn btn-primary form-btn" type="submit">SAVE</button>
+                        <button class="btn btn-danger form-btn" type="reset">CANCEL</button>
                     </div>
                 </div>
             </div>
         </div>
-        <jsp:include page="footer.html" />
-    </c:if>
+    </form>
+    <div class="jumbotron">
+        <h1>Friends</h1>
+        <div class="container">
+            <ul class="list-inline text-center">
+                <!-- List of friends -->
+                <c:forEach items="${toShow.getFriends()}" var="friend">
+                    <li class="list-inline-item">
+                        <!-- A friend -->
+                        <a href="/profile?id=${friend.getId()}">${friend.getUsername()}</a>
+                    </li>
+                </c:forEach>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script>
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
+<script src="scripts/profileScript.js"></script>
 </body>
 
 </html>
