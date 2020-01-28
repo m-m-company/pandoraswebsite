@@ -3,6 +3,7 @@ package persistence;
 import model.Game;
 import model.User;
 import org.apache.commons.io.IOUtils;
+import org.postgresql.util.PGbytea;
 import utility.EncryptDecryptAES128;
 
 import java.io.IOException;
@@ -15,13 +16,14 @@ import java.util.ArrayList;
 
 public class UserDAO {
     private PreparedStatement statement;
+
     public ArrayList<User> getFriends(User user) {
         ArrayList<User> friends = new ArrayList<User>();
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT u.* FROM public.user as u, public.friends as uf WHERE uf.id_user1 = ?::integer and u.id = uf.id_user2";
+        String query = "SELECT u.* FROM public.user as u, friends as uf WHERE uf.id_user1 = ? and u.id = uf.id_user2";
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1, Integer.toString(user.getId()));
+            statement.setInt(1, user.getId());
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.isClosed())
                 return null;
@@ -36,12 +38,12 @@ public class UserDAO {
 
     public byte[] getProfilePicture(User u) {
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT profileimage FROM public.user where id = ?";
+        String query = "SELECT profile_image FROM public.user where id = ?";
         try {
             statement = connection.prepareStatement(query);
             statement.setInt(1, u.getId());
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 return resultSet.getBytes("profileimage");
             }
         } catch (SQLException e) {
@@ -56,9 +58,9 @@ public class UserDAO {
         String query = "SELECT * FROM public.library where id_user= ?";
         try {
             statement = connection.prepareStatement(query);
-            statement.setInt(1,u.getId());
+            statement.setInt(1, u.getId());
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()){
+            while (resultSet.next()) {
                 library.add(DAOFactory.getInstance().makeGameDAO().createSimpleGame(resultSet));
             }
             return library;
@@ -71,9 +73,8 @@ public class UserDAO {
     private User createSimpleUser(ResultSet resultSet) throws SQLException {
         if (resultSet.getInt("id") == 0)
             return null;
-        return new User(resultSet.getInt("id"), resultSet.getString("username"),
-                EncryptDecryptAES128.getInstance().decrypt(resultSet.getString("password")), resultSet.getString("description"),
-                resultSet.getString("email"));
+        return new User(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("email"),
+                EncryptDecryptAES128.getInstance().decrypt(resultSet.getString("password")), resultSet.getString("description"), resultSet.getBytes("profile_image"));
     }
 
     public User getUserById(int id) {
@@ -83,7 +84,7 @@ public class UserDAO {
             statement = connection.prepareStatement(query);
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 return createSimpleUser(resultSet);
             }
         } catch (SQLException e) {
@@ -108,10 +109,10 @@ public class UserDAO {
         return null;
     }
 
-    public User checkLogin(String email, String password){
+    public User checkLogin(String email, String password) {
         try {
             User u = this.getUserByEmail(email);
-            if (u.getPassword().equals(password)){
+            if (u.getPassword().equals(password)) {
                 return u;
             }
             return null;
@@ -121,16 +122,15 @@ public class UserDAO {
         return null;
     }
 
-    public void insertUser(User user) {
+    public void insertUser(String email, String username, String password, String description) {
         Connection connection = DbAccess.getConnection();
         String query = "INSERT INTO public.user(id, email, username, password, description) values(default,?,?,?,?)";
         try {
-            System.out.println(connection.isClosed());
             statement = connection.prepareStatement(query);
-            statement.setString(1, user.getEmail());
-            statement.setString(2, user.getUsername());
-            statement.setString(3, EncryptDecryptAES128.getInstance().encrypt(user.getPassword()));
-            statement.setString(4, user.getDescription());
+            statement.setString(1, email);
+            statement.setString(2, username);
+            statement.setString(3, EncryptDecryptAES128.getInstance().encrypt(password));
+            statement.setString(4, description);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -152,14 +152,15 @@ public class UserDAO {
 
     public void changeUserDetails(User u) {
         Connection connection = DbAccess.getConnection();
-        String query = "UPDATE public.user SET username = ?, email = ?, description = ?, password = ?  WHERE id = ?::integer";
+        String query = "UPDATE public.user SET username = ?, email = ?, description = ?, password = ?, profile_image = ? WHERE id = ?";
         try {
             statement = connection.prepareStatement(query);
             statement.setString(1, u.getUsername());
             statement.setString(2, u.getEmail());
             statement.setString(3, u.getDescription());
             statement.setString(4, EncryptDecryptAES128.getInstance().encrypt(u.getPassword()));
-            statement.setString(5, Integer.toString(u.getId()));
+            statement.setBytes(5, u.getImage());
+            statement.setInt(6, u.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -181,7 +182,7 @@ public class UserDAO {
 
     public void changeProfileImageUser(int idUser, InputStream fileContent) {
         Connection connection = DbAccess.getConnection();
-        String query = "UPDATE public.user SET profileimage = ? WHERE id = ?::integer";
+        String query = "UPDATE public.user SET profile_image = ? WHERE id = ?::integer";
         try {
             statement = connection.prepareStatement(query);
             statement.setBytes(1, IOUtils.toByteArray(fileContent));

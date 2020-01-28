@@ -25,7 +25,6 @@ public class EncryptDecryptAES128 {
         try {
             Cipher cipher   = Cipher.getInstance(cipherTransformation);
             byte[] key      = secretKey.getBytes(characterEncoding);
-            System.out.println(key.length);
             SecretKeySpec secretKey = new SecretKeySpec(key, aesEncryptionAlgorithem);
             IvParameterSpec ivparameterspec = new IvParameterSpec(key);
             cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivparameterspec);

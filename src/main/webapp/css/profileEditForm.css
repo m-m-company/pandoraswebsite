@@ -1,17 +1,9 @@
-div.avatar > img {
-  border-radius: 50%;
-}
-
 div.container.profile {
   padding: 10px 20px;
 }
 
 .center {
   text-align: center;
-}
-
-.no-marging {
-  margin: 0 !important;
 }
 
 .relative {
@@ -22,8 +14,9 @@ div.container.profile {
   position: absolute;
 }
 
-div.profile-row {
-  margin-top: 55px;
+div.profile-center {
+  margin: 0 auto;
+  width: 50%;
 }
 
 .absolue.center {
@@ -36,18 +29,11 @@ div.alert {
   width: 40%;
 }
 
-.alert-col {
-}
-
 .alert-col > .alert {
   padding: 10px;
   border-radius: 0;
   transition: all 0.5s ease;
   opacity: 0;
-}
-
-.alert-col > .alert.display {
-  opacity: 1;
 }
 
 hr {
@@ -64,8 +50,16 @@ hr {
   max-width: 200px;
 }
 
-img.avart-img {
-  max-width: 200px;
+div.avatar {
+  vertical-align: middle;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+
+img {
+  border-radius: 50%;
+  margin-left: 50%;
 }
 
 div.avatar-bg {
@@ -75,8 +69,5 @@ div.avatar-bg {
   background-size: cover;
   border-radius: 50%;
   margin-left: calc(50% - 100px);
-}
-
-div.avatar {
 }
 

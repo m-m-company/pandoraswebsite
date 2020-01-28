@@ -16,4 +16,8 @@ $(document).ready(function () {
         $("#saveCancel").show();
         $("#inputDescription").attr("readonly", false);
     });
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
 });

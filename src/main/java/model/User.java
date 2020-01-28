@@ -5,45 +5,29 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class User {
-	static private int contId = 0;
 	private int id;
 	private String username;
+	private String email;
 	private String password;
 	private String description;
 	private ArrayList<User> friends;
 	private ArrayList<Game> library;
 	private byte[] image;
-	private String email;
 
 
 	public User() {}
 
-	public User(int id, String username, String password, String description, String email) {
+	public User(int id, String username, String email, String password, String description, byte[] image) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.description = description;
 		this.email = email;
+		this.image = image;
 	}
 
-	public User(String username, String password, String description, ArrayList<User> friends, String email, ArrayList<Game> library) {
-		id = contId++;
-		this.username = username;
-		this.password = password;
-		this.description = description;
-		this.friends = friends;
-		this.email = email;
-		image = null;
-		this.library = library;
-	}
 	public ArrayList<Game> getLibrary() {
 		return library;
-	}
-	public static int getContId() {
-		return contId;
-	}
-	public static void setContId(int contId) {
-		User.contId = contId;
 	}
 	public int getId() {
 		return id;

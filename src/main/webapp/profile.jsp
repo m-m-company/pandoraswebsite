@@ -9,10 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Profile</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/Profile-Edit-Form-1.css">
-    <link rel="stylesheet" href="css/Profile-Edit-Form.css">
-    <link rel="stylesheet" href="css/Sidebar-Menu-1.css">
-    <link rel="stylesheet" href="css/Sidebar-Menu.css">
+    <link rel="stylesheet" href="css/profileEditForm.css">
+    <link rel="stylesheet" href="css/sidebarMenu.css">
 </head>
 
 <body>
@@ -23,85 +21,84 @@
             as a friend
         </button>
     </c:if>
-    <form method="POST">
-        <div class="form-row profile-row">
-            <div class="col-md-4 relative">
-                <div class="avatar">
-                    <div class="avatar-bg center">
-
-                    </div>
-                </div>
-                <input type="file" class="form-control" name="avatar-file" onclick="$('#saveCancel').show()">
+    <form method="POST" enctype="multipart/form-data">
+        <div class="profile-center">
+            <div class="avatar">
+                <c:if test="${toShow.getImage() == null}">
+                    <div class="avatar-bg center"></div>
+                </c:if>
+                <c:if test="${toShow.getImage() != null}">
+                    <img src="/printImage?id=${user.getId()}" alt="avatar" width="200" height="200">
+                </c:if>
             </div>
-            <div class="col-md-8">
-                <h1>Profile </h1>
-                <hr>
-                <div class="form-row">
-                    <div class="col-sm-10 col-md-10">
-                        <div class="form-group">
-                            <label>Username</label>
-                            <input class="form-control" type="text"
-                                   name="firstname" id="inputUsername"
-                                   value="${toShow.getUsername()}" readonly>
-                        </div>
-                    </div>
-                    <div class="col text-center align-self-center col-2" style="padding-top: 30px;">
-                        <button type="button" class="btn btn-dark btn-sm" id="btnChangeUsername">
-                            <i class="fa fa-edit" aria-hidden="true"></i>
-                        </button>
+            <input type="file" class="form-control" name="profileImage" onclick="$('#saveCancel').show()">
+            <h1>Profile </h1>
+            <hr>
+            <div class="form-row">
+                <div class="col-sm-10 col-md-10">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input class="form-control" type="text"
+                               name="username" id="inputUsername"
+                               value="${toShow.getUsername()}" readonly>
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="col-10">
-                        <div class="form-group">
-                            <label>Email </label>
-                            <input class="form-control" type="email"
-                                   autocomplete="off" id="inputEmail"
-                                   name="email" value="${toShow.getEmail()}"
-                                   readonly>
-                        </div>
-                    </div>
-                    <div class="col text-center align-self-center col-2" style="padding-top: 30px;">
-                        <button type="button" class="btn btn-dark btn-sm" id="btnChangeEmail">
-                            <i class="fa fa-edit" aria-hidden="true"></i>
-                        </button>
-                    </div>
+                <div class="col text-center align-self-center col-2" style="padding-top: 30px;">
+                    <button type="button" class="btn btn-dark btn-sm" id="btnChangeUsername">
+                        <i class="fa fa-edit" aria-hidden="true"></i>
+                    </button>
                 </div>
-                <div class="form-row">
-                    <div class="col-sm-10 col-md-10">
-                        <div class="form-group">
-                            <label>Password </label>
-                            <input class="form-control" type="password"
-                                   name="password" autocomplete="off"
-                                   value="${toShow.getPassword()}"
-                                   id="inputPassword" readonly/>
-                        </div>
-                    </div>
-                    <div class="col text-center align-self-center col-2" style="padding-top: 30px;">
-                        <button type="button" class="btn btn-dark btn-sm" id="btnChangePassword">
-                            <i class="fa fa-edit" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-10">
-                        <label>Description</label>
-                        <input id="inputDescription" class="form-control"
-                               type="text" value="${toShow.getDescription()}"
+            </div>
+            <div class="form-row">
+                <div class="col-10">
+                    <div class="form-group">
+                        <label>Email </label>
+                        <input class="form-control" type="email"
+                               autocomplete="off" id="inputEmail"
+                               name="email" value="${toShow.getEmail()}"
                                readonly>
                     </div>
-                    <div class="col text-center align-self-center col-2" style="padding-top: 30px;">
-                        <button type="button" class="btn btn-dark btn-sm" id="btnChangeDescription">
-                            <i class="fa fa-edit" aria-hidden="true"></i>
-                        </button>
+                </div>
+                <div class="col text-center align-self-center col-2" style="padding-top: 30px;">
+                    <button type="button" class="btn btn-dark btn-sm" id="btnChangeEmail">
+                        <i class="fa fa-edit" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-sm-10 col-md-10">
+                    <div class="form-group">
+                        <label>Password </label>
+                        <input class="form-control" type="password"
+                               name="password" autocomplete="off"
+                               value="${toShow.getPassword()}"
+                               id="inputPassword" readonly/>
                     </div>
                 </div>
-                <hr>
-                <div class="form-row" id="saveCancel">
-                    <div class="col-md-12 content-right">
-                        <button class="btn btn-primary form-btn" type="submit">SAVE</button>
-                        <button class="btn btn-danger form-btn" type="reset">CANCEL</button>
-                    </div>
+                <div class="col text-center align-self-center col-2" style="padding-top: 30px;">
+                    <button type="button" class="btn btn-dark btn-sm" id="btnChangePassword">
+                        <i class="fa fa-edit" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-10">
+                    <label>Description</label>
+                    <input id="inputDescription" class="form-control" name="description"
+                           type="text" value="${toShow.getDescription()}"
+                           readonly>
+                </div>
+                <div class="col text-center align-self-center col-2" style="padding-top: 30px;">
+                    <button type="button" class="btn btn-dark btn-sm" id="btnChangeDescription">
+                        <i class="fa fa-edit" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+            <hr>
+            <div class="form-row" id="saveCancel">
+                <div class="col-md-12 content-right">
+                    <button class="btn btn-primary form-btn" type="submit">SAVE</button>
+                    <button class="btn btn-danger form-btn" type="reset">CANCEL</button>
                 </div>
             </div>
         </div>
@@ -124,12 +121,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
-<script>
-    $("#menu-toggle").click(function (e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-</script>
 <script src="scripts/profileScript.js"></script>
 </body>
 

@@ -11,13 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/PrintImage")
+@WebServlet("/printImage")
 public class PrintImage extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int userId = Integer.parseInt(req.getParameter("id"));
-        User u = null;
-        u = DAOFactory.getInstance().makeUserDAO().getUserById(userId);
+        User u = DAOFactory.getInstance().makeUserDAO().getUserById(userId);
         byte[] imageBytes = u.getImage();
 
         resp.setContentType("image/jpeg");
@@ -26,4 +26,5 @@ public class PrintImage extends HttpServlet {
 
         resp.getOutputStream().write(imageBytes);
     }
+
 }
