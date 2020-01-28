@@ -9,8 +9,7 @@
     <script src="css/bootstrap-4.4.1-dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/bootstrap-4.4.1-dist/css/bootstrap.css">
     <link rel="stylesheet" href="css/userStatsStyle.css">
-    <link rel="stylesheet" href="css/Sidebar-Menu-1.css">
-    <link rel="stylesheet" href="css/Sidebar-Menu.css">
+    <link rel="stylesheet" href="css/sidebarMenu.css">
     <link rel="stylesheet" href="css/devStats.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 </head>

@@ -12,12 +12,12 @@
     <script src="css/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="css/bootstrap-4.4.1-dist/css/bootstrap.css">
     <link rel="stylesheet" href="css/userStatsStyle.css">
+    <link rel="stylesheet" href="css/sidebarMenu.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-    <script src="scripts/changeHeight.js"></script>
-
 </head>
 <body>
 <jsp:include page="header.jsp"></jsp:include>
+<jsp:include page="profileMenu.html"></jsp:include>
 <div style="margin-left: 20%">
     <ul class="nav nav-tabs">
         <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tab-1">General Stats</a>
@@ -146,4 +146,10 @@
 
     <jsp:include page="footer.html"></jsp:include>
 </body>
+<script>
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+</script>
 </html>
