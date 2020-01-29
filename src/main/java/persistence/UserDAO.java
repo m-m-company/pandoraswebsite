@@ -109,19 +109,6 @@ public class UserDAO {
         return null;
     }
 
-    public User checkLogin(String email, String password) {
-        try {
-            User u = this.getUserByEmail(email);
-            if (u.getPassword().equals(password)) {
-                return u;
-            }
-            return null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public void insertUser(String email, String username, String password, String description) {
         Connection connection = DbAccess.getConnection();
         String query = "INSERT INTO public.user(id, email, username, password, description) values(default,?,?,?,?)";

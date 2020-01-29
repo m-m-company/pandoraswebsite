@@ -15,7 +15,6 @@ import java.sql.SQLException;
 
 @WebServlet(value = "/login", name = "login")
 public class Login extends HttpServlet {
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setStatus(403); // Permission denied, only POST here
@@ -42,5 +41,4 @@ public class Login extends HttpServlet {
             resp.setStatus(301);
         }
     }
-
 }
