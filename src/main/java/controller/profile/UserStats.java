@@ -26,16 +26,10 @@ public class UserStats extends HttpServlet {
         {
             totalHours += hoursPlayedYear.get(game);
         }
-        TreeMap<Integer, Integer> gamesPlayedYear = DAOFactory.getInstance().makePurchaseDAO().getGamesYearFromIdUser(id);
-        int totalGames = 0;
-        for(Integer year: gamesPlayedYear.keySet())
-        {
-            totalGames += gamesPlayedYear.get(year);
-        }
         ArrayList<Pair<Integer, String>> gameScore = DAOFactory.getInstance().makeScoreDAO().getScoresFromIdUser(id);
         Pair<Integer, String> bestScore = new Pair<Integer, String>(0,"");
-        bestScore.setFirst(gameScore.get(0).getFirst());
-        bestScore.setSecond(gameScore.get(0).getSecond());
+        //bestScore.setFirst(gameScore.get(0).getFirst());
+        //bestScore.setSecond(gameScore.get(0).getSecond());
         for(Pair<Integer,String> p: gameScore)
         {
             if(p.getFirst() > bestScore.getFirst())
@@ -44,19 +38,12 @@ public class UserStats extends HttpServlet {
                 bestScore.setFirst(p.getFirst());
             }
         }
-        req.getSession().setAttribute("hoursPlayedKeys", hoursPlayedYear.keySet());
-        req.getSession().setAttribute("hoursPlayedValues", hoursPlayedYear.values());
-
-        req.getSession().setAttribute("totalHoursPlayed", totalHours);
-
-        req.getSession().setAttribute("gamesPlayedKeys", gamesPlayedYear.keySet());
-        req.getSession().setAttribute("gamesPlayedValues", gamesPlayedYear.values());
-
-        req.getSession().setAttribute("totalGamesPlayed", totalGames);
-
-        req.getSession().setAttribute("bestScoreName", bestScore.getSecond());
-        req.getSession().setAttribute("bestScoreValue", bestScore.getFirst());
+        req.setAttribute("hoursPlayedKeys", hoursPlayedYear.keySet());
+        req.setAttribute("hoursPlayedValues", hoursPlayedYear.values());
+        req.setAttribute("totalHoursPlayed", totalHours);
+        req.setAttribute("bestScoreName", bestScore.getSecond());
+        req.setAttribute("bestScoreValue", bestScore.getFirst());
         RequestDispatcher rd = req.getRequestDispatcher("userStats.jsp");
-        rd.forward(req,resp);
+        rd.include(req,resp);
     }
 }

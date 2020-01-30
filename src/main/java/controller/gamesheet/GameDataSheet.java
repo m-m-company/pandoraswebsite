@@ -12,14 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 
 @WebServlet(value="/GameDataSheet")
 public class GameDataSheet extends HttpServlet {
@@ -31,7 +25,7 @@ public class GameDataSheet extends HttpServlet {
         //Game game = factory.makeGameDAO().getGameFromIdWithPreviews(gameId);
         String usernameDeveloper = null;
         usernameDeveloper = factory.makeUserDAO().getUserById(game.getIdDeveloper()).getUsername();
-        ArrayList<Review> reviews = factory.makeReviewDAO().getReviewsFromIdGame(gameId);
+        ArrayList<Review> reviews = factory.makeReviewDAO().getReviewsByIdGame(gameId);
         ArrayList<Score> scores = factory.makeScoreDAO().getScoresFromIdGame(gameId);
         if(req.getSession().getAttribute("userId") != null) {
             boolean canBuy = false;

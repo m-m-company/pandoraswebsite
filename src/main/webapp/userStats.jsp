@@ -22,8 +22,10 @@
     <ul class="nav nav-tabs">
         <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tab-1">General Stats</a>
         </li>
-        <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-2">&lt;Game1&gt;</a>
-        </li>
+        <c:set var="i" value="2" scope="page"></c:set>
+        <c:forEach items="${user.getLibrary()}" var="game">
+            <c:out value="<li class=\"nav-item\"><a class=\"nav-link\" role=\"tab\" data-toggle=\"tab\" href=\"#tab-${i+=1}\">${game.getName()}</a></li>"></c:out>
+        </c:forEach>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" role="tabpanel" id="tab-1">
@@ -31,19 +33,11 @@
                 <div class="col">
                     <div class="bg-dark border rounded border-info">
                         <p class="text-center">Hours Played</p>
-                        <p class="text-center">Total: </p>
+                        <p class="text-center">Total: ${totalHours} </p>
                     </div>
                 </div>
                 <div class="col-7">
                     <canvas id="hoursChart" class="canvas-size"></canvas>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-5">
-                    <div class="bg-dark border rounded border-info">
-                        <p class="text-center">Best ranks</p>
-                        <p class="text-center"></p>
-                    </div>
                 </div>
             </div>
             <div class="row">
@@ -123,20 +117,6 @@
                     backgroundColor: 'rgb(173, 216, 240)',
                     borderColor: 'rgb(255, 165, 0)',
                     data: ${hoursPlayedValues}
-                }]
-            },
-            options: {}
-        });
-        var ctx = document.getElementById('gamesChart').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ${gamesPlayedKeys},
-                datasets: [{
-                    label: 'Games',
-                    backgroundColor: 'rgb(173, 216, 240)',
-                    borderColor: 'rgb(255, 165, 0)',
-                    data: ${gamesPlayedValues}
                 }]
             },
             options: {}
