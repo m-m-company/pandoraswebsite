@@ -23,15 +23,16 @@
     </c:if>
     <form method="POST" enctype="multipart/form-data">
         <div class="profile-center">
-            <div class="avatar">
+            <label class="avatar">
                 <c:if test="${toShow.getImage() == null}">
-                    <div class="avatar-bg center"></div>
+                    <img src="https://www.gravatar.com/avatar/1234566?size=200&d=mm" width="200" height="200">
                 </c:if>
                 <c:if test="${toShow.getImage() != null}">
-                    <img src="/printImage?id=${user.getId()}" alt="avatar" width="200" height="200">
+                    <img src="/printImage?${toShow.getId()}" width="200" height="200">
                 </c:if>
-            </div>
-            <input type="file" class="form-control" name="profileImage" onclick="$('#saveCancel').show()">
+                <input type="file" name="profileImage" onclick="$('#saveCancel').show()" style="display: none">
+            </label>
+            <label>Click on the image to change it</label>
             <h1>Profile </h1>
             <hr>
             <div class="form-row">
