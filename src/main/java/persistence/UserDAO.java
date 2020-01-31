@@ -55,7 +55,7 @@ public class UserDAO {
     public ArrayList<Game> getGames(User u) {
         Connection connection = DbAccess.getConnection();
         ArrayList<Game> library = new ArrayList<>();
-        String query = "SELECT * FROM public.library where id_user= ?";
+        String query = "SELECT game.* FROM library, game where id_user= ? AND id_game = game.id";
         try {
             statement = connection.prepareStatement(query);
             statement.setInt(1, u.getId());

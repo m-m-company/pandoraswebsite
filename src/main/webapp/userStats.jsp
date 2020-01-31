@@ -18,13 +18,15 @@
 <body>
 <jsp:include page="header.jsp"></jsp:include>
 <jsp:include page="profileMenu.html"></jsp:include>
+<c:set var="userLibrary" scope="page" value="${user.getLibrary()}"></c:set>
 <div style="margin-left: 20%">
     <ul class="nav nav-tabs">
         <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tab-1">General Stats</a>
         </li>
         <c:set var="i" value="2" scope="page"></c:set>
-        <c:forEach items="${user.getLibrary()}" var="game">
-            <c:out value="<li class=\"nav-item\"><a class=\"nav-link\" role=\"tab\" data-toggle=\"tab\" href=\"#tab-${i+=1}\">${game.getName()}</a></li>"></c:out>
+        <c:forEach items="${userLibrary}" var="game">
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-${i}">${game.getName()}</a></li>
+            <c:set var="i" value="${i + 1}" scope="page"></c:set>
         </c:forEach>
     </ul>
     <div class="tab-content">
@@ -33,7 +35,7 @@
                 <div class="col">
                     <div class="bg-dark border rounded border-info">
                         <p class="text-center">Hours Played</p>
-                        <p class="text-center">Total: ${totalHours} </p>
+                        <p class="text-center">Total: ${totalHoursPlayed} </p>
                     </div>
                 </div>
                 <div class="col-7">
@@ -79,36 +81,40 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane" role="tabpanel" id="tab-2">
-            <div class="row">
-                <div class="col">
-                    <div class="bg-dark border rounded border-info">
-                        <p class="text-center">Hours Played</p>
-                        <p class="text-center">Total: </p>
+        <c:set var="j" value="2" scope="page"></c:set>
+        <c:set var="k" value="0" scope="page"></c:set>
+        <c:forEach var="game" items="${userLibrary}">
+            <div class="tab-pane" role="tabpanel" id="tab-${j}">
+                <div class="row">
+                    <div class="col">
+                        <div class="bg-dark border rounded border-info">
+                            <p class="text-center">Hours Played</p>
+                            <p class="text-center">Total: ${totalGameHoursPlayed.get(k)}</p>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <canvas id="hoursPlayedGame-${k}" class="canvas-size chartsHoursPlayed"></canvas>
                     </div>
                 </div>
-                <div class="col-7">
-                    <canvas id="hoursPlayedGame-1" class="canvas-size"></canvas>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="bg-dark border rounded border-info">
-                        <p class="text-center">Your scores</p>
+                <div class="row">
+                    <div class="col">
+                        <div class="bg-dark border rounded border-info">
+                            <p class="text-center">Your scores</p>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <canvas id="scoresGame-${k}" class="canvas-size chartsScoresGame"></canvas>
                     </div>
                 </div>
-
-                <div class="col-7">
-                    <canvas id="scoresGame-1" class="canvas-size"></canvas>
-                </div>
             </div>
+            <c:set var="k" value="${k + 1}"></c:set>
+            <c:set var="j" value="${j + 1}"></c:set>
+        </c:forEach>
         </div>
-    </div>
-
     <!-- script for charts -->
     <script>
-        var ctx = document.getElementById('hoursChart').getContext('2d');
-        var chart = new Chart(ctx, {
+        let ctx = document.getElementById('hoursChart').getContext('2d');
+        let chart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: ${hoursPlayedKeys},
@@ -121,6 +127,25 @@
             },
             options: {}
         });
+        let gamesHoursCharts = document.getElementsByClassName("chartsHoursPlayed");
+        for (var c =0; c<gamesHoursCharts.length; c++){
+            canvas = gamesHoursCharts[c];
+            let ctx = canvas.getContext('2d');
+            console.log(${arrayHashMapHoursKeys});
+            let chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ${arrayHashMapHoursKeys}[c],
+                    datasets: [{
+                        label: 'Hours',
+                        backgroundColor: 'rgb(173, 216, 240)',
+                        borderColor: 'rgb(255, 165, 0)',
+                        data: ${arrayHashMapHoursValues}[c]
+                    }]
+                },
+                options: {}
+            });
+        }
     </script>
 
 

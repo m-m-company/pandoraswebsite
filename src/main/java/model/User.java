@@ -1,8 +1,11 @@
 package model;
 
+import persistence.DAOFactory;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class User {
 	private int id;
@@ -27,7 +30,7 @@ public class User {
 	}
 
 	public ArrayList<Game> getLibrary() {
-		return library;
+		return DAOFactory.getInstance().makeUserDAO().getGames(this);
 	}
 	public int getId() {
 		return id;

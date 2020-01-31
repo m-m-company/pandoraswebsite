@@ -33,6 +33,16 @@ public class ScoreDAO {
         }
         return null;
     }
+    public HashMap<Integer, Integer> getDatasForGamesHoursCharts(int id){
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT sum()";
+        try{
+            statement = connection.prepareStatement(query);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public ArrayList<Score> getScoresFromIdGame(int id)
     {
