@@ -55,59 +55,7 @@ public class PurchaseDAO {
         return null;
     }
 
-    public SoldGames getSoldGamesFromIdUser(int id)
-    {
-        //FIXME: Se hai buona volontà cerca di capirci qualcosa tu, io non riesco.
-        Connection connection = DbAccess.getConnection();
-        TreeMap<Integer,Integer> soldGPerYear = new TreeMap<Integer,Integer>();
-        TreeMap<Integer,Double> earnedMoneyPerYear = new TreeMap<Integer,Double>();
-        String queryYears = "SELECT EXTRACT(YEAR FROM date) FROM public.purchase;";
-        try
-        {
-            statement = connection.prepareStatement(queryYears);
-            ResultSet result = statement.executeQuery();
-            while(result.next())
-            {
-                soldGPerYear.put(Integer.valueOf(result.getString(1)), 0);
-                earnedMoneyPerYear.put(Integer.valueOf(result.getString(1)), 0.0);
-            }
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        String querySoldGames = "SELECT EXTRACT(YEAR FROM date), id_game FROM public.purchase;";
-        try
-        {
-            statement = connection.prepareStatement(querySoldGames);
-            ResultSet result = statement.executeQuery();
-            if(result.isClosed())
-                return null;
-            SoldGames soldGames = new SoldGames();
-            int idGame = 0;
-            double currentPrice = 0;
-            while(result.next())
-            {
-                idGame = result.getInt("game");
-                String currentYear = result.getString(1);
-                String queryGame = "SELECT * FROM public.game WHERE id = " + idGame + " AND id_developer = " + id + ";";
-                PreparedStatement statementGame = connection.prepareStatement(queryGame);
-                ResultSet resultGame = statementGame.executeQuery();
-                if(resultGame.next())
-                {
-                    soldGPerYear.put(Integer.valueOf(currentYear), soldGPerYear.get(Integer.valueOf(currentYear)) + 1);
-                    currentPrice += resultGame.getDouble("price");
-                    earnedMoneyPerYear.put(Integer.valueOf(currentYear), earnedMoneyPerYear.get(Integer.valueOf(currentYear)) + currentPrice);
-                }
-            }
-            soldGames.setSoldGPerYear(soldGPerYear);
-            soldGames.setEarnedMoneyPerYear(earnedMoneyPerYear);
-            return soldGames;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public TreeMap<Date, Integer>
 
     public ArrayList<Game> getBestThreeSoldGames()
     {

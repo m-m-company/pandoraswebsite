@@ -30,11 +30,7 @@ public class ResetPassword extends HttpServlet {
         String email = (String) req.getSession().getAttribute("email");
         String newPassword = req.getParameter("password");
         User user = null;
-        try {
-            user = DAOFactory.getInstance().makeUserDAO().getUserByEmail(email);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        user = DAOFactory.getInstance().makeUserDAO().getUserByEmail(email);
         DAOFactory.getInstance().makeUserDAO().changePassword(user, newPassword);
         resp.sendRedirect("/");
     }

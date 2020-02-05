@@ -17,11 +17,7 @@ public class ForgotPassword extends HttpServlet {
 
     private boolean checkEmail(String email){
         User user = null;
-        try {
-            user = DAOFactory.getInstance().makeUserDAO().getUserByEmail(email);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        user = DAOFactory.getInstance().makeUserDAO().getUserByEmail(email);
         return user == null;
     }
 

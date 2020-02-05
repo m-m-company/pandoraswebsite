@@ -3,11 +3,9 @@ package persistence;
 
 import model.Review;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class ReviewDAO {
     private PreparedStatement statement;
@@ -38,6 +36,27 @@ public class ReviewDAO {
         }
     }
 
+    public ArrayList<Integer> getAvgReviewsByIdUser(int id){
+        ArrayList<Integer> averages = new ArrayList<>();
+        Connection connection = DbAccess.getConnection();
+        String query =
+                "SELECT AVG(reviews.stars), reviews.id_game FROM reviews, game " +
+                "WHERE id_developer = ? AND id_game = game.id " +
+                "GROUP BY reviews.id_game ORDER BY reviews.id_game";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                averages.add(resultSet.getInt(1));
+            }
+            return averages;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public ArrayList<Review> getReviewsByIdGame(int id)
     {
         Connection connection = DbAccess.getConnection();
@@ -51,6 +70,28 @@ public class ReviewDAO {
             ArrayList<Review> reviews = new ArrayList<Review>();
             while(result.next()) {
                 reviews.add(createSimpleReview(result));
+            }
+            return reviews;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public TreeMap<String, Integer> getReviewsTreeMapByIdGame(int id){
+        Connection connection = DbAccess.getConnection();
+        TreeMap<String, Integer> reviews = new TreeMap<>();
+        String query =
+                "SELECT date, avg(reviews.stars) " +
+                "FROM reviews " +
+                "WHERE id_game = ? " +
+                "GROUP BY reviews.date";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1,id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                reviews.put("'"+resultSet.getDate(1)+"'", resultSet.getInt(2));
             }
             return reviews;
         } catch (SQLException e) {

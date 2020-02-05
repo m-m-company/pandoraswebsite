@@ -11,6 +11,24 @@ public class GameDAO {
 
     private PreparedStatement statement;
 
+    public ArrayList<Game> getUploadedGamesById(int id){
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT * FROM game WHERE id_developer = ? ORDER BY id";
+        ArrayList<Game> games = new ArrayList<>();
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1,id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                games.add(this.createSimpleGame(resultSet));
+            }
+            return games;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public Game getGameByName(String name) {
         Connection connection = DbAccess.getConnection();
         String query = "SELECT * FROM public.game WHERE name = ?";

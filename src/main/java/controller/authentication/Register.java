@@ -51,11 +51,7 @@ public class Register extends HttpServlet {
 
     private boolean checkUniqueEmail(HttpServletRequest req){
         User user = null;
-        try {
-            user = DAOFactory.getInstance().makeUserDAO().getUserByEmail(req.getParameter("email"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        user = DAOFactory.getInstance().makeUserDAO().getUserByEmail(req.getParameter("email"));
         return user == null;
     }
 

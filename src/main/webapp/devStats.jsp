@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,8 +19,11 @@
 <div style="margin-left: 20%">
     <ul class="nav nav-tabs">
         <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tab-1">General Stats</a></li>
-        <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-2">&lt;Game1&gt;</a>
-        </li>
+        <c:set var="i" value="2" scope="page"></c:set>
+        <c:forEach items="${uploadedGames}" var="game">
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-${i}">${game.getName()}</a></li>
+            <c:set var="i" value="${i+1}" scope="page"></c:set>
+        </c:forEach>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" role="tabpanel" id="tab-1">
@@ -48,7 +52,9 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane" role="tabpanel" id="tab-2">
+        <c:set var="i" value="2" scope="page"></c:set>
+        <c:forEach items="${uploadedGames}" var="game">
+        <div class="tab-pane" role="tabpanel" id="tab-${i}">
             <div class="row">
                 <div class="col">
                     <div class="bg-dark border rounded border-info">
@@ -86,10 +92,12 @@
                 </div>
             </div>
         </div>
+            <c:set var="i" scope="page" value="${i+1}"></c:set>
+        </c:forEach>
     </div>
 </div>
 
-<!-- script for charts -->
+<!-- script for charts
 <script>
     var ctx = document.getElementById('soldGamesChart').getContext('2d');
     var chart = new Chart(ctx, {
@@ -120,13 +128,15 @@
         options: {}
     });
 </script>
-
+-->
 
 <footer>
     <jsp:include page="footer.html"></jsp:include>
 </footer>
 </body>
 <script>
+    console.log(${starringValue});
+    console.log(${starringKeys});
     $("#menu-toggle").click(function (e) {
         e.preventDefault();
         $("#wrapper").toggleClass("toggled");

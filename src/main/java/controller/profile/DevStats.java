@@ -1,6 +1,6 @@
 package controller.profile;
 
-import model.SoldGames;
+import model.Game;
 import model.User;
 import persistence.DAOFactory;
 
@@ -11,39 +11,54 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Set;
 import java.util.TreeMap;
 
 @WebServlet(value = "/devStats")
 public class DevStats extends HttpServlet
 {
+    private ArrayList<Integer> createAverageStarring(User loggedUser){
+        ArrayList<Integer> averages = new ArrayList<>();
+        averages.add(null);
+        averages.add(null);
+        averages.addAll(DAOFactory.getInstance().makeReviewDAO().getAvgReviewsByIdUser(loggedUser.getId()));
+        return averages;
+    }
+
+    private ArrayList<TreeMap<String, Integer>> createStarring(ArrayList<Game> uploadedGames){
+        ArrayList<TreeMap<String, Integer>> starring = new ArrayList<>();
+        starring.add(null);
+        starring.add(null);
+        for (Game game : uploadedGames)
+            starring.add(DAOFactory.getInstance().makeReviewDAO().getReviewsTreeMapByIdGame(game.getId()));
+        this.log(String.valueOf(starring));
+        return starring;
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
         RequestDispatcher rd = null;
         User loggedUser = (User) req.getSession().getAttribute("user");
         rd = req.getRequestDispatcher("header.jsp");
-        this.log(rd.toString());
         rd.include(req, resp);
-        /*SoldGames tempSG = DAOFactory.getInstance().makePurchaseDAO().getSoldGamesFromIdUser(loggedUser.getId());
-        TreeMap<Integer, Integer> soldGPerYear = tempSG.getSoldGPerYear();
-        TreeMap<Integer, Double> earnedMoneyPerYear = tempSG.getEarnedMoneyPerYear();
-        int totalSoldGames = 0;
-        double totalMoneyEarned = 0;
-        for(Integer year : soldGPerYear.keySet())
-        {
-            totalSoldGames++;
-            totalMoneyEarned += earnedMoneyPerYear.get(year);
+        ArrayList<Game> uploadedGames = new ArrayList<>(DAOFactory.getInstance().makeGameDAO().getUploadedGamesById(loggedUser.getId()));
+        req.setAttribute("uploadedGames", uploadedGames);
+        req.setAttribute("averageStarring",createAverageStarring(loggedUser));
+        ArrayList<TreeMap<String, Integer>> starring = createStarring(uploadedGames);
+        ArrayList<Set<String>> starringKeys = new ArrayList<>();
+        ArrayList<Collection<Integer>> starringValue = new ArrayList<>();
+        for (TreeMap<String, Integer> s : starring) {
+            if (s != null) {
+                starringKeys.add(s.keySet());
+                starringValue.add(s.values());
+            }
         }
-        this.log(totalSoldGames + "\n" + totalMoneyEarned);
-        req.getSession().setAttribute("soldGameKeys", soldGPerYear.keySet());
-        req.getSession().setAttribute("soldGameValues", soldGPerYear.values());
+        req.setAttribute("starringKeys",starringKeys);
+        req.setAttribute("starringValues",starringValue);
 
-        req.getSession().setAttribute("moneyEarnedKeys", earnedMoneyPerYear.keySet());
-        req.getSession().setAttribute("moneyEarnedValues", earnedMoneyPerYear.values());
-
-        req.getSession().setAttribute("totalSold", totalSoldGames);
-        req.getSession().setAttribute("totalMoney", totalMoneyEarned);
-*/
         rd = req.getRequestDispatcher("devStats.jsp");
         rd.include(req, resp);
     }
