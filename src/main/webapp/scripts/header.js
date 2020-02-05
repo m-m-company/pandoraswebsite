@@ -47,6 +47,22 @@ function googleSignIn(googleUser) {
         data: {
             token: googleUser.getAuthResponse().id_token
         },
+        success: function () {
+            console.log("ciao");
+            $.ajax({
+               type: "POST",
+               url: "/login",
+               data: {
+                   email: googleUser.getBasicProfile().getEmail()
+               },
+               success: function () {
+                    window.location.replace("/");
+               },
+               error: function () {
+                    alert("Something has gone wrong with google login");
+               }
+            });
+        },
         error: function () {
             alert("NOPE");
             //TODO: da gestire se l'email è già presente nel database

@@ -74,7 +74,7 @@ public class UserDAO {
         if (resultSet.getInt("id") == 0)
             return null;
         return new User(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("email"),
-                EncryptDecryptAES128.getInstance().decrypt(resultSet.getString("password")), resultSet.getString("description"), resultSet.getBytes("profile_image"));
+                EncryptDecryptAES128.getInstance().decrypt(resultSet.getString("password")), resultSet.getString("description"), resultSet.getBytes("profile_image"), resultSet.getBoolean("google_user"));
     }
 
     public User getUserById(int id) {
@@ -109,15 +109,30 @@ public class UserDAO {
         return null;
     }
 
-    public void insertUser(String email, String username, String password, String description) {
+    public void insertUser(String email, String username, String password, String description, boolean googleUser) {
         Connection connection = DbAccess.getConnection();
-        String query = "INSERT INTO public.user(id, email, username, password, description) values(default,?,?,?,?)";
+        String query = "INSERT INTO public.user(id, email, username, password, description, google_user) values(default,?,?,?,?,?)";
         try {
             statement = connection.prepareStatement(query);
             statement.setString(1, email);
             statement.setString(2, username);
             statement.setString(3, EncryptDecryptAES128.getInstance().encrypt(password));
             statement.setString(4, description);
+            statement.setBoolean(5, googleUser);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void insertGoogleUser(String id, String email, String image) {
+        Connection connection = DbAccess.getConnection();
+        String query = "INSERT INTO id_google(id, email, profile_image) values(?,?,?)";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setString(1, id);
+            statement.setString(2, email);
+            statement.setString(3, image);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -180,20 +195,20 @@ public class UserDAO {
         }
     }
 
-    public boolean googleIdAlreadyExists(int id) {
+    public boolean googleIdAlreadyExists(String id) {
         Connection connection = DbAccess.getConnection();
         String query = "SELECT * FROM id_google WHERE id=?";
         try {
             statement = connection.prepareStatement(query);
-            statement.setInt(1, id);
+            statement.setString(1, id);
             ResultSet resultSet = statement.executeQuery();
-            if(resultSet.isClosed()){
-                return false;
+            if(resultSet.next()){
+                return true;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return true;
+        return false;
     }
 
 }

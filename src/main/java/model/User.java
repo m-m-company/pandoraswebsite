@@ -16,17 +16,19 @@ public class User {
 	private ArrayList<User> friends;
 	private ArrayList<Game> library;
 	private byte[] image;
+	private boolean googleUser;
 
 
 	public User() {}
 
-	public User(int id, String username, String email, String password, String description, byte[] image) {
+	public User(int id, String username, String email, String password, String description, byte[] image, boolean googleUser) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.description = description;
 		this.email = email;
 		this.image = image;
+		this.googleUser = googleUser;
 	}
 
 	public ArrayList<Game> getLibrary() {
@@ -76,6 +78,14 @@ public class User {
 	}
 	public void setLibrary(ArrayList<Game> library) {
 		this.library = library;
+	}
+
+	public boolean isGoogleUser() {
+		return googleUser;
+	}
+
+	public void setGoogleUser(boolean googleUser) {
+		this.googleUser = googleUser;
 	}
 
 	public boolean addFriend(User u)

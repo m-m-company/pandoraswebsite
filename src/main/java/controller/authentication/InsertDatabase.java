@@ -26,7 +26,7 @@ public class InsertDatabase extends HttpServlet {
         String email = (String) session.getAttribute("email");
         String username = (String) session.getAttribute("username");
         String password = (String) session.getAttribute("password");
-        DAOFactory.getInstance().makeUserDAO().insertUser(email, username, password, "Ciao sono " + username);
+        DAOFactory.getInstance().makeUserDAO().insertUser(email, username, password, "Ciao, sono " + username, false);
         resp.sendRedirect("/?registered=true");
     }
 

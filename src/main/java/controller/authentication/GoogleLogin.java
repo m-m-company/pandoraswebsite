@@ -32,13 +32,19 @@ public class GoogleLogin extends HttpServlet {
                 String userId = payload.getSubject();
                 String email = payload.getEmail();
                 String username = (String) payload.get("name");
+                String description = "Ciao, sono " + username;
                 String pictureUrl = (String) payload.get("picture");
-                if(DAOFactory.getInstance().makeUserDAO().googleIdAlreadyExists(Integer.parseInt(userId))){
-                    //TODO: login
+                if(!(DAOFactory.getInstance().makeUserDAO().googleIdAlreadyExists(userId))){
+                    if(DAOFactory.getInstance().makeUserDAO().getUserByEmail(email) == null){
+                        DAOFactory.getInstance().makeUserDAO().insertUser(email, username, "", description, true);
+                        DAOFactory.getInstance().makeUserDAO().insertGoogleUser(userId, email, pictureUrl);
+                    }
+                    else{
+                        //TODO: da gestire
+                        this.log("qualcosa non va");
+                    }
                 }
-                else{
-                    //TODO: register
-                }
+                resp.setStatus(201);
             } else {
                 //TODO: da gestire
                 this.log("non valido");

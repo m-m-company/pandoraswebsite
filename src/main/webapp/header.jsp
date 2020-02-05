@@ -69,7 +69,7 @@
                         <div class="g-signin2" data-onsuccess="onSignIn"></div>
                         <script>
                             function onSignIn(googleUser) {
-                                googleSignIn(googleUser);
+                                <!--googleSignIn(googleUser);-->
                             }
                         </script>
                     </div>

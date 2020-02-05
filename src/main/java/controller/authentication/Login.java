@@ -23,12 +23,13 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User user = null;
+        this.log(req.getParameter("email"));
         user = DAOFactory.getInstance().makeUserDAO().getUserByEmail(req.getParameter("email"));
         if (user == null){
             resp.setStatus(301);
             return;
         }
-        if(user.getPassword().equals(req.getParameter("password")) && user.getEmail().equals(req.getParameter("email"))){
+        if(user.isGoogleUser() || (user.getPassword().equals(req.getParameter("password")) && user.getEmail().equals(req.getParameter("email")))){
             req.getSession().setAttribute("logged",true);
             resp.addCookie(new Cookie("logged", "true"));
             req.getSession().setAttribute("user", user);
