@@ -41,7 +41,7 @@
                             <a class="dropdown-item" role="presentation" href="library">Library</a>
                             <a class="dropdown-item" role="presentation" href="upload">Upload</a>
                             <a class="dropdown-item" role="presentation" href="help">Help</a>
-                            <a class="dropdown-item" role="presentation" href="logout">Logout</a>
+                            <a class="dropdown-item" role="presentation" href="logout" onclick="signOut()">Logout</a>
                         </div>
                     </div>
                     <%}%>
@@ -65,18 +65,17 @@
                         <label id="errorLabel" style="display: none"> Email o password errate! Riprova </label>
                         <button type="button" class="btn btn-primary btn-block" id="loginBtn">Login</button>
                     </div>
+                    <div class="form-group">
+                        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                        <script>
+                            function onSignIn(googleUser) {
+                                googleSignIn(googleUser);
+                            }
+                        </script>
+                    </div>
                     <a class="forgot" href="forgotPassword">Hai dimenticato la tua password?</a>
-                    <a class="forgot" href="register">Non hai un account? Registrati</a></form>
-                    <div class="g-signin2" data-onsuccess="onSignIn"></div>
-                    <script>
-                        function onSignIn(googleUser) {
-                            var profile = googleUser.getBasicProfile();
-                            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-                            console.log('Name: ' + profile.getName());
-                            console.log('Image URL: ' + profile.getImageUrl());
-                            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-                        }
-                    </script>
+                    <a class="forgot" href="register">Non hai un account? Registrati</a>
+                </form>
             </div>
         </div>
     </div>

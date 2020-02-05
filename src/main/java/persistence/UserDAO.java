@@ -93,7 +93,7 @@ public class UserDAO {
         return null;
     }
 
-    public User getUserByEmail(String email) throws SQLException {
+    public User getUserByEmail(String email){
         Connection connection = DbAccess.getConnection();
         String query = "SELECT * FROM public.user where email=?";
         try {
@@ -178,6 +178,22 @@ public class UserDAO {
         } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean googleIdAlreadyExists(int id) {
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT * FROM id_google WHERE id=?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.isClosed()){
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
 }
