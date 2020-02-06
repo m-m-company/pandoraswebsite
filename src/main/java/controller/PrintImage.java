@@ -24,10 +24,18 @@ public class PrintImage extends HttpServlet {
         else{
             u = (User) req.getSession().getAttribute("user");
         }
-        byte[] imageBytes = u.getImage();
-        resp.setContentType("image/jpeg");
-        resp.setContentLength(imageBytes.length);
-        resp.getOutputStream().write(imageBytes);
+        if(u.isGoogleUser()){
+            String urlImage = DAOFactory.getInstance().makeUserDAO().getGoogleProfileImage(u.getEmail());
+            this.log(urlImage);
+            resp.setContentType("text/html");
+            resp.getWriter().write(urlImage);
+        }
+        else {
+            byte[] imageBytes = u.getImage();
+            resp.setContentType("image/jpeg");
+            resp.setContentLength(imageBytes.length);
+            resp.getOutputStream().write(imageBytes);
+        }
     }
 
 }

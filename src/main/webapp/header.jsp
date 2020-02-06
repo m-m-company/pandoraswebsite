@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="css/login.css">
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@beta/dist/js.cookie.min.js"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
     <script src="scripts/header.js"></script>
 </head>
 <header>
@@ -30,10 +30,10 @@
                     <%} else if (request.getSession().getAttribute("logged") != null && (boolean) request.getSession().getAttribute("logged")) {%>
                     <div class="nav-item dropdown show">
                         <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="true" href="#">
-                            <% if ( ((User) request.getSession().getAttribute("user")).getImage() == null) { %>
-                            <img class="dropdown-image" src="https://www.gravatar.com/avatar/1234566?size=200&d=mm" width="50" height="50">
+                            <% if ( ((User) request.getSession().getAttribute("user")).getImage() == null && !(((User) request.getSession().getAttribute("user")).isGoogleUser())) { %>
+                                <img class="dropdown-image" src="https://www.gravatar.com/avatar/1234566?size=200&d=mm" width="50" height="50">
                             <% } else { %>
-                            <img class="dropdown-image" src="/printImage" width="50" height="50">
+                                <img class="dropdown-image" src="/printImage" width="50" height="50">
                             <% } %>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" role="menu">
@@ -66,12 +66,14 @@
                         <button type="button" class="btn btn-primary btn-block" id="loginBtn">Login</button>
                     </div>
                     <div class="form-group">
+                        <% if (request.getSession().getAttribute("logged") == null || !(boolean) request.getSession().getAttribute("logged")) {%>
                         <div class="g-signin2" data-onsuccess="onSignIn"></div>
                         <script>
                             function onSignIn(googleUser) {
-                                <!--googleSignIn(googleUser);-->
+                                googleSignIn(googleUser);
                             }
                         </script>
+                        <% } %>
                     </div>
                     <a class="forgot" href="forgotPassword">Hai dimenticato la tua password?</a>
                     <a class="forgot" href="register">Non hai un account? Registrati</a>

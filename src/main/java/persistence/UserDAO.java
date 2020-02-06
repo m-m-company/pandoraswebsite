@@ -211,4 +211,19 @@ public class UserDAO {
         return false;
     }
 
+    public String getGoogleProfileImage(String email) {
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT * FROM id_google WHERE email=?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            return resultSet.getString("profile_image");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

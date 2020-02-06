@@ -33,6 +33,12 @@ $(document).ready(()=>{
     })
 });
 
+function onLoad() {
+    gapi.load('auth2', function() {
+        gapi.auth2.init();
+    });
+}
+
 function signOut() {
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
@@ -48,7 +54,6 @@ function googleSignIn(googleUser) {
             token: googleUser.getAuthResponse().id_token
         },
         success: function () {
-            console.log("ciao");
             $.ajax({
                type: "POST",
                url: "/login",
