@@ -25,7 +25,8 @@
         </li>
         <c:set var="i" value="2" scope="page"></c:set>
         <c:forEach items="${userLibrary}" var="game">
-            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-${i}">${game.getName()}</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-${i}">${game.getName()}</a>
+            </li>
             <c:set var="i" value="${i + 1}" scope="page"></c:set>
         </c:forEach>
     </ul>
@@ -79,9 +80,14 @@
             <c:set var="k" value="${k + 1}"></c:set>
             <c:set var="j" value="${j + 1}"></c:set>
         </c:forEach>
-        </div>
+    </div>
     <!-- script for charts -->
+    <%-- FIXME: Can't move this on an external file 'cause of the ${}, can we fix it? --%>
     <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
         let ctx = document.getElementById('hoursChart').getContext('2d');
         let chart = new Chart(ctx, {
             type: 'line',
@@ -97,7 +103,7 @@
             options: {}
         });
         let gamesHoursCharts = document.getElementsByClassName("chartsHoursPlayed");
-        for (let c =0; c<gamesHoursCharts.length; c++){
+        for (let c = 0; c < gamesHoursCharts.length; c++) {
             let canvas = gamesHoursCharts[c];
             let ctx = canvas.getContext('2d');
             console.log(${arrayHashMapHoursKeys});
@@ -116,7 +122,7 @@
             });
         }
         let scoresCharts = document.getElementsByClassName("chartsScoresGame");
-        for (let c =0; c<scoresCharts.length; c++){
+        for (let c = 0; c < scoresCharts.length; c++) {
             let canvas = scoresCharts[c];
             let ctx = canvas.getContext('2d');
             let chart = new Chart(ctx, {
@@ -134,14 +140,6 @@
             });
         }
     </script>
-
-
     <jsp:include page="footer.html"></jsp:include>
 </body>
-<script>
-    $("#menu-toggle").click(function (e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-</script>
 </html>

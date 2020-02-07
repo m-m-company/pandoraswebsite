@@ -18,10 +18,12 @@
 <jsp:include page="profileMenu.html"></jsp:include>
 <div style="margin-left: 20%">
     <ul class="nav nav-tabs">
-        <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tab-1">General Stats</a></li>
+        <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tab-1">General Stats</a>
+        </li>
         <c:set var="i" value="2" scope="page"></c:set>
         <c:forEach items="${uploadedGames}" var="game">
-            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-${i}">${game.getName()}</a></li>
+            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-${i}">${game.getName()}</a>
+            </li>
             <c:set var="i" value="${i+1}" scope="page"></c:set>
         </c:forEach>
     </ul>
@@ -46,54 +48,61 @@
         </div>
         <c:set var="i" value="2" scope="page"></c:set>
         <c:forEach items="${uploadedGames}" var="game">
-        <div class="tab-pane" role="tabpanel" id="tab-${i}">
-            <div class="row">
-                <div class="col">
-                    <div class="bg-dark border rounded border-info">
-                        <p class="text-center">Review starrings</p>
-                        <p class="text-center">Average: ${averageStarring.get(Integer.parseInt(i))}</p>
+            <div class="tab-pane" role="tabpanel" id="tab-${i}">
+                <div class="row">
+                    <div class="col">
+                        <div class="bg-dark border rounded border-info">
+                            <p class="text-center">Review starrings</p>
+                            <p class="text-center">Average: ${averageStarring.get(Integer.parseInt(i))}</p>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <div>
+                            <canvas id="starringsGame-${i}" class="canvas-size"></canvas>
+                        </div>
                     </div>
                 </div>
-                <div class="col-7">
-                    <div><canvas id="starringsGame-${i}" class="canvas-size"></canvas></div>
+                <div class="row">
+                    <div class="col">
+                        <div class="bg-dark border rounded border-info">
+                            <p class="text-center">Sells</p>
+                            <p class="text-center">Total: ${sellsPerGame.get(Integer.parseInt(i))}</p>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <div>
+                            <canvas id="sellsGame-${i}" class="canvas-size"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="bg-dark border rounded border-info">
+                            <p class="text-center">Price</p>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <div>
+                            <canvas id="priceGame-${i}" class="canvas-size"></canvas>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col">
-                    <div class="bg-dark border rounded border-info">
-                        <p class="text-center">Sells</p>
-                        <p class="text-center">Total: ${sellsPerGame.get(Integer.parseInt(i))}</p>
-                    </div>
-                </div>
-                <div class="col-7">
-                    <div>
-                        <canvas id="sellsGame-${i}" class="canvas-size"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <div class="bg-dark border rounded border-info">
-                        <p class="text-center">Price</p>
-                    </div>
-                </div>
-                <div class="col-7">
-                    <div>
-                        <canvas id="priceGame-${i}" class="canvas-size"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
             <c:set var="i" scope="page" value="${i+1}"></c:set>
         </c:forEach>
     </div>
 </div>
 
 <!-- script for charts -->
+<%-- FIXME: same as userStats --%>
 <script>
+    $("#menu-toggle").click(function (e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
     let i = ${i};
-    for (let c=2; c<i; c++){
-        var ctx = document.getElementById('starringsGame-'+c).getContext('2d');
+    for (let c = 2; c < i; c++) {
+        var ctx = document.getElementById('starringsGame-' + c).getContext('2d');
         var chart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -109,8 +118,8 @@
         });
     }
     i = ${i};
-    for (let c=2; c<i; c++){
-        var ctx = document.getElementById('sellsGame-'+c).getContext('2d');
+    for (let c = 2; c < i; c++) {
+        var ctx = document.getElementById('sellsGame-' + c).getContext('2d');
         var chart = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -126,8 +135,8 @@
         });
     }
     i = ${i};
-    for (let c=2; c<i; c++){
-        var ctx = document.getElementById('priceGame-'+c).getContext('2d');
+    for (let c = 2; c < i; c++) {
+        var ctx = document.getElementById('priceGame-' + c).getContext('2d');
         var chart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -143,16 +152,8 @@
         });
     }
 </script>
-
-
 <footer>
     <jsp:include page="footer.html"></jsp:include>
 </footer>
 </body>
-<script>
-    $("#menu-toggle").click(function (e) {
-        e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
-    });
-</script>
 </html>

@@ -1,5 +1,23 @@
+let tags;
+let alreadyClicked = [];
+const getTags = () => {
+    $.ajax({
+        type: 'GET',
+        url: "/getTags",
+        success: (data) => {
+            tags = data
+        },
+        async: false
+    })
+};
+
 linkSize = 1;
 tagSize = 1;
+getTags();
+
+function populateList(event) {
+
+}
 
 function addRow(event) {
     let actualRow = $(event.target.parentNode.parentNode);
@@ -19,8 +37,8 @@ function addRow(event) {
         let newInputTag = newRow[0].children[0].children[0];
         let oldInputTag = actualRow[0].children[0].children[0];
         let actualName = $(oldInputTag).attr("name");
-        let id = (Number(actualName.split("-")[1])+1).toString();
-        $(newInputTag).attr("name","tag-".concat(id));
+        let id = (Number(actualName.split("-")[1]) + 1).toString();
+        $(newInputTag).attr("name", "tag-".concat(id));
         newRow.insertAfter(actualRow);
         reformatName(newRow, true);
     }
@@ -43,17 +61,16 @@ function removeRow(event) {
 
 function reformatName(actualRow, up) {
     let nextRow = actualRow[0].nextSibling;
-    if(nextRow != null){
-        while(nextRow.nextSibling !== null){
+    if (nextRow != null) {
+        while (nextRow.nextSibling !== null) {
             let inputText = nextRow.children[0].children[0];
             let name = $(inputText).attr("name").split("-")[0];
             name.concat("-");
             let id = Number($(inputText).attr("name").split("-")[1]);
             console.log(id);
-            if(up){
+            if (up) {
                 ++id;
-            }
-            else{
+            } else {
                 --id;
             }
             $(inputText).attr("name", name.concat(String(id)));
