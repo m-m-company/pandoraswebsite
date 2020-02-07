@@ -42,44 +42,6 @@
                     <canvas id="hoursChart" class="canvas-size"></canvas>
                 </div>
             </div>
-            <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3>I tuoi commenti e recensioni</h3>
-                        </div>
-                        <div class="card-body" style="height: auto; width: auto">
-                            <ul class="list-group" id="commentList">
-                                <li class="list-group-item" style="margin-bottom:6px;">
-                                    <div class="media">
-                                        <div class="media-body">
-                                            <div class="media" style="overflow:visible;">
-                                                <div><img class="mr-3" style="width: 25px; height:25px;"
-                                                          src="assets/logo.png"></div>
-                                                <div class="media-body" style="overflow:visible;">
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <a href="#">Sara Doe</a>
-                                                            <div>
-                                                                <span></span>
-                                                                <span></span>
-                                                                <span></span>
-                                                                <span></span>
-                                                                <span></span>
-                                                            </div>
-                                                            <p><br>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <c:set var="j" value="2" scope="page"></c:set>
         <c:set var="k" value="0" scope="page"></c:set>
@@ -89,7 +51,14 @@
                     <div class="col">
                         <div class="bg-dark border rounded border-info">
                             <p class="text-center">Hours Played</p>
-                            <p class="text-center">Total: ${totalGameHoursPlayed.get(k)}</p>
+                            <p class="text-center">Total:
+                                <c:if test="${totalGameHoursPlayed.size() != 0}">
+                                    ${totalGameHoursPlayed.get(k)}
+                                </c:if>
+                                <c:if test="${totalGameHoursPlayed.size() != 0}">
+                                    0
+                                </c:if>
+                            </p>
                         </div>
                     </div>
                     <div class="col-7">
@@ -128,8 +97,8 @@
             options: {}
         });
         let gamesHoursCharts = document.getElementsByClassName("chartsHoursPlayed");
-        for (var c =0; c<gamesHoursCharts.length; c++){
-            canvas = gamesHoursCharts[c];
+        for (let c =0; c<gamesHoursCharts.length; c++){
+            let canvas = gamesHoursCharts[c];
             let ctx = canvas.getContext('2d');
             console.log(${arrayHashMapHoursKeys});
             let chart = new Chart(ctx, {
@@ -141,6 +110,24 @@
                         backgroundColor: 'rgb(173, 216, 240)',
                         borderColor: 'rgb(255, 165, 0)',
                         data: ${arrayHashMapHoursValues}[c]
+                    }]
+                },
+                options: {}
+            });
+        }
+        let scoresCharts = document.getElementsByClassName("chartsScoresGame");
+        for (let c =0; c<scoresCharts.length; c++){
+            let canvas = scoresCharts[c];
+            let ctx = canvas.getContext('2d');
+            let chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ${scoresKeys}[c],
+                    datasets: [{
+                        label: 'Scores',
+                        backgroundColor: 'rgb(173, 216, 240)',
+                        borderColor: 'rgb(255, 165, 0)',
+                        data: ${scoresValues}[c]
                     }]
                 },
                 options: {}

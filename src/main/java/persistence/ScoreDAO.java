@@ -33,12 +33,21 @@ public class ScoreDAO {
         }
         return null;
     }
-    public HashMap<Integer, Integer> getDatasForGamesHoursCharts(int id){
+
+    public TreeMap<String, Integer> getScoresByIdUserForGameId(int user, int game){
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT sum()";
-        try{
+        String query = "SELECT AVG(score.score), date(score.date) FROM score WHERE id_user = ? AND id_game = ? GROUP BY date(score.date)";
+        TreeMap<String, Integer> scores = new TreeMap<>();
+        try {
             statement = connection.prepareStatement(query);
-        }catch (SQLException e){
+            statement.setInt(1,user);
+            statement.setInt(2,game);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                scores.put("'"+resultSet.getDate(2)+"'", resultSet.getInt(1));
+            }
+            return scores;
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;

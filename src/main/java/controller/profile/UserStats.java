@@ -20,46 +20,39 @@ public class UserStats extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User u = (User)req.getSession().getAttribute("user");
-        int id = u.getId();
+        ArrayList<Game> userLibrary = DAOFactory.getInstance().makeUserDAO().getGames(u);
+        ArrayList<TreeMap<String, Integer>> scoresArray = new ArrayList<>();
+        ArrayList<Set<String>> scoresKeys = new ArrayList<>();
+        ArrayList<Collection<Integer>> scoresValues = new ArrayList<>();
+        ArrayList<TreeMap<Integer, Integer>> arrayListHashMaps = new ArrayList<>();
+        ArrayList<Set<Integer>> hashMapHoursKeys = new ArrayList<>();
+        ArrayList<Collection<Integer>> hashMapHoursValues = new ArrayList<>();
         float totalHours = 0f;
-        TreeMap<String, Integer> hoursPlayedYear = DAOFactory.getInstance().makeHoursPlayedDAO().getHoursPlayedFromIdUser(id);
+        TreeMap<String, Integer> hoursPlayedYear = DAOFactory.getInstance().makeHoursPlayedDAO().getHoursPlayedFromIdUser(u.getId());
         for(String game: hoursPlayedYear.keySet())
         {
             totalHours += hoursPlayedYear.get(game);
         }
-        ArrayList<Pair<Integer, String>> gameScore = DAOFactory.getInstance().makeScoreDAO().getScoresFromIdUser(id);
-        Pair<Integer, String> bestScore = new Pair<Integer, String>(0,"");
-        //bestScore.setFirst(gameScore.get(0).getFirst());
-        //bestScore.setSecond(gameScore.get(0).getSecond());
-        for(Pair<Integer,String> p: gameScore)
-        {
-            if(p.getFirst() > bestScore.getFirst())
-            {
-                bestScore.setSecond(p.getSecond());
-                bestScore.setFirst(p.getFirst());
-            }
-        }
-        ArrayList<Game> userLibrary = DAOFactory.getInstance().makeUserDAO().getGames(u);
-        ArrayList<TreeMap<Integer, Integer>> arrayListHashMaps = new ArrayList<>();
-        for (Game g : userLibrary){
-            arrayListHashMaps.add(DAOFactory.getInstance().makeHoursPlayedDAO().getHoursPlayedYEARGAMEbyIdUser(u.getId(),g.getId()));
-        }
-        ArrayList<Set<Integer>> hashMapHoursKeys = new ArrayList<>();
-        for (TreeMap<Integer, Integer> map : arrayListHashMaps){
-            hashMapHoursKeys.add(map.keySet());
-        }
-        ArrayList<Collection<Integer>> hashMapHoursValues = new ArrayList<>();
-        for (TreeMap<Integer, Integer> map : arrayListHashMaps){
-            hashMapHoursValues.add(map.values());
-        }
-        req.setAttribute("totalGameHoursPlayed", DAOFactory.getInstance().makeHoursPlayedDAO().getTotalHoursPlayedByUser(id));
+        userLibrary.forEach(game ->{
+            scoresArray.add(DAOFactory.getInstance().makeScoreDAO().getScoresByIdUserForGameId(u.getId(), game.getId()));
+            arrayListHashMaps.add(DAOFactory.getInstance().makeHoursPlayedDAO().getHoursPlayedYEARGAMEbyIdUser(u.getId(),game.getId()));
+        });
+        scoresArray.forEach(stringIntegerTreeMap -> {
+            scoresKeys.add(stringIntegerTreeMap.keySet());
+            scoresValues.add(stringIntegerTreeMap.values());
+        });
+        arrayListHashMaps.forEach(integerIntegerTreeMap -> {
+            hashMapHoursKeys.add(integerIntegerTreeMap.keySet());
+            hashMapHoursValues.add(integerIntegerTreeMap.values());
+        });
+        req.setAttribute("totalGameHoursPlayed", DAOFactory.getInstance().makeHoursPlayedDAO().getTotalHoursPlayedByUser(u.getId()));
         req.setAttribute("arrayHashMapHoursKeys",hashMapHoursKeys);
         req.setAttribute("arrayHashMapHoursValues", hashMapHoursValues);
         req.setAttribute("hoursPlayedKeys", hoursPlayedYear.keySet());
         req.setAttribute("hoursPlayedValues", hoursPlayedYear.values());
         req.setAttribute("totalHoursPlayed", totalHours);
-        req.setAttribute("bestScoreName", bestScore.getSecond());
-        req.setAttribute("bestScoreValue", bestScore.getFirst());
+        req.setAttribute("scoresKeys", scoresKeys);
+        req.setAttribute("scoresValues", scoresValues);
         RequestDispatcher rd = req.getRequestDispatcher("userStats.jsp");
         rd.include(req,resp);
     }

@@ -82,10 +82,10 @@ public class ReviewDAO {
         Connection connection = DbAccess.getConnection();
         TreeMap<String, Integer> reviews = new TreeMap<>();
         String query =
-                "SELECT date, avg(reviews.stars) " +
+                "SELECT date(reviews.date), avg(reviews.stars) " +
                 "FROM reviews " +
                 "WHERE id_game = ? " +
-                "GROUP BY reviews.date";
+                "GROUP BY date(reviews.date)";
         try {
             statement = connection.prepareStatement(query);
             statement.setInt(1,id);
