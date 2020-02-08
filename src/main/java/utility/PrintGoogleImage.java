@@ -1,4 +1,4 @@
-package controller;
+package utility;
 
 import model.User;
 import persistence.DAOFactory;
@@ -9,10 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
-@WebServlet("/printImage")
-public class PrintImage extends HttpServlet {
+@WebServlet(value = "/printGoogleImage", name = "printGoogleImage")
+public class PrintGoogleImage extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -21,21 +20,17 @@ public class PrintImage extends HttpServlet {
             int userId = Integer.parseInt(req.getParameter("id"));
             u = DAOFactory.getInstance().makeUserDAO().getUserById(userId);
         }
-        else{
+        else {
             u = (User) req.getSession().getAttribute("user");
         }
-        if(u.isGoogleUser()){
-            String urlImage = DAOFactory.getInstance().makeUserDAO().getGoogleProfileImage(u.getEmail());
-            this.log(urlImage);
-            resp.setContentType("text/html");
-            resp.getWriter().write(urlImage);
+        String token = DAOFactory.getInstance().makeUserDAO().getGoogleToken(u.getEmail());
+        if(!GoogleToken.getInstance().verifyToken(token)){
+            //TODO: da gestire
+            this.log("token non valido per stampare l'immagine");
         }
-        else {
-            byte[] imageBytes = u.getImage();
-            resp.setContentType("image/jpeg");
-            resp.setContentLength(imageBytes.length);
-            resp.getOutputStream().write(imageBytes);
-        }
+        String url = GoogleToken.getInstance().getUrlImage();
+        resp.setContentType("text/html");
+        resp.getWriter().write("<img class=\"dropdown-image\" src=\""+url+"\" width=\"50\" height=\"50\">");
     }
 
 }

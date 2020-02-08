@@ -33,7 +33,11 @@
                             <% if ( ((User) request.getSession().getAttribute("user")).getImage() == null && !(((User) request.getSession().getAttribute("user")).isGoogleUser())) { %>
                                 <img class="dropdown-image" src="https://www.gravatar.com/avatar/1234566?size=200&d=mm" width="50" height="50">
                             <% } else { %>
-                                <img class="dropdown-image" src="/printImage" width="50" height="50">
+                                <% if ( (((User) request.getSession().getAttribute("user"))).isGoogleUser()) { %>
+                                    <jsp:include page="/printGoogleImage"></jsp:include>
+                                <% } else { %>
+                                    <img class="dropdown-image" src="/printImage" width="50" height="50">
+                                <% } %>
                             <% } %>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" role="menu">

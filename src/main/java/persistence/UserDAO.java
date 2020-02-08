@@ -125,14 +125,13 @@ public class UserDAO {
         }
     }
 
-    public void insertGoogleUser(String id, String email, String image) {
+    public void insertGoogleUser(String token, String email) {
         Connection connection = DbAccess.getConnection();
-        String query = "INSERT INTO id_google(id, email, profile_image) values(?,?,?)";
+        String query = "INSERT INTO id_google(token, email) values(?,?)";
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1, id);
+            statement.setString(1, token);
             statement.setString(2, email);
-            statement.setString(3, image);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -195,12 +194,12 @@ public class UserDAO {
         }
     }
 
-    public boolean googleIdAlreadyExists(String id) {
+    public boolean googleIdAlreadyExists(String token) {
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT * FROM id_google WHERE id=?";
+        String query = "SELECT * FROM id_google WHERE token=?";
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1, id);
+            statement.setString(1, token);
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()){
                 return true;
@@ -211,7 +210,7 @@ public class UserDAO {
         return false;
     }
 
-    public String getGoogleProfileImage(String email) {
+    public String getGoogleToken(String email) {
         Connection connection = DbAccess.getConnection();
         String query = "SELECT * FROM id_google WHERE email=?";
         try {
@@ -219,7 +218,7 @@ public class UserDAO {
             statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
-            return resultSet.getString("profile_image");
+            return resultSet.getString("token");
         } catch (SQLException e) {
             e.printStackTrace();
         }
