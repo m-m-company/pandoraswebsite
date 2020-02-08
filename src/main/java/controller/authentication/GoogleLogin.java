@@ -22,18 +22,17 @@ public class GoogleLogin extends HttpServlet {
                 this.log("verifica del token fallita");
             }
             String email = GoogleToken.getInstance().getEmail();
-            String username = GoogleToken.getInstance().getUsername();
-            String description = "Ciao, sono " + username;
             if(DAOFactory.getInstance().makeUserDAO().getUserByEmail(email) == null){
+                String username = GoogleToken.getInstance().getUsername();
+                String description = "Ciao, sono " + username;
                 DAOFactory.getInstance().makeUserDAO().insertUser(email, username, "", description, true);
                 DAOFactory.getInstance().makeUserDAO().insertGoogleUser(token, email);
             }
-            else{
-                //TODO: da gestire
-                this.log("email google non trovata nel database");
-            }
+            resp.setStatus(201);
+        } else {
+            //TODO: da gestire
+            this.log("email già presente nel database");
         }
-        resp.setStatus(201);
     }
 
 }

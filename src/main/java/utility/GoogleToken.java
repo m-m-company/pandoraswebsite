@@ -13,7 +13,6 @@ public class GoogleToken {
 
     private static GoogleToken instance = null;
     private GoogleIdTokenVerifier verifier = null;
-    private GoogleIdToken idToken = null;
     private GoogleIdToken.Payload payload = null;
 
     private GoogleToken() {
@@ -30,10 +29,12 @@ public class GoogleToken {
     }
 
     public boolean verifyToken(String token) {
+        System.out.println("entro");
         try {
-            idToken = verifier.verify(token);
+            GoogleIdToken idToken = verifier.verify(token);
             if (idToken != null){
                 payload = idToken.getPayload();
+                System.out.println("true");
                 return true;
             }
         } catch (GeneralSecurityException | IOException e) {

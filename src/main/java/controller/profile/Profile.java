@@ -34,7 +34,7 @@ public class Profile extends HttpServlet{
 		req.setAttribute("toShow", toShow);
 	}
 
-	private void takeData(HttpServletRequest req, User user) {
+	private void takeData(HttpServletRequest req, User user, byte[] image) {
 		DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory();
 		ServletFileUpload servletFileUpload = new ServletFileUpload(diskFileItemFactory);
 		try {
@@ -42,7 +42,8 @@ public class Profile extends HttpServlet{
 			for (FileItem f : fileItems){
 				switch (f.getFieldName()){
 					case "profileImage":
-						user.setImage(f.get());
+						user.setImage(true);
+						image = f.get();
 						break;
 
 					case "username":
@@ -83,8 +84,9 @@ public class Profile extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		User user = (User) req.getSession().getAttribute("user");
-		takeData(req, user);
-		DAOFactory.getInstance().makeUserDAO().changeUserDetails(user);
+		byte[] image = null;
+		takeData(req, user, image);
+		DAOFactory.getInstance().makeUserDAO().changeUserDetails(user, image);
 		resp.sendRedirect("/profile");
 	}
 

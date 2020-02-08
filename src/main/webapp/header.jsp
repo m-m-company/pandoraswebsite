@@ -30,11 +30,11 @@
                     <%} else if (request.getSession().getAttribute("logged") != null && (boolean) request.getSession().getAttribute("logged")) {%>
                     <div class="nav-item dropdown show">
                         <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="true" href="#">
-                            <% if ( ((User) request.getSession().getAttribute("user")).getImage() == null && !(((User) request.getSession().getAttribute("user")).isGoogleUser())) { %>
+                            <% if ( !((User) request.getSession().getAttribute("user")).getImage() && !(((User) request.getSession().getAttribute("user")).isGoogleUser())) { %>
                                 <img class="dropdown-image" src="https://www.gravatar.com/avatar/1234566?size=200&d=mm" width="50" height="50">
                             <% } else { %>
                                 <% if ( (((User) request.getSession().getAttribute("user"))).isGoogleUser()) { %>
-                                    <jsp:include page="/printGoogleImage"></jsp:include>
+                                    <jsp:include page="/printGoogleImage?class=dropdown-image&width=50&height=50"></jsp:include>
                                 <% } else { %>
                                     <img class="dropdown-image" src="/printImage" width="50" height="50">
                                 <% } %>

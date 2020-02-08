@@ -36,15 +36,15 @@ public class UserDAO {
         return friends;
     }
 
-    public byte[] getProfilePicture(User u) {
+    public byte[] getProfilePicture(int id) {
         Connection connection = DbAccess.getConnection();
         String query = "SELECT profile_image FROM public.user where id = ?";
         try {
             statement = connection.prepareStatement(query);
-            statement.setInt(1, u.getId());
+            statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                return resultSet.getBytes("profileimage");
+            if (resultSet.next()) {
+                return resultSet.getBytes("profile_image");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -73,8 +73,12 @@ public class UserDAO {
     private User createSimpleUser(ResultSet resultSet) throws SQLException {
         if (resultSet.getInt("id") == 0)
             return null;
+        boolean image = false;
+        if (resultSet.getBytes("profile_image") != null) {
+            image = true;
+        }
         return new User(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("email"),
-                EncryptDecryptAES128.getInstance().decrypt(resultSet.getString("password")), resultSet.getString("description"), resultSet.getBytes("profile_image"), resultSet.getBoolean("google_user"));
+                EncryptDecryptAES128.getInstance().decrypt(resultSet.getString("password")), resultSet.getString("description"), image, resultSet.getBoolean("google_user"));
     }
 
     public User getUserById(int id) {
@@ -151,7 +155,7 @@ public class UserDAO {
         }
     }
 
-    public void changeUserDetails(User u) {
+    public void changeUserDetails(User u, byte[] image) {
         Connection connection = DbAccess.getConnection();
         String query = "UPDATE public.user SET username = ?, email = ?, description = ?, password = ?, profile_image = ? WHERE id = ?";
         try {
@@ -160,7 +164,7 @@ public class UserDAO {
             statement.setString(2, u.getEmail());
             statement.setString(3, u.getDescription());
             statement.setString(4, EncryptDecryptAES128.getInstance().encrypt(u.getPassword()));
-            statement.setBytes(5, u.getImage());
+            statement.setBytes(5, image);
             statement.setInt(6, u.getId());
             statement.executeUpdate();
         } catch (SQLException e) {

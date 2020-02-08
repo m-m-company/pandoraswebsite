@@ -15,13 +15,13 @@ public class User {
 	private String description;
 	private ArrayList<User> friends;
 	private ArrayList<Game> library;
-	private byte[] image;
+	private boolean image;
 	private boolean googleUser;
 
 
 	public User() {}
 
-	public User(int id, String username, String email, String password, String description, byte[] image, boolean googleUser) {
+	public User(int id, String username, String email, String password, String description, boolean image, boolean googleUser) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
@@ -64,10 +64,10 @@ public class User {
 	public void setFriends(ArrayList<User> friends) {
 		this.friends = friends;
 	}
-	public byte[] getImage() {
+	public boolean getImage() {
 		return image;
 	}
-	public void setImage(byte[] image) {
+	public void setImage(boolean image) {
 		this.image = image;
 	}
 	public String getEmail() {
@@ -108,7 +108,7 @@ public class User {
 				", description='" + description + '\'' +
 				", friends=" + friends +
 				", library=" + library +
-				", image=" + Arrays.toString(image) +
+				", image=" + image +
 				", email='" + email + '\'' +
 				'}';
 	}
