@@ -147,10 +147,12 @@ public class GameDAO {
         return null;
     }
 
-    public void insertGame(String name, String frontImage, String paymentEmail, String supportEmail, double price, int idDeveloper, String description, String specifics, ArrayList<String> tags, ArrayList<String> externalLinks) throws SQLException {
+    public void insertGame(String name, String frontImage, String paymentEmail, String supportEmail, double price,
+                           int idDeveloper, String description, String specifics, ArrayList<String> tags,
+                           ArrayList<String> externalLinks) {
         Connection connection = DbAccess.getConnection();
-        String query = "INSERT INTO game(id, name, front_img, payment_email, support_email, price, sale, release_date, id_developer, description, specifics) " +
-                "VALUES(default, ?, ?, ?, ?, ?, default , default , ?, ?, ?) ";
+        String query = "INSERT INTO game(id, name, front_img, payment_email, support_email, price, sale, release_date, " +
+                "id_developer, description, specifics) VALUES(default, ?, ?, ?, ?, ?, default , default , ?, ?, ?) ";
         try {
             statement = connection.prepareStatement(query);
             statement.setString(1, name);

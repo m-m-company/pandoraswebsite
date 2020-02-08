@@ -1,5 +1,4 @@
 let tags;
-let alreadyClicked = [];
 const getTags = () => {
     $.ajax({
         type: 'GET',
@@ -15,9 +14,28 @@ linkSize = 1;
 tagSize = 1;
 getTags();
 
-function populateList(event) {
-
-}
+$(document).ready(function () {
+    for(let i = 0; i < tags.length; ++i){
+        let id = "tag-".concat((i+1).toString());
+        let row = document.createElement("div");
+        row.classList.add("custom-control");
+        row.classList.add("custom-checkbox");
+        row.classList.add("custom-control-inline");
+        let tag = document.createElement("input");
+        tag.type = "checkbox";
+        tag.classList.add("custom-control-input");
+        tag.id = id;
+        tag.name = id;
+        tag.value = tags[i];
+        let label = document.createElement("label");
+        label.classList.add("custom-control-label");
+        label.htmlFor = "tag-".concat((i+1).toString());
+        label.innerHTML = tags[i];
+        row.appendChild(tag);
+        row.appendChild(label);
+        document.getElementById("tags").appendChild(row);
+    }
+});
 
 function addRow(event) {
     let actualRow = $(event.target.parentNode.parentNode);
