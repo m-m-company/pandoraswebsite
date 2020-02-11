@@ -3,7 +3,6 @@ $(document).ready(function () {
     let url = new URL(urlString);
     let c = url.searchParams.get("emailAlreadyExists");
     if(c === "true"){
-        alert("EMAIL GIA' ESISTENTE. PROVA AD EFFETTUARE IL LOGIN O INSERISCI UN'EMAIL DIVERSA");
-        //TODO : magari un modal?
+        showAlertModal("Email error", "This email already exists, try to login", ICONS.alert);
     }
 });

@@ -37,7 +37,7 @@ function showGame(event) {
             insertComments(game);
         },
         error: function (error) {
-            alert("Hai messo mani dove non dovevi, verrai punito severamente per questo");
+            showAlertModal("Generic error", "You broke something, reload the page and retry", ICONS.alert);
         }
     })
 }
@@ -138,7 +138,7 @@ function setUser(id, username, src) {
             src.src = "/PrintImage?id=" + user.id;
         },
         error: function () {
-            alert("QUALCOSA NON VA NELLA SEZIONE COMMENTI");
+            showAlertModal("Generic error", "There's an error with comments, try later", ICONS.alert);
         },
     })
 }

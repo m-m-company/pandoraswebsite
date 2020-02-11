@@ -10,6 +10,7 @@
     <title>Homepage</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="scripts/alertUtility.js"></script>
     <script src="scripts/indexScript.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -244,8 +245,31 @@
     </div>
     </div>
     </div>
-    <h1>FRANCESCOOOO</h1>
     <jsp:include page="footer.html" />
 </body>
-
+<div id="alertModal" class="modal fade" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header"><i id="alertIcon" class="fas fa-exclamation-triangle" style="padding-top: 0.5rem"></i>
+                <h4 class="modal-title" id="alertTitle"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">x</span></button>
+            </div>
+            <div class="modal-body">
+                <p id="alertContent"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">Okay</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    let urlString = window.location;
+    let url = new URL(urlString);
+    let c = url.searchParams.get("registered");
+    if(c === "true"){
+        showAlertModal("Congratulations", "The registration has gone well", ICONS.info);
+    }
+</script>
 </html>
