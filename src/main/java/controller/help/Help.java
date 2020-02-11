@@ -1,4 +1,4 @@
-package controller;
+package controller.help;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -22,10 +22,10 @@ import model.User;
 import persistence.DAOFactory;
 import utility.EmailSender;
 
-@WebServlet(value = "/help")
-public class GeneralHelp extends HttpServlet
+@WebServlet(value = "/help", name = "help")
+public class Help extends HttpServlet
 {
-	String to;
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
 	{
@@ -35,27 +35,25 @@ public class GeneralHelp extends HttpServlet
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
 	{
-		if(req.getParameter("send").equals("false"))
-			getPage(req, resp);
-		else if(req.getParameter("send").equals("true"))
-		{
-			new Thread(new EmailSender("This email is from " + req.getParameter("userEmail") + "\n "+ req.getParameter("content"),
-					req.getParameter("subject"), req.getParameter("receiver")));
-		}
+		String name = req.getParameter("name");
+		String email = req.getParameter("email");
+		String content = req.getParameter("content");
+		String text = "This email is from " + name + "(" + email + ")\n" + content;
+		String subject = req.getParameter("subject");
+		new Thread(new EmailSender(text, subject,"pandorasjar2019@gmail.com")).start();
 		resp.sendRedirect("/");
 	}
 
 	private void getPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
-		to = req.getParameter("emailTo");
+		String to = req.getParameter("emailTo");
 		if(to == null)
 		{
 			to = "pandorasjar2019@gmail.com";
 		}
-		User loggedUser = null;
-		if(req.getSession().getAttribute("user") != null)
+		User loggedUser = (User) req.getSession().getAttribute("user");
+		if(loggedUser != null)
 		{
-			loggedUser = (User) req.getSession().getAttribute("user");
 			String name = loggedUser.getUsername();
 			String email = loggedUser.getEmail();
 			req.setAttribute("name", name);

@@ -33,7 +33,7 @@ public class EmailSender implements Runnable {
             msg.setFrom(new InternetAddress("pandorasjar2019@gmail.com"));
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(this.receiver, false));
             msg.setSubject(subject);
-            msg.setText(text); //TODO: make it bello
+            msg.setText(text);
             msg.setHeader("X-Mailer", "");
             msg.setSentDate(new Date());
             SMTPTransport t = (SMTPTransport) session.getTransport("smtps");
