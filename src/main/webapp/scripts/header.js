@@ -56,15 +56,12 @@ function googleSignIn(googleUser) {
                },
                success: function () {
                     window.location.replace("/");
-               },
-               error: function () {
-                    alert("Something has gone wrong with google login");
                }
             });
         },
         error: function () {
-            alert("NOPE");
-            //TODO: da gestire se l'email è già presente nel database
+            showAlertModal("Email already exists", "This email has been already used for sign in", ICONS.info);
+            signOut();
         }
     });
 }

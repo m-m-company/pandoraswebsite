@@ -15,6 +15,7 @@
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
     <script src="scripts/header.js"></script>
+    <script src="scripts/alertUtility.js"></script>
 </head>
 <header>
     <nav class="navbar navbar-expand-md custom-header">
@@ -82,6 +83,23 @@
                     <a class="forgot" href="forgotPassword">Hai dimenticato la tua password?</a>
                     <a class="forgot" href="register">Non hai un account? Registrati</a>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="alertModal" class="modal fade" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header"><i id="alertIcon" class="fas fa-exclamation-triangle" style="padding-top: 0.5rem"></i>
+                <h4 class="modal-title" id="alertTitle"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">x</span></button>
+            </div>
+            <div class="modal-body">
+                <p id="alertContent"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">Okay</button>
             </div>
         </div>
     </div>
