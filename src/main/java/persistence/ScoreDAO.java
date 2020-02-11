@@ -15,7 +15,7 @@ public class ScoreDAO {
     public ArrayList<Pair<Integer, String>> getScoresFromIdUser(int id)
     {
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT score.value, game.name FROM public.score, public.game WHERE score.game = game.idgame and score.user = ?::integer";
+        String query = "SELECT score.score, game.name FROM public.score, public.game WHERE score.id_game = game.id and score.id_user = ?::integer";
         try {
             statement = connection.prepareStatement(query);
             statement.setString(1,Integer.toString(id));
@@ -24,7 +24,7 @@ public class ScoreDAO {
                 return null;
             ArrayList<Pair<Integer, String>> gamesScore = new ArrayList<Pair<Integer, String>>();
             while(result.next()) {
-                gamesScore.add(new Pair<Integer,String>(result.getInt("value"), result.getString("name")));
+                gamesScore.add(new Pair<Integer,String>(result.getInt("score"), result.getString("name")));
             }
             return gamesScore;
 
@@ -34,10 +34,29 @@ public class ScoreDAO {
         return null;
     }
 
+    public TreeMap<String, Integer> getScoresByIdUserForGameId(int user, int game){
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT AVG(score.score), date(score.date) FROM score WHERE id_user = ? AND id_game = ? GROUP BY date(score.date)";
+        TreeMap<String, Integer> scores = new TreeMap<>();
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1,user);
+            statement.setInt(2,game);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                scores.put("'"+resultSet.getDate(2)+"'", resultSet.getInt(1));
+            }
+            return scores;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public ArrayList<Score> getScoresFromIdGame(int id)
     {
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT * FROM public.score WHERE score.game = ? ORDER BY value DESC LIMIT 5";
+        String query = "SELECT * FROM public.scoregameusername WHERE id = ? ORDER BY value DESC LIMIT 5";
         try {
             statement = connection.prepareStatement(query);
             statement.setInt(1, id);
@@ -47,15 +66,12 @@ public class ScoreDAO {
             ArrayList<Score> gamesScore = new ArrayList<Score>();
             while(result.next()) {
                 Score score = new Score();
-                score.setIdScore(result.getInt("idscore"));
                 score.setIdGame(id);
-                score.setValue(result.getDouble("value"));
-                score.setIdUser(result.getInt("user"));
+                score.setValue(result.getDouble("score"));
                 score.setUsername(result.getString("username"));
                 gamesScore.add(score);
             }
             return gamesScore;
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

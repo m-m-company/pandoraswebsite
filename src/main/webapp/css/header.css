@@ -1,0 +1,52 @@
+.custom-header {
+  color: #f0f9ff;
+  background-color: midnightblue;
+  padding: 20px 40px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 0;
+}
+
+.header-link{
+  color: white;
+  text-decoration: none;
+}
+
+.header-link:hover{
+  color: orange;
+}
+
+.dropdown-image{
+  border-radius: 50%;
+}
+
+.dropdown-item:hover{
+  color: orange !important;
+}
+
+.dropdown-toggle:hover{
+  color: orange !important;
+}
+
+header .btn {
+  height: 30px;
+  position: absolute;
+  left: 0;
+  top: 5px;
+  border-radius:50%   ;
+}
+
+.modal-get-offer .modal-content {
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border-radius: 30px;
+  background-color: rgba(255,255,255,0);
+  color:#FFF;
+}
+.modal-content .form-control{
+  margin-bottom: 5%;
+}
+.modal-get-offer .modal-content .modal-header {
+  text-align:center;
+  border: none;
+}

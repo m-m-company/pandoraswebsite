@@ -12,13 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 
 @WebServlet(value="/GameDataSheet")
 public class GameDataSheet extends HttpServlet {
@@ -26,12 +21,15 @@ public class GameDataSheet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int gameId = Integer.parseInt(req.getParameter("gameId"));
         DAOFactory factory = DAOFactory.getInstance();
-        Game game = factory.makeGameDAO().getGameFromIdWithPreviews(gameId);
-        String usernameDeveloper = factory.makeUserDAO().getUserByIdUser(game.getIdDeveloper()).getUsername();
-        ArrayList<Review> reviews = factory.makeReviewDAO().getReviewsFromIdGame(gameId);
+        Game game = null;
+        //Game game = factory.makeGameDAO().getGameFromIdWithPreviews(gameId);
+        String usernameDeveloper = null;
+        usernameDeveloper = factory.makeUserDAO().getUserById(game.getIdDeveloper()).getUsername();
+        ArrayList<Review> reviews = factory.makeReviewDAO().getReviewsByIdGame(gameId);
         ArrayList<Score> scores = factory.makeScoreDAO().getScoresFromIdGame(gameId);
         if(req.getSession().getAttribute("userId") != null) {
-            boolean canBuy = factory.makeGameDAO().isGamePurchased(gameId,(int) req.getSession().getAttribute("userId"));
+            boolean canBuy = false;
+            canBuy = factory.makeGameDAO().isGamePurchased(gameId,(int) req.getSession().getAttribute("userId"));
             req.setAttribute("canBuy", canBuy);
         }
         sortScores(scores);
@@ -39,8 +37,8 @@ public class GameDataSheet extends HttpServlet {
             scores = (ArrayList<Score>) scores.subList(0,9);
 
         ArrayList<Integer> totalSize = new ArrayList<Integer>();
-        for(int i = 0; i < game.getPreviewsVID().size()+game.getPreviewsIMG().size();i++)
-            totalSize.add(i);
+        /*for(int i = 0; i < game.getPreviewsVID().size()+game.getPreviewsIMG().size();i++)
+            totalSize.add(i);*/
         req.setAttribute("game", game);
         req.setAttribute("totalSize", totalSize);
         req.setAttribute("developer", usernameDeveloper);

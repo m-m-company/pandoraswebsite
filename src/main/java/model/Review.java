@@ -1,11 +1,31 @@
 package model;
 
+import java.sql.Date;
+
 public class Review {
     private String username;
     private int author;
     private int idGame;
-    private String stars;
+    private int stars;
     private String comment;
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    private Date date;
+
+    public Review(int author, int idGame, int stars, Date date, String comment) {
+        this.author = author;
+        this.idGame = idGame;
+        this.stars = stars;
+        this.date = date;
+        this.comment = comment;
+    }
 
     public Review() {}
 
@@ -33,19 +53,11 @@ public class Review {
         this.idGame = idGame;
     }
 
-    public String getStars() {
+    public int getStars() {
         return stars;
     }
 
-    public void setStars(int numStars) {
-        if(numStars > 5)
-            return;
-        String newStar = "";
-        StringBuilder sb = new StringBuilder(newStar);
-        for(int i = 0; i < numStars; i++)
-            sb.append("⭐");
-        this.stars = sb.toString();
-    }
+    public void setStars(int numStars) { this.stars = numStars;}
 
     public String getComment() {
         return comment;

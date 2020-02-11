@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.Properties;
 
@@ -72,7 +73,7 @@ public class GeneralHelp extends HttpServlet
 
 	private void getPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
-		to = (String) req.getParameter("emailTo");
+		to = req.getParameter("emailTo");
 		if(to == null)
 		{
 			to = "pandorasjar2019@gmail.com";
@@ -81,7 +82,7 @@ public class GeneralHelp extends HttpServlet
 		if(req.getSession().getAttribute("userId") != null)
 		{
 			int idUser = (int) req.getSession().getAttribute("userId");
-			loggedUser = DAOFactory.getInstance().makeUserDAO().getUserByIdUser(idUser);
+			loggedUser = DAOFactory.getInstance().makeUserDAO().getUserById(idUser);
 			String name = loggedUser.getUsername();
 			String email = loggedUser.getEmail();
 			req.setAttribute("name", name);

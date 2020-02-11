@@ -19,7 +19,7 @@ public class PurchaseDAO {
     public TreeMap<Integer,Integer> getGamesYearFromIdUser(int id)
     {
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT * FROM public.purchase WHERE purchase.user = ?::integer";
+        String query = "SELECT * FROM public.purchase WHERE purchase.id_user = ?::integer";
         try {
             statement = connection.prepareStatement(query);
             statement.setString(1,Integer.toString(id));
@@ -32,7 +32,7 @@ public class PurchaseDAO {
             Calendar calendar = Calendar.getInstance();
             while(result.next()) {
                 calendar.setTime(result.getDate("date"));
-                Pair<Integer, Integer> pair = new Pair<Integer,Integer>(calendar.get(Calendar.YEAR),result.getInt("game"));
+                Pair<Integer, Integer> pair = new Pair<Integer,Integer>(calendar.get(Calendar.YEAR),result.getInt("id_game"));
                 yearGames.add(pair);
                 years.add(calendar.get(Calendar.YEAR));
             }
@@ -55,58 +55,7 @@ public class PurchaseDAO {
         return null;
     }
 
-    public SoldGames getSoldGamesFromIdUser(int id)
-    {
-        Connection connection = DbAccess.getConnection();
-        TreeMap<Integer,Integer> soldGPerYear = new TreeMap<Integer,Integer>();
-        TreeMap<Integer,Double> earnedMoneyPerYear = new TreeMap<Integer,Double>();
-        String queryYears = "SELECT EXTRACT(YEAR FROM date) FROM public.purchase;";
-        try
-        {
-            statement = connection.prepareStatement(queryYears);
-            ResultSet result = statement.executeQuery();
-            while(result.next())
-            {
-                soldGPerYear.put(Integer.valueOf(result.getString(1)), 0);
-                earnedMoneyPerYear.put(Integer.valueOf(result.getString(1)), 0.0);
-            }
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        String querySoldGames = "SELECT EXTRACT(YEAR FROM date), game FROM public.purchase;";
-        try
-        {
-            statement = connection.prepareStatement(querySoldGames);
-            ResultSet result = statement.executeQuery();
-            if(result.isClosed())
-                return null;
-            SoldGames soldGames = new SoldGames();
-            int idGame = 0;
-            double currentPrice = 0;
-            while(result.next())
-            {
-                idGame = result.getInt("game");
-                String currentYear = result.getString(1);
-                String queryGame = "SELECT * FROM public.game WHERE idGame = " + idGame + " AND developer = " + id + ";";
-                PreparedStatement statementGame = connection.prepareStatement(queryGame);
-                ResultSet resultGame = statementGame.executeQuery();
-                if(resultGame.next())
-                {
-                    soldGPerYear.put(Integer.valueOf(currentYear), soldGPerYear.get(Integer.valueOf(currentYear)) + 1);
-                    currentPrice += resultGame.getDouble("price");
-                    earnedMoneyPerYear.put(Integer.valueOf(currentYear), earnedMoneyPerYear.get(Integer.valueOf(currentYear)) + currentPrice);
-                }
-            }
-            soldGames.setSoldGPerYear(soldGPerYear);
-            soldGames.setEarnedMoneyPerYear(earnedMoneyPerYear);
-            return soldGames;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public TreeMap<Date, Integer>
 
     public ArrayList<Game> getBestThreeSoldGames()
     {
@@ -134,34 +83,102 @@ public class PurchaseDAO {
 
     public void insertNewPurchase(Acquisto acquisto) {
         Connection connection = DbAccess.getConnection();
-        int nextId = getPurchaseNextId(connection);
-        String query = "INSERT INTO public.purchase values(?,?,?,?)";
+        String query = "INSERT INTO public.purchase(id, id_user, id_game, price, date) VALUES (default,?,?,?,default)";
         try {
             Date date = new Date(100);
             statement = connection.prepareStatement(query);
-            statement.setInt(1,nextId);
-            statement.setDate(2, new java.sql.Date(System.currentTimeMillis()));
-            statement.setInt(3,acquisto.getIdUser());
-            statement.setInt(4,acquisto.getIdGame());
+            statement.setInt(1, acquisto.getIdUser());
+            statement.setInt(2, acquisto.getIdGame());
+            statement.setDouble(3, acquisto.getPrice());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private int getPurchaseNextId(Connection conn)
-    {
-        String query = "SELECT nextval('purchase_sequence') AS id";
-        PreparedStatement stmt = null;
+    public int getTotalSellsByIdUser(int id) {
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT COUNT(*) FROM purchase, game WHERE id_game = game.id AND game.id_developer = ?";
         try {
-            stmt = conn.prepareStatement(query);
-            ResultSet set = stmt.executeQuery();
-            set.next();
-            return set.getInt("id");
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                return resultSet.getInt(1);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return 0;
     }
 
+    public TreeMap<String, Integer> getSellsByIdGame(int id){
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT COUNT(*), purchase.date FROM purchase WHERE id_game = ? GROUP BY date";
+        TreeMap<String, Integer> treeMap = new TreeMap<>();
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                treeMap.put("'" + resultSet.getDate(2) + "'", resultSet.getInt(1));
+            }
+            return treeMap;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Collection<? extends Integer> getSellsByIdUser(int id) {
+        Connection connection = DbAccess.getConnection();
+        ArrayList<Integer> sells = new ArrayList<>();
+        String query = "SELECT COUNT(*), game.id FROM purchase, game WHERE id_game = game.id AND game.id_developer = ? GROUP BY game.id ORDER BY game.id";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                sells.add(resultSet.getInt(1));
+            }
+            return sells;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public int getEarningsByIdUser(int id) {
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT sum(purchase.price) FROM purchase, game WHERE purchase.id_game=game.id AND game.id_developer = ?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1,id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public TreeMap<String, Double> getPricesByIdGame(int id) {
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT AVG(purchase.price), purchase.date FROM purchase WHERE id_game = ? GROUP BY date";
+        TreeMap<String, Double> treeMap = new TreeMap<>();
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                treeMap.put("'" + resultSet.getDate(2) + "'", resultSet.getDouble(1));
+            }
+            return treeMap;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

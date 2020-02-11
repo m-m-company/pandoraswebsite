@@ -1,41 +1,38 @@
 package model;
 
+import persistence.DAOFactory;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class User {
-	static private int contId = 0;
 	private int id;
 	private String username;
+	private String email;
 	private String password;
 	private String description;
 	private ArrayList<User> friends;
 	private ArrayList<Game> library;
-	private byte[] image;
-	private String email;
+	private boolean image;
+	private boolean googleUser;
 
 
 	public User() {}
 
-	public User(String username, String password, String description, ArrayList<User> friends, String email, ArrayList<Game> library) {
-		id = contId++;
+	public User(int id, String username, String email, String password, String description, boolean image, boolean googleUser) {
+		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.description = description;
-		this.friends = friends;
 		this.email = email;
-		image = null;
-		this.library = library;
+		this.image = image;
+		this.googleUser = googleUser;
 	}
+
 	public ArrayList<Game> getLibrary() {
-		return library;
-	}
-	public static int getContId() {
-		return contId;
-	}
-	public static void setContId(int contId) {
-		User.contId = contId;
+		return DAOFactory.getInstance().makeUserDAO().getGames(this);
 	}
 	public int getId() {
 		return id;
@@ -67,10 +64,10 @@ public class User {
 	public void setFriends(ArrayList<User> friends) {
 		this.friends = friends;
 	}
-	public byte[] getImage() {
+	public boolean getImage() {
 		return image;
 	}
-	public void setImage(byte[] image) {
+	public void setImage(boolean image) {
 		this.image = image;
 	}
 	public String getEmail() {
@@ -81,6 +78,14 @@ public class User {
 	}
 	public void setLibrary(ArrayList<Game> library) {
 		this.library = library;
+	}
+
+	public boolean isGoogleUser() {
+		return googleUser;
+	}
+
+	public void setGoogleUser(boolean googleUser) {
+		this.googleUser = googleUser;
 	}
 
 	public boolean addFriend(User u)
@@ -103,7 +108,7 @@ public class User {
 				", description='" + description + '\'' +
 				", friends=" + friends +
 				", library=" + library +
-				", image=" + Arrays.toString(image) +
+				", image=" + image +
 				", email='" + email + '\'' +
 				'}';
 	}
