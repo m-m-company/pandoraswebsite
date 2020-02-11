@@ -1,7 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-pageEncoding="ISO-8859-1"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 <!DOCTYPE html>
 <html>
 
@@ -10,91 +6,79 @@ pageEncoding="ISO-8859-1"%>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Help</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Actor">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Andada">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-    <link rel="stylesheet" href="css/help.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css">
+    <link rel="stylesheet" href="assets/css/AXY-Contact-Us-1.css">
+    <link rel="stylesheet" href="assets/css/AXY-Contact-Us.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/TD-BS4-Simple-Contact-Form-1.css">
+    <link rel="stylesheet" href="assets/css/TD-BS4-Simple-Contact-Form.css">
 </head>
 
 <body>
-    <div class="float-left divSinistra">
-        <h3 class="text-monospace text-center">Benvenuto nella pagina dell'assistenza!</h3>
-        <p class="lead text-monospace text-center text-secondary">Questa email sara' inviata a ${emailTo}</p>
-        <img class="img-fluid" src="Assets/mailLogo.png" style="margin-left: 25%;"></div>
-    <div class="float-left divDestra">
-        <section class="td-form">
-            <div class="row td-form-wrapper">
-                <div class="col td-glass">
-                    <form class="td-form-wrapper" method="POST" action="/help?send=true">
-                        <div class="form-group">
-                            <div class="col-md-12"><label class="text-dark" for="name" style="font-weight: bold;">Nome</label>
-                                <div class="d-flex td-input-container">
-                                    <div class="input-group" style="margin-left: 2%;">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text fa fa-address-book"></span>
-                                        </div>
-                                        <c:if test="${not logged}">
-                                            <input id="name" class="form-control" type="text" placeholder="Il tuo nome" required>
-                                        </c:if>
-                                        <c:if test="${logged}">
-                                            <input id="name" class="form-control" type="text" value = ${name} readonly>
-                                        </c:if>
-                                        <div class="input-group-append"></div>
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-12"><label class="text-dark" for="email" style="font-weight: bold;">Email</label>
-                                <div class="d-flex td-input-container">
-                                    <div class="input-group" style="margin-left: 2%;">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text fa fa-envelope"></span>
-                                        </div>
-                                        <c:if test="${not logged}">
-                                            <input name="email" id="email" class="form-control" type="text" placeholder="something@example.com" required>
-                                        </c:if>
-                                        <c:if test="${logged}">
-                                            <input name="email" id="email" class="form-control" type="text" value=${email} readonly>
-                                        </c:if>
-                                        <div class="input-group-append"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <label class="text-dark" for="subject" style="font-weight: bold;">Oggetto</label>
-                                <div class="d-flex td-input-container">
-                                    <div class="input-group" style="margin-left: 2%;">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text fa fa-info-circle"></span>
-                                        </div>
-                                            <input name="subject" id="subject" class="form-control" type="text" placeholder="Oggetto della richiesta" required>
-                                        <div class="input-group-append"></div>
-                                </div>
-                            </div>
-                        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-12">
-            <label class="text-dark" for="message" style="font-weight: bold;">Messaggio</label>
-            <div class="d-flex td-input-container">
-                <i class="icon ion-android-create align-self-center"></i>
-                <textarea name="message" class="form-control" placeholder="Corpo della richiesta" id="message" rows="6" cols="50"></textarea>
+<div><div class="jumbotron-contact jumbotron-contact-sm">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-lg-12">
+                <h1 class="h1">
+                    Contact us <small>Feel free to contact us</small></h1>
             </div>
         </div>
     </div>
-    <div class="form-group">
-        <div class="col-md-12"><button class="btn btn-dark float-right" type="submit">Invia</button></div>
-    </div>
-    </form>
-    </div>
-    </div>
-    </section>
-    </div>
+</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="well well-sm">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">
+                                        Name</label>
+                                    <input type="text" class="form-control" id="name" placeholder="${name}" required="required" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">
+                                        Email Address</label>
+                                    <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span>
+                                </span>
+                                        <input type="email" class="form-control" id="email" placeholder="${email}" required="required" /></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subject">
+                                        Subject</label>
+                                    <input required class="form-control" type="text" id="subject" name="subject" placeholder="Your subject here"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">
+                                        Message</label>
+                                    <textarea name="content" id="message" class="form-control" rows="9" cols="25" required="required"
+                                              placeholder="Message"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary pull-right" id="btnContactUs">
+                                    Send Message</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <form>
+                    <address>
+                        <strong>You are sending this to:</strong><br>
+                        <a href="mailto:#">${emailTo}</a>
+                    </address>
+                </form>
+            </div>
+        </div>
+    </div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
