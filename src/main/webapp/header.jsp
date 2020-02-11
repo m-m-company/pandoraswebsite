@@ -15,41 +15,42 @@
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
     <script src="scripts/header.js"></script>
+    <script src="scripts/googleSignIn.js"></script>
 </head>
 <header>
     <nav class="navbar navbar-expand-md custom-header">
         <div class="container-fluid">
             <div><a href="/"><img alt="logo" src="Assets/logo.png"></a></div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
-                <div class="nav navbar-nav ml-auto">
-                    <% if (request.getSession().getAttribute("logged") == null || !(boolean) request.getSession().getAttribute("logged")) {%>
-                    <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav mr-auto">
+                    <li class="nav-item link" role="presentation"><a class="header-link" href="upload">UPLOAD</a></li>
+                    <li class="nav-item link" role="presentation"><a class="header-link" href="help">HELP</a></li>
+                </ul>
+                <% if (request.getSession().getAttribute("logged") == null || !(boolean) request.getSession().getAttribute("logged")) {%>
+                    <ul class="nav navbar-nav">
                         <li class="nav-link"><a class="header-link" href="register"><span class="fas fa-user"></span> Sign Up</a></li>
                         <li class="nav-link"><a class="header-link" href="#login" data-toggle="modal"><span class="fas fa-door-open"></span> Login</a></li>
                     </ul>
-                    <%} else if (request.getSession().getAttribute("logged") != null && (boolean) request.getSession().getAttribute("logged")) {%>
-                    <div class="nav-item dropdown show">
-                        <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="true" href="#">
-                            <% if ( !((User) request.getSession().getAttribute("user")).getImage() && !(((User) request.getSession().getAttribute("user")).isGoogleUser())) { %>
-                                <img class="dropdown-image" src="https://www.gravatar.com/avatar/1234566?size=200&d=mm" width="50" height="50">
+                <%} else if (request.getSession().getAttribute("logged") != null && (boolean) request.getSession().getAttribute("logged")) {%>
+                <div class="nav-item dropdown show">
+                    <a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="true" href="#">
+                        <% if ( !((User) request.getSession().getAttribute("user")).getImage() && !(((User) request.getSession().getAttribute("user")).isGoogleUser())) { %>
+                            <img class="dropdown-image" src="https://www.gravatar.com/avatar/1234566?size=200&d=mm" width="50" height="50">
+                        <% } else { %>
+                            <% if ( (((User) request.getSession().getAttribute("user"))).isGoogleUser()) { %>
+                                <jsp:include page="/printGoogleImage?class=dropdown-image&width=50&height=50"></jsp:include>
                             <% } else { %>
-                                <% if ( (((User) request.getSession().getAttribute("user"))).isGoogleUser()) { %>
-                                    <jsp:include page="/printGoogleImage?class=dropdown-image&width=50&height=50"></jsp:include>
-                                <% } else { %>
-                                    <img class="dropdown-image" src="/printImage" width="50" height="50">
-                                <% } %>
+                                <img class="dropdown-image" src="/printImage" width="50" height="50">
                             <% } %>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" role="menu">
-                            <a class="dropdown-item" role="presentation" href="profile">Settings</a>
-                            <a class="dropdown-item" role="presentation" href="library">Library</a>
-                            <a class="dropdown-item" role="presentation" href="upload">Upload</a>
-                            <a class="dropdown-item" role="presentation" href="help">Help</a>
-                            <a class="dropdown-item" role="presentation" href="logout" onclick="signOut()">Logout</a>
-                        </div>
+                        <% } %>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" role="menu">
+                        <a class="dropdown-item" role="presentation" href="profile">My profile</a>
+                        <a class="dropdown-item" role="presentation" href="library">My library</a>
+                        <a class="dropdown-item" role="presentation" href="logout" onclick="signOut()">Logout</a>
                     </div>
-                    <%}%>
                 </div>
+                <%}%>
             </div>
         </div>
     </nav>
@@ -71,7 +72,7 @@
                     </div>
                     <div class="form-group">
                         <% if (request.getSession().getAttribute("logged") == null || !(boolean) request.getSession().getAttribute("logged")) {%>
-                        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                        <div class="g-signin2" data-onsuccess="onSignIn" data-longtitle="true" data-width="auto"></div>
                         <script>
                             function onSignIn(googleUser) {
                                 googleSignIn(googleUser);

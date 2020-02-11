@@ -12,6 +12,12 @@
   text-decoration: none;
 }
 
+.link{
+  padding-left: 5rem;
+  padding-right: 5rem;
+  font-size: 1.6rem;
+}
+
 .header-link:hover{
   color: orange;
 }
@@ -21,7 +27,7 @@
 }
 
 .dropdown-item:hover{
-  color: orange !important;
+  color: blue !important;
 }
 
 .dropdown-toggle:hover{
