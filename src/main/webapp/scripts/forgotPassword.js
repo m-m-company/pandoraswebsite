@@ -3,6 +3,6 @@ $(document).ready(function () {
     let url = new URL(urlString);
     let c = url.searchParams.get("emailNotExists");
     if(c === "true"){
-        alert("L'EMAIL INSERITA NON ESISTE");
+        showAlertModal("Email error", "The email does not exists", ICONS.alert);
     }
 });

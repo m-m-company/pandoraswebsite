@@ -21,7 +21,7 @@ public class PrintGoogleImage extends HttpServlet {
             u = DAOFactory.getInstance().makeUserDAO().getUserById(userId);
             String token = DAOFactory.getInstance().makeUserDAO().getGoogleToken(u.getEmail());
             if(!(GoogleToken.getInstance().verifyToken(token))){
-                //TODO: da gestire
+                //TODO: da verificare
                 this.log("token non valido per stampare l'immagine");
             }
         }

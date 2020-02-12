@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>register</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
     <link rel="stylesheet" href="css/genericForm.css">
 </head>
 
 <body>
-<div class="register-photo" style="background-image: url(Assets/backgroundRegister.jpg);">
+<div class="register-photo" style="background-image: url(Assets/background2.jpg);">
     <div class="form-container">
         <form id="regForm" method="post">
             <h2 class="text-center"><strong>Crea un account!</strong></h2>
@@ -25,7 +26,9 @@
             <div class="form-group">
                 <div class="form-check">
                     <label class="form-check-label"><input class="form-check-input" type="checkbox" required="">
-                        <a target="_blank" href="https://www.privacypolicies.com/terms/view/cb295030ef5568133dec1aae0c6d0c7c">Accetto i termini e le condizioni d'uso</a>
+                        <a target="_blank"
+                           href="https://www.privacypolicies.com/terms/view/cb295030ef5568133dec1aae0c6d0c7c">Accetto i
+                            termini e le condizioni d'uso</a>
                     </label>
                 </div>
             </div>
@@ -52,10 +55,29 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script src="scripts/alertUtility.js"></script>
 <script src="scripts/checkPasswords.js"></script>
 <script src="scripts/captcha.js"></script>
 <script src="scripts/uniqueEmail.js"></script>
 <script src="scripts/googleSignIn.js"></script>
+  
+<div id="alertModal" class="modal fade" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header"><i id="alertIcon" class="fas fa-exclamation-triangle" style="padding-top: 0.5rem"></i>
+                <h4 class="modal-title" id="alertTitle"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">x</span></button>
+            </div>
+            <div class="modal-body">
+                <p id="alertContent"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">Okay</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 
 </html>

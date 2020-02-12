@@ -176,8 +176,6 @@ public class GameDAO {
         }
     }
 
-
-    //FIXME: DO WE NEED THIS THREE???
     public void insertPreview(int id, String imageName) {
         Connection connection = DbAccess.getConnection();
         String query = "INSERT INTO public.external_links(id, id_game, link) VALUES (default,?,?)";

@@ -19,13 +19,14 @@
 <jsp:include page="header.jsp"></jsp:include>
 <jsp:include page="profileMenu.html"></jsp:include>
 <c:set var="userLibrary" scope="page" value="${user.getLibrary()}"></c:set>
-<div style="margin-left: 20%">
+<div style="margin-left: 20%" id="all">
     <ul class="nav nav-tabs">
         <li class="nav-item"><a class="nav-link active" role="tab" data-toggle="tab" href="#tab-1">General Stats</a>
         </li>
         <c:set var="i" value="2" scope="page"></c:set>
         <c:forEach items="${userLibrary}" var="game">
-            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="tab" href="#tab-${i}">${game.getName()}</a>
+            <li class="nav-item">
+                <a class="nav-link" role="tab" data-toggle="tab" href="#tab-${i}">${game.getName()}</a>
             </li>
             <c:set var="i" value="${i + 1}" scope="page"></c:set>
         </c:forEach>
@@ -140,6 +141,7 @@
             });
         }
     </script>
-    <jsp:include page="footer.html"></jsp:include>
+</div>
+<jsp:include page="footer.html"></jsp:include>
 </body>
 </html>

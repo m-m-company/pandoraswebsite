@@ -3,11 +3,11 @@ $(document).ready(function () {
         let pswd =$("#password");
         let cpswd = $("#confirm");
         if(pswd.val().length <8){
-            alert("La password deve essere lunga almeno 8 caratteri");
+            showAlertModal("Password Error", "The password must at least 8 chars long", ICONS.alert);
             e.preventDefault(); //QUESTO FA FALLIRE IL SUBMIT, AL SERVER NON ARRIVA LA RICHIESTA POST!
         }
         if (pswd.val() !== cpswd.val()) {
-            alert("Le password non coincidono!");
+            showAlertModal("Password Error", "The passwords does not match", ICONS.alert);
             e.preventDefault();
         }
     })

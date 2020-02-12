@@ -18,7 +18,7 @@ public class GoogleLogin extends HttpServlet {
         String token = req.getParameter("token");
         if(!(DAOFactory.getInstance().makeUserDAO().googleIdAlreadyExists(token))){
             if(!GoogleToken.getInstance().verifyToken(token)){
-                //TODO: da gestire
+                //TODO: da verificare con altri profili
                 this.log("verifica del token fallita");
             }
             String email = GoogleToken.getInstance().getEmail();
@@ -27,11 +27,11 @@ public class GoogleLogin extends HttpServlet {
                 String description = "Ciao, sono " + username;
                 DAOFactory.getInstance().makeUserDAO().insertUser(email, username, "", description, true);
                 DAOFactory.getInstance().makeUserDAO().insertGoogleUser(token, email);
+                resp.setStatus(201);
             }
-            resp.setStatus(201);
-        } else {
-            //TODO: da gestire
-            this.log("email già presente nel database");
+            else{
+                resp.setStatus(403);
+            }
         }
     }
 

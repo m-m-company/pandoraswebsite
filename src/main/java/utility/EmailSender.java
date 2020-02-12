@@ -1,4 +1,4 @@
-package controller.confirmCode;
+package utility;
 
 import com.sun.mail.smtp.SMTPTransport;
 
@@ -10,14 +10,16 @@ import javax.mail.internet.MimeMessage;
 import java.util.Date;
 import java.util.Properties;
 
-public class CodeSender implements Runnable {
+public class EmailSender implements Runnable {
 
-    private String code;
+    private String text;
     private String receiver;
+    private String subject;
 
-    public CodeSender(String code, String receiver) {
-        this.code = code;
+    public EmailSender(String text, String subject, String receiver) {
+        this.text = text;
         this.receiver = receiver;
+        this.subject = subject;
     }
 
     @Override
@@ -30,9 +32,8 @@ public class CodeSender implements Runnable {
             Message msg = new MimeMessage(session);
             msg.setFrom(new InternetAddress("pandorasjar2019@gmail.com"));
             msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(this.receiver, false));
-            msg.setSubject("WELCOME!");
-            msg.setText(
-                    "Your code is: " + this.code); //TODO: make it bello
+            msg.setSubject(subject);
+            msg.setText(text);
             msg.setHeader("X-Mailer", "");
             msg.setSentDate(new Date());
             SMTPTransport t = (SMTPTransport) session.getTransport("smtps");
