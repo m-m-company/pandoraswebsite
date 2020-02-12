@@ -76,7 +76,7 @@ function insertPreviews(game) {
             data.map(function (link) {
                 $("#carousel").append(
                     "<div class=\"swiper-slide\">" +
-                    "<iframe width=\"560\" height=\"315\" src=\""+link+"\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>" +
+                    "<iframe width=\"560\" height=\"315\" src=\"" + link + "\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>" +
                     " </div>\n"
                 )
             })
@@ -106,7 +106,7 @@ function insertComments(game) {
         data: {
             idGame: game.id
         },
-        success: (data) =>{
+        success: (data) => {
             let commentList = document.getElementById("commentList");
             let row = commentList.children[0];
             for (let i = 0; i < data.length; ++i) {
@@ -116,7 +116,6 @@ function insertComments(game) {
                 }
                 let username = commentList.children[i].children[0].children[0].children[0].children[1].children[0].children[0].children[0];
                 let src = commentList.children[i].children[0].children[0].children[0].children[0].children[0];
-                setUser(data[i].author, username, src);
                 let rating = commentList.children[i].children[0].children[0].children[0].children[1].children[0].children[0].children[1];
                 let stars = data[i].stars;
                 for (let j = 1; j <= stars; ++j) {
@@ -129,26 +128,82 @@ function insertComments(game) {
                 }
                 let p = commentList.children[i].children[0].children[0].children[0].children[1].children[0].children[0].children[2];
                 $(p).html(data[i].comment);
+                console.log(p.parentNode);
+                populateComment(data[i].author, username, src, p.parentNode, data[i].id);
             }
         }
     });
 }
 
-function setUser(id, username, src) {
+function populateComment(idAuthor, username, src, div, idReview) {
     $.ajax({
         type: "POST",
         url: "/getUserForComment",
         data: {
-            id: id
+            id: idAuthor
         },
-        success: function (user) {
-            $(username).html(user.username);
-            username.href = "profile?id=" + user.id;
-            src.src = "/printImage?id=" + user.id;
-            console.log(src.src);
+        success: function (data) {
+            console.log(data);
+            $(username).html(data[1]);
+            username.href = "profile?id=" + data[0];
+            if (data[3] === "true") {
+                src.src = "/printImage?id=" + data[0];
+            } else {
+                src.src = "https://www.gravatar.com/avatar/1234566?size=200&d=mm";
+            }
+            if (data[2] === "true") {
+                $(div).append("<button type=\"button\" class=\"btn btn-dark btn-sm fa fa-edit\" id='" + idReview + "' onclick='modifyComment(event)'>\n" +
+                    "                                                </button>");
+                $(div).append("<button type=\"button\" class=\"btn btn-danger btn-sm fa fa-trash\" id='" + idReview + "' onclick='deleteComment(event)'>\n" +
+                    "                                                </button>")
+            }
         },
         error: function () {
             alert("QUALCOSA NON VA NELLA SEZIONE COMMENTI");
         },
     })
+}
+
+function modifyComment(event) {
+    let p = event.target.parentNode.children[2];
+    console.log(p);
+    let text = $(p).html();
+    $(p).replaceWith("<input type='text' placeholder='Insert your comment' value='" + text + "'>");
+    event.target.onclick = updateComment;
+    $(event.target).removeClass("btn-dark fa-edit").addClass("btn-success fa-check-circle");
+}
+
+function updateComment(event) {
+    $.ajax({
+        type: "POST",
+        url: "/updateComment",
+        data: {
+            idReview: event.target.id,
+            content: $(event.target.parentNode.children[2]).val()
+        },
+        success: function () {
+            window.location.reload()
+        },
+        error: function () {
+            //TODO: modal
+            alert("impossibile modificare il commento. Riprova")
+        }
+    });
+}
+
+function deleteComment(event) {
+    $.ajax({
+        type: "GET",
+        url: "/deleteComment",
+        data: {
+            id: event.target.id
+        },
+        success: function () {
+            $(event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode).remove();
+        },
+        error: function () {
+            //TODO: modal
+            alert("impossibile eliminare il commento. Ricarica")
+        }
+    });
 }

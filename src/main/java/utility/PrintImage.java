@@ -25,8 +25,6 @@ public class PrintImage extends HttpServlet {
             u = (User) req.getSession().getAttribute("user");
         }
         byte[] imageBytes = DAOFactory.getInstance().makeUserDAO().getProfilePicture(u.getId());
-        this.log(String.valueOf(imageBytes));
-        System.out.println("AHSJLDHASLDJHALSJDHSJDHALSDJH");
         resp.setContentType("image/jpeg");
         resp.setContentLength(imageBytes.length);
         resp.getOutputStream().write(imageBytes);

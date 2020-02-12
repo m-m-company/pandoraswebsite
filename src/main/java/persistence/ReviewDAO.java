@@ -12,7 +12,7 @@ public class ReviewDAO {
 
     public Review createSimpleReview(ResultSet resultSet){
         try {
-            return new Review(resultSet.getInt("id_user"), resultSet.getInt("id_game"),
+            return new Review(resultSet.getInt("id"), resultSet.getInt("id_user"), resultSet.getInt("id_game"),
                     resultSet.getInt("stars"), resultSet.getDate("date"), resultSet.getString("content"));
         } catch (SQLException e) {
             e.printStackTrace();
@@ -116,5 +116,37 @@ public class ReviewDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean deleteComment(int id) {
+        Connection connection = DbAccess.getConnection();
+        String query = "DELETE FROM reviews WHERE id=?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            if(statement.executeUpdate() != 0){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+
+    }
+
+    public boolean updateComment(int idReview, String content) {
+        Connection connection = DbAccess.getConnection();
+        String query = "UPDATE reviews SET content=?,date=default WHERE id=?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setString(1, content);
+            statement.setInt(2, idReview);
+            if(statement.executeUpdate() != 0){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

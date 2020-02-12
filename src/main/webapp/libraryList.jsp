@@ -15,7 +15,7 @@
             <h5>Libreria di ${user.getUsername()}</h5>
             <c:if test="${user.getLibrary().size() != 0}">
                 <c:forEach items="${user.getLibrary()}" var="game">
-                    <li class="nav-item shadow"><a class="nav-link active" id="${game.getName()}" onclick="showGame(event)">${game.getName()}</a></li>
+                    <li class="nav-item shadow" style="cursor: pointer"><a class="nav-link active" id="${game.getName()}" onclick="showGame(event)">${game.getName()}</a></li>
                 </c:forEach>
             </c:if>
         </ul>
