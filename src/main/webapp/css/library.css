@@ -1,0 +1,6 @@
+.background-library{
+    background-image: url(../Assets/background7.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
