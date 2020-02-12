@@ -39,7 +39,15 @@
                 <button class="btn btn-next btn-primary btn-block" type="submit">Registrati!</button>
             </div>
             <div class="form-group">
-                <a class="already" href="#Login" data-toggle="modal">Hai già un account? Accedi</a>
+                <div class="g-signin2" data-onsuccess="onSignIn" data-longtitle="true" data-width="auto"></div>
+                <script>
+                    function onSignIn(googleUser) {
+                        googleSignIn(googleUser);
+                    }
+                </script>
+            </div>
+            <div class="form-group">
+                <a class="already" href="#login" data-toggle="modal">Hai già un account? Accedi</a>
             </div>
         </form>
     </div>
@@ -51,7 +59,8 @@
 <script src="scripts/checkPasswords.js"></script>
 <script src="scripts/captcha.js"></script>
 <script src="scripts/uniqueEmail.js"></script>
-
+<script src="scripts/googleSignIn.js"></script>
+  
 <div id="alertModal" class="modal fade" role="dialog" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

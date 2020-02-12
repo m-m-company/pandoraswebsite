@@ -1,6 +1,6 @@
 .custom-header {
   color: #f0f9ff;
-  background-color: midnightblue;
+  background-color: #282d32;
   padding: 20px 40px;
   box-sizing: border-box;
   border: 0;
@@ -12,6 +12,10 @@
   text-decoration: none;
 }
 
+.link{
+  font-size: 1.5rem;
+}
+
 .header-link:hover{
   color: orange;
 }
@@ -21,7 +25,7 @@
 }
 
 .dropdown-item:hover{
-  color: orange !important;
+  color: blue !important;
 }
 
 .dropdown-toggle:hover{

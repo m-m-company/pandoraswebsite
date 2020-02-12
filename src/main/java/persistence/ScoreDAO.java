@@ -56,7 +56,7 @@ public class ScoreDAO {
     public ArrayList<Score> getScoresFromIdGame(int id)
     {
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT * FROM public.scoregameusername WHERE id = ? ORDER BY value DESC LIMIT 5";
+        String query = "SELECT * FROM public.scoregameusername WHERE id = ? ORDER BY public.scoregameusername.score DESC LIMIT 5";
         try {
             statement = connection.prepareStatement(query);
             statement.setInt(1, id);
