@@ -62,7 +62,8 @@ function insertPreviews(game) {
         },
         error: function () {
             $("#carousel").empty();
-            $("#carousel").append("<h1> Non ci sono immagini di preview disponibili </h1>");
+            $("#carousel").append("<h1 class='text-center'> Non ci sono immagini di preview disponibili </h1>");
+            $("#preview-swap").empty();
         }
     });
     $.ajax({
