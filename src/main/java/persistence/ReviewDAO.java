@@ -20,7 +20,7 @@ public class ReviewDAO {
         return null;
     }
 
-    public void addCommentForGame(int id, int stars, String comment, int author, String username){
+    public void addCommentForGame(int id, int stars, String comment, int author){
         Connection connection = DbAccess.getConnection();
         String query = "INSERT INTO public.reviews(id, id_game, id_user, content, stars, date) VALUES (default,?,?,?,?,default)";
         try {
@@ -60,10 +60,10 @@ public class ReviewDAO {
     public ArrayList<Review> getReviewsByIdGame(int id)
     {
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT * FROM public.reviewuser WHERE id_game = ?::integer";
+        String query = "SELECT * FROM public.reviews WHERE id_game = ?";
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1,Integer.toString(id));
+            statement.setInt(1,id);
             ResultSet result = statement.executeQuery();
             if(result.isClosed())
                 return null;
