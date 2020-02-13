@@ -47,6 +47,7 @@
                             <div class="dropdown-menu dropdown-menu-right" role="menu">
                                 <a class="dropdown-item" role="presentation" href="profile">My profile</a>
                                 <a class="dropdown-item" role="presentation" href="library">My library</a>
+                                <a class="dropdown-item" role="presentation" href="friends">My friends</a>
                                 <a class="dropdown-item" role="presentation" href="logout" onclick="signOut()">Logout</a>
                             </div>
                         </li>

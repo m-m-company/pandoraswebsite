@@ -30,7 +30,6 @@ public class Profile extends HttpServlet{
 		}else if (req.getParameter("id") != null){
 			toShow = DAOFactory.getInstance().makeUserDAO().getUserById(Integer.parseInt(req.getParameter("id")));
 		}
-		toShow.setFriends(DAOFactory.getInstance().makeUserDAO().getFriends(toShow));
 		req.setAttribute("toShow", toShow);
 	}
 

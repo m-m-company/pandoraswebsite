@@ -1,5 +1,6 @@
 package persistence;
 
+import model.Friend;
 import model.Game;
 import model.User;
 import org.apache.commons.io.IOUtils;
@@ -17,23 +18,31 @@ import java.util.ArrayList;
 public class UserDAO {
     private PreparedStatement statement;
 
-    public ArrayList<User> getFriends(User user) {
-        ArrayList<User> friends = new ArrayList<User>();
+    public ArrayList<Friend> getFriends(int id) {
+        ArrayList<Friend> friends = new ArrayList<>();
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT u.* FROM public.user as u, friends as uf WHERE uf.id_user1 = ? and u.id = uf.id_user2";
+        String query = "SELECT u.* FROM public.user as u, friends as f WHERE f.id_user1 = ? and u.id = f.id_user2";
         try {
             statement = connection.prepareStatement(query);
-            statement.setInt(1, user.getId());
+            statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            if (resultSet.isClosed())
-                return null;
             while (resultSet.next()) {
-                friends.add(createSimpleUser(resultSet));
+                friends.add(createSimpleFriend(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return friends;
+    }
+
+    private Friend createSimpleFriend(ResultSet resultSet) throws SQLException {
+        Friend friend = new Friend();
+        friend.setId(resultSet.getInt("id"));
+        friend.setUsername(resultSet.getString("username"));
+        friend.setDescription(resultSet.getString("description"));
+        friend.setGoogleUser(resultSet.getBoolean("google_user"));
+        friend.setEmail(resultSet.getString("email"));
+        return friend;
     }
 
     public byte[] getProfilePicture(int id) {
