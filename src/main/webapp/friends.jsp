@@ -16,13 +16,6 @@
                 <h2 class="text-center">Friends</h2>
             </div>
             <div class="row people" id="container-friends">
-                <div class="col-md-6 col-lg-4 item">
-                    <div class="box"><img class="rounded-circle" src="assets/img/1.jpg">
-                        <h3 class="name">Ben Johnson</h3>
-                        <p class="description">Aenean tortor est, vulputate quis leo in, vehicula rhoncus lacus. Praesent aliquam in tellus eu gravida. Aliquam varius finibus est, et interdum justo suscipit id. Etiam dictum feugiat tellus, a semper massa. </p>
-                        <div class="social"></div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

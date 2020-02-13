@@ -16,22 +16,25 @@ public class GoogleLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String token = req.getParameter("token");
-        if(!(DAOFactory.getInstance().makeUserDAO().googleIdAlreadyExists(token))){
-            if(!GoogleToken.getInstance().verifyToken(token)){
-                //TODO: da verificare con altri profili
-                this.log("verifica del token fallita");
-            }
-            String email = GoogleToken.getInstance().getEmail();
-            if(DAOFactory.getInstance().makeUserDAO().getUserByEmail(email) == null){
-                String username = GoogleToken.getInstance().getUsername();
-                String description = "Ciao, sono " + username;
-                DAOFactory.getInstance().makeUserDAO().insertUser(email, username, "", description, true);
-                DAOFactory.getInstance().makeUserDAO().insertGoogleUser(token, email);
-                resp.setStatus(201);
+        if(GoogleToken.getInstance().verifyToken(token)){
+            String id = GoogleToken.getInstance().getId();
+            String url = GoogleToken.getInstance().getUrlImage();
+            if(!(DAOFactory.getInstance().makeUserDAO().googleIdAlreadyExists(id))){
+                String email = GoogleToken.getInstance().getEmail();
+                if(DAOFactory.getInstance().makeUserDAO().getUserByEmail(email) == null){
+                    String username = GoogleToken.getInstance().getUsername();
+                    String description = "Ciao, sono " + username;
+                    DAOFactory.getInstance().makeUserDAO().insertUser(email, username, "", description, true);
+                    DAOFactory.getInstance().makeUserDAO().insertGoogleUser(id, email, url);
+                }
             }
             else{
-                resp.setStatus(403);
+                DAOFactory.getInstance().makeUserDAO().updateGoogleUrl(url, id);
             }
+            resp.setStatus(201);
+        }
+        else{
+            resp.setStatus(403);
         }
     }
 

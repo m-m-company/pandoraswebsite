@@ -112,7 +112,7 @@ public class UserDAO {
             statement = connection.prepareStatement(query);
             statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 return createSimpleUser(resultSet);
             }
         } catch (SQLException e) {
@@ -137,13 +137,14 @@ public class UserDAO {
         }
     }
 
-    public void insertGoogleUser(String token, String email) {
+    public void insertGoogleUser(String id, String email, String url) {
         Connection connection = DbAccess.getConnection();
-        String query = "INSERT INTO id_google(token, email) values(?,?)";
+        String query = "INSERT INTO id_google(email, url_image, id) values(?,?,?)";
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1, token);
-            statement.setString(2, email);
+            statement.setString(1, email);
+            statement.setString(2, url);
+            statement.setString(3, id);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -180,38 +181,12 @@ public class UserDAO {
         }
     }
 
-    public void addUserFriend(int from, int to) {
+    public boolean googleIdAlreadyExists(String id) {
         Connection connection = DbAccess.getConnection();
-        String query = "INSERT INTO friends(id, id_user1, id_user2, date) values(default, ?, ?, default)";
+        String query = "SELECT * FROM id_google WHERE id=?";
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1, Integer.toString(from));
-            statement.setString(2, Integer.toString(to));
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void changeProfileImageUser(int idUser, InputStream fileContent) {
-        Connection connection = DbAccess.getConnection();
-        String query = "UPDATE public.user SET profile_image = ? WHERE id = ?::integer";
-        try {
-            statement = connection.prepareStatement(query);
-            statement.setBytes(1, IOUtils.toByteArray(fileContent));
-            statement.setString(2, Integer.toString(idUser));
-            statement.executeUpdate();
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public boolean googleIdAlreadyExists(String token) {
-        Connection connection = DbAccess.getConnection();
-        String query = "SELECT * FROM id_google WHERE token=?";
-        try {
-            statement = connection.prepareStatement(query);
-            statement.setString(1, token);
+            statement.setString(1, id);
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()){
                 return true;
@@ -222,15 +197,28 @@ public class UserDAO {
         return false;
     }
 
-    public String getGoogleToken(String email) {
+    public void updateGoogleUrl(String url, String id) {
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT * FROM id_google WHERE email=?";
+        String query = "UPDATE id_google SET url_image=? WHERE id=?";
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1, email);
-            ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            return resultSet.getString("token");
+            statement.setString(1, url);
+            statement.setString(2, id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getGoogleUrlImage(int id) {
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT g.url_image FROM public.user as u, id_google as g WHERE u.id=? AND u.email=g.email";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            if(rs.next()){
+                return rs.getString("url_image");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
