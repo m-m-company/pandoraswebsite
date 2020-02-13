@@ -1,5 +1,7 @@
 package model;
 
+import persistence.DAOFactory;
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,4 +125,23 @@ public class Game {
         this.specifics = specifics;
     }
 
+    public ArrayList<String> getTags(){
+        return DAOFactory.getInstance().makeTagDao().getTagsForGame(this.getId());
+    }
+
+    public String getTagsString(){
+        StringBuilder s = new StringBuilder();
+        getTags().forEach(tag->{
+            s.append(tag).append(",");
+        });
+        return s.toString();
+    }
+
+    public Integer getBestScoreOfIdUser(int user){
+        return DAOFactory.getInstance().makeScoreDAO().getBestScoreIdUserGame(user,this.getId());
+    }
+
+    public Integer getHoursPlayedOfIdUser(int user){
+        return DAOFactory.getInstance().makeHoursPlayedDAO().getHoursPlayedByIdUserGame(user, this.getId());
+    }
 }

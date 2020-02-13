@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class UserDAO {
+
     private PreparedStatement statement;
 
     public ArrayList<User> getFriends(int id) {

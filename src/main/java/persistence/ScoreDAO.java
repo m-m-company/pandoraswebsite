@@ -78,4 +78,20 @@ public class ScoreDAO {
         return null;
     }
 
+    public Integer getBestScoreIdUserGame(int user, int game){
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT score.score FROM score WHERE id_user=? AND id_game=? ORDER BY score DESC LIMIT 1";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, user);
+            statement.setInt(2, game);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }

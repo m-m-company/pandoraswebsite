@@ -72,4 +72,20 @@ public class HoursPlayedDAO {
         }
         return null;
     }
+
+    public Integer getHoursPlayedByIdUserGame(int user, int game) {
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT sum(hours_played.value) FROM hours_played WHERE id_user=? AND id_game = ?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1,user);
+            statement.setInt(2,game);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }
