@@ -1,7 +1,6 @@
 package controller.friends;
 
 import com.google.gson.Gson;
-import model.Friend;
 import model.User;
 import persistence.DAOFactory;
 
@@ -20,7 +19,7 @@ public class GetFriends extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = ((User) req.getSession().getAttribute("user")).getId();
-        ArrayList<Friend> friends = DAOFactory.getInstance().makeUserDAO().getFriends(id);
+        ArrayList<User> friends = DAOFactory.getInstance().makeUserDAO().getFriends(id);
         Gson gson = new Gson();
         String json = gson.toJson(friends);
         PrintWriter printWriter = resp.getWriter();

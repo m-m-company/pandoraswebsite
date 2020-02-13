@@ -1,10 +1,8 @@
 package persistence;
 
-import model.Friend;
 import model.Game;
 import model.User;
 import org.apache.commons.io.IOUtils;
-import org.postgresql.util.PGbytea;
 import utility.EncryptDecryptAES128;
 
 import java.io.IOException;
@@ -18,8 +16,8 @@ import java.util.ArrayList;
 public class UserDAO {
     private PreparedStatement statement;
 
-    public ArrayList<Friend> getFriends(int id) {
-        ArrayList<Friend> friends = new ArrayList<>();
+    public ArrayList<User> getFriends(int id) {
+        ArrayList<User> friends = new ArrayList<>();
         Connection connection = DbAccess.getConnection();
         String query = "SELECT u.* FROM public.user as u, friends as f WHERE f.id_user1 = ? and u.id = f.id_user2";
         try {
@@ -35,13 +33,14 @@ public class UserDAO {
         return friends;
     }
 
-    private Friend createSimpleFriend(ResultSet resultSet) throws SQLException {
-        Friend friend = new Friend();
+    private User createSimpleFriend(ResultSet resultSet) throws SQLException {
+        User friend = new User();
         friend.setId(resultSet.getInt("id"));
         friend.setUsername(resultSet.getString("username"));
         friend.setDescription(resultSet.getString("description"));
         friend.setGoogleUser(resultSet.getBoolean("google_user"));
         friend.setEmail(resultSet.getString("email"));
+        friend.setImage(resultSet.getBytes("profile_image") != null);
         return friend;
     }
 
