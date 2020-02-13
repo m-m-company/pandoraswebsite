@@ -15,10 +15,15 @@ public class Friends extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher rd = req.getRequestDispatcher("header.jsp");
         rd.include(req, resp);
-        rd = req.getRequestDispatcher("friends.jsp");
+        rd = req.getRequestDispatcher("friends.html");
         rd.include(req, resp);
         rd = req.getRequestDispatcher("footer.html");
         rd.include(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String username = req.getParameter("username");
     }
 
 }

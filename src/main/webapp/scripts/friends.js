@@ -13,7 +13,9 @@ $(document).ready(function () {
                         url: "printGoogleImage",
                         data: {
                             id: friend.id,
-                            class: "rounded-circle"
+                            class: "rounded-circle",
+                            width: "70%",
+                            height: "70%"
                         },
                         success: function (text) {
                             img = text;
@@ -37,7 +39,8 @@ $(document).ready(function () {
                     "                    <div class=\"box\">"+img+"\n" +
                     "                        <h3 class=\"name\">"+friend.username+"</h3>\n" +
                     "                        <p class=\"description\">"+friend.description+"</p>\n" +
-                    "                        <div class=\"social\"></div>\n" +
+                    "                        <div class=\"social\"><button type='button' id='"+friend.id+"'" +
+                    "                           class='fas fa-user-minus btn btn-danger' onclick='deleteFriend(event)'></button></div>\n" +
                     "                    </div>\n" +
                     "                </div>")
             })
@@ -47,4 +50,8 @@ $(document).ready(function () {
             alert("Impossibile caricare gli amici. Riprova più tardi");
         }
     });
-})
+});
+
+function deleteFriend(event) {
+    //TODO: delete friend
+}
