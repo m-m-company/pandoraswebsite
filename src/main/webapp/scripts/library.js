@@ -118,7 +118,7 @@ function insertComments(game) {
                 let src = commentList.children[i].children[0].children[0].children[0].children[0].children[0];
                 let rating = commentList.children[i].children[0].children[0].children[0].children[1].children[0].children[0].children[1];
                 let stars = data[i].stars;
-                for (let j = 1; j <= stars; ++j) {
+                for (let j = 1; j <= 5; ++j) {
                     rating.children[j - 1].className = "fa fa-star";
                     if (j <= stars) {
                         rating.children[j - 1].style = "color: orange;"
