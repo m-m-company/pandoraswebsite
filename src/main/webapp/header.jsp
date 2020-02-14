@@ -69,7 +69,7 @@
                     <div class="form-group"><input class="form-control" type="password" id="logPassword" name="password"
                                                    placeholder="Password"></div>
                     <div class="form-group">
-                        <label id="errorLabel" style="display: none"> Email o password errate! Riprova </label>
+                        <label id="errorLabel" style="display: none"> Wrong email or password! Retry </label>
                         <button type="button" class="btn btn-primary btn-block" id="loginBtn">Login</button>
                     </div>
                     <div class="form-group">
@@ -82,8 +82,8 @@
                         </script>
                         <% } %>
                     </div>
-                    <a class="forgot" href="forgotPassword">Hai dimenticato la tua password?</a>
-                    <a class="forgot" href="register">Non hai un account? Registrati</a>
+                    <a class="forgot" href="forgotPassword">Did you forgot the password?</a>
+                    <a class="forgot" href="register">Don't you have an account? Register!</a>
                 </form>
             </div>
         </div>
