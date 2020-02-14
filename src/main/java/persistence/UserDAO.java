@@ -258,4 +258,36 @@ public class UserDAO {
         }
         return users;
     }
+
+    public boolean sendFriendRequest(int userID, int friendID) {
+        Connection connection = DbAccess.getConnection();
+        String query = "INSERT INTO friend_request(id, \"from\", \"to\", accepted) VALUES (default,?,?,default)";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, userID);
+            statement.setInt(2, friendID);
+            if(statement.executeUpdate() != 0){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean deleteFriendRequest(int userID, int friendID) {
+        Connection connection = DbAccess.getConnection();
+        String query = "DELETE FROM friend_request WHERE \"from\"=? AND \"to\"=?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, userID);
+            statement.setInt(2, friendID);
+            if(statement.executeUpdate() != 0){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
