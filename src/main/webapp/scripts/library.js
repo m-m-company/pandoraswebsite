@@ -62,7 +62,7 @@ function insertPreviews(game) {
         },
         error: function () {
             $("#carousel").empty();
-            $("#carousel").append("<h1 class='text-center'> Non ci sono immagini di preview disponibili </h1>");
+            $("#carousel").append("<h1 class='text-center'> No preview images </h1>");
             $("#preview-swap").empty();
         }
     });
@@ -189,8 +189,7 @@ function updateComment(event) {
             window.location.reload()
         },
         error: function () {
-            //TODO: modal
-            alert("impossibile modificare il commento. Riprova")
+            showAlertModal("Comment error", "Impossible to modify the preview, retry.", ICONS.alert);
         }
     });
 }
@@ -206,8 +205,7 @@ function deleteComment(event) {
             $(event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode).remove();
         },
         error: function () {
-            //TODO: modal
-            alert("impossibile eliminare il commento. Ricarica")
+            showAlertModal("Review error", "Impossible to delete the comment. Reload the page", ICONS.alert);
         }
     });
 }

@@ -12,7 +12,7 @@
 </head>
 <body>
     <c:if test="${user.getLibrary().size() == 0}">
-        <h1>La tua libreria è vuota: compra qualcosa <a href="/">qui!</a></h1>
+        <h1>Your library is empty. Buy something <a href="${pageContext.request.contextPath}/">here!</a></h1>
     </c:if>
     <c:if test="${user.getLibrary().size() != 0}">
         <div class="row background-library">

@@ -12,7 +12,7 @@
 </head>
 
 <body>
-<h1 class="text-center" id="title">Nome gioco</h1>
+<h1 class="text-center" id="title">Game Name</h1>
 <button id="download" class="btn btn-success">Download!</button>
 <div class="simple-slider">
     <div class="swiper-container">
@@ -28,17 +28,17 @@
 <div class="container">
     <div class="row">
         <div class="col">
-            <h1>Descrizione</h1>
+            <h1>Description</h1>
             <p class="text-justify" id="description"></p>
         </div>
         <div class="col">
-            <h1>Specifiche Tecniche</h1>
+            <h1>Specifications</h1>
             <p id="specs" class="text-justify"></p>
         </div>
     </div>
     <div class="row">
         <div class="col-6">
-            <h3>Classifica generale:</h3>
+            <h3>General ranks:</h3>
             <ol type="I" id="ranks">
 
             </ol>
@@ -48,7 +48,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <h3>Commenti e recensioni</h3>
+                    <h3>Comments and reviews</h3>
                 </div>
                 <div class="card-body" style="height: auto; width: auto">
                     <ul class="list-group" id="commentList">
@@ -83,19 +83,19 @@
                             <div class="row">
                                 <div class="col-7">
                                     <textarea class="form-control" id="commentContent" name="content"
-                                    placeholder="Inserisci qui il tuo commento" required></textarea>
+                                    placeholder="Insert here your comment" required></textarea>
                                 </div>
                                 <div class="col-3">
-                                    <label>Inserisci le tue stelle:</label>
+                                    <label>Insert your stars:</label>
                                 </div>
                                 <div class="col-2">
-                                    <input type="number" min="0" max="5" step="1" class="form-control" id="commentStars"/>
+                                    <input type="number" value="0" min="0" max="5" step="1" class="form-control" id="commentStars"/>
                                 </div>
                             </div>
                             <div class="row">
                                 <button class="btn btn-light"
                                         style="margin-left: 601px;margin-top: 10px;background-color: rgb(255,124,11);"
-                                        type="button" id="addComment">Aggiungi commento</button>
+                                        type="button" id="addComment">Submit the review</button>
                             </div>
                         </form>
                     </div>

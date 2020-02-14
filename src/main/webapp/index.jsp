@@ -19,7 +19,7 @@
 
 <body>
     <jsp:include page="header.jsp" />
-    <h1 class="text-center">Giochi best sellers</h1>
+    <h1 class="text-center">Best sellers</h1>
     <div class="carousel slide bestSellers-size-slide" data-ride="carousel" id="carousel-1">
         <div class="carousel-inner bestSellers-size-inner" role="listbox">
             <div class="carousel-item bestSellers-size-item active">
@@ -148,7 +148,7 @@
     </div>
 
     <div class="category-games border rounded">
-        <h2>Azione</h2>
+        <h2>Action</h2>
         <div class="container-fluid category-games-container-fluid-size">
             <div id="multi-item-azione" class="carousel slide carousel-multi-item category-games-multi-item-size" data-ride="carousel">
 
