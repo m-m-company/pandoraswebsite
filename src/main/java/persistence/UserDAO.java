@@ -290,4 +290,22 @@ public class UserDAO {
         }
         return false;
     }
+
+    public ArrayList<User> getFriendsRequests(int id) {
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT public.user.* FROM public.user, friend_request WHERE public.user.id = friend_request.from AND friend_request.to = ?";
+        ArrayList<User> requests = new ArrayList<>();
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                requests.add(createSimpleFriend(resultSet));
+            }
+            return requests;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
