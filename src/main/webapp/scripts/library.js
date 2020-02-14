@@ -148,8 +148,12 @@ function populateComment(idAuthor, username, src, div, idReview) {
             username.href = "profile?id=" + data[0];
             if (data[3] === "true") {
                 src.src = "/printImage?id=" + data[0];
-            } else {
+            }
+            else if (data[3] === "false") {
                 src.src = "https://www.gravatar.com/avatar/1234566?size=200&d=mm";
+            }
+            else {
+                src.src = data[3];
             }
             if (data[2] === "true") {
                 $(div).append("<button type=\"button\" class=\"btn btn-dark btn-sm fa fa-edit\" id='" + idReview + "' onclick='modifyComment(event)'>\n" +

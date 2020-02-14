@@ -25,7 +25,6 @@ public class GetUserForComment extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
-        this.log(Integer.toString(id));
         User user = null;
         user = DAOFactory.getInstance().makeUserDAO().getUserById(id);
         String actualUser = "false";
@@ -36,7 +35,12 @@ public class GetUserForComment extends HttpServlet {
         data.add(String.valueOf(user.getId()));
         data.add(user.getUsername());
         data.add(actualUser);
-        data.add(String.valueOf(user.getImage()));
+        if(user.isGoogleUser()){
+            data.add(DAOFactory.getInstance().makeUserDAO().getGoogleUrlImage(user.getId()));
+        }
+        else{
+            data.add(String.valueOf(user.getImage()));
+        }
         Gson gson = new Gson();
         String response = gson.toJson(data);
         PrintWriter printWriter = resp.getWriter();

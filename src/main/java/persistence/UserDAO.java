@@ -226,4 +226,17 @@ public class UserDAO {
         return null;
     }
 
+    public boolean deleteFriend(int idActual, int idFriend) {
+        Connection connection = DbAccess.getConnection();
+        String query = "DELETE FROM friends WHERE id_user1=? AND id_user2=?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idActual);
+            statement.setInt(2, idFriend);
+            return statement.executeUpdate() != 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

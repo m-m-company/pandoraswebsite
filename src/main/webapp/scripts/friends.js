@@ -40,7 +40,8 @@ $(document).ready(function () {
                     "                        <h3 class=\"name\">"+friend.username+"</h3>\n" +
                     "                        <p class=\"description\">"+friend.description+"</p>\n" +
                     "                        <div class=\"social\"><button type='button' id='"+friend.id+"'" +
-                    "                           class='fas fa-user-minus btn btn-danger' onclick='deleteFriend(event)'></button></div>\n" +
+                    "                           class='btn btn-danger' onclick='deleteFriend(event)'>" +
+                    "                           <i class='fas fa-user-minus'></i></button></div>\n" +
                     "                    </div>\n" +
                     "                </div>")
             })
@@ -53,5 +54,22 @@ $(document).ready(function () {
 });
 
 function deleteFriend(event) {
-    //TODO: delete friend
+    let button = event.target;
+    if(event.target.tagName == "I"){
+        button = event.target.parentNode;
+    }
+    $.ajax({
+       type: "POST",
+       url: "/deleteFriend",
+       data: {
+           idFriend: button.id
+       },
+       success: function () {
+            $(button.parentNode.parentNode.parentNode).remove();
+       },
+       error: function () {
+           //TODO: modal
+           alert("Impossibile eliminare l'amico. Riprova più tardi");
+       }
+    });
 }
