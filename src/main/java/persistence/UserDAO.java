@@ -239,4 +239,23 @@ public class UserDAO {
         }
         return false;
     }
+
+    public ArrayList<User> getUsersByUsername(String username, int id) {
+        ArrayList<User> users = new ArrayList<>();
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT * FROM public.user WHERE username ILIKE ? AND id<>?";
+        username = "%" + username + "%";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setString(1, username);
+            statement.setInt(2, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                users.add(createSimpleUser(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
 }
