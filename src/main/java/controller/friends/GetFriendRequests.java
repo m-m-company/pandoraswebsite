@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-@WebServlet(value = "/getFriendRequests", name = "getFriendRequests")
+@WebServlet(value = "/getReceivedFriendRequests", name = "getReceivedFriendRequests")
 public class GetFriendRequests extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

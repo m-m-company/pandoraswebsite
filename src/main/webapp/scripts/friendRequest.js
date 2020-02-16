@@ -1,7 +1,7 @@
 $(document).ready(() => {
     $.ajax({
         type: 'GET',
-        url: '/getFriendRequests',
+        url: '/getReceivedFriendRequests',
         success: (data) => {
             $("#loading").remove();
             if (data.length === 0){

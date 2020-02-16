@@ -1,4 +1,6 @@
 let friends = [];
+let sentRequests = [];
+let receivedRequests = [];
 $(document).ready(function () {
     $.ajax({
         type: "POST",
@@ -8,10 +10,29 @@ $(document).ready(function () {
             populateContainer(users);
         },
         error: function () {
-            //TODO: Modal
-            alert("Impossibile caricare gli amici. Riprova più tardi");
+            showAlertModal("ERROR", "Failed loading friends. Retry later", ICONS.alert);
         }
     });
+    $.ajax({
+        type: "GET",
+        url: "/getReceivedFriendRequests",
+        success: function (users) {
+            users.map((u) => receivedRequests.push(u.id));
+        },
+        error: function () {
+            showAlertModal("ERROR", "Failed loading received friend request. Retry later", ICONS.alert);
+        }
+    });
+    $.ajax({
+        type: "GET",
+        url: "/getSentFriendRequests",
+        success: function (users) {
+            users.map((u) => sentRequests.push(u.id))
+        },
+        error: function () {
+            showAlertModal("ERROR", "Failed loading sent friend request. Retry later", ICONS.alert);
+        }
+    })
 });
 
 function searchUsers(event) {
@@ -26,8 +47,7 @@ function searchUsers(event) {
             populateContainer(users);
         },
         error: function () {
-            //TODO: da rifare
-            alert("Nessun amico trovato");
+            showAlertModal("NOT FOUND", "Your search produced no results", ICONS.alert);
         }
     })
 }
@@ -73,6 +93,16 @@ function populateContainer(users) {
             f = "deleteFriend(event)";
             icon = "fas fa-user-minus";
         }
+        if (receivedRequests.includes(user.id)){
+            btnClass = "btn btn-success";
+            f = "acceptFriendRequest(event)";
+            icon = "fas fa-user-plus";
+        }
+        if (sentRequests.includes(user.id)){
+            btnClass = "btn btn-warning";
+            f = "deleteFriendRequest(event)";
+            icon = "fas fa-user-times";
+        }
         $(usersContainer).append("<div class=\"col-md-6 col-lg-4 item\">\n" +
             "                    <div class=\"box\">"+img+"\n" +
             "                        <h3 class=\"name\"><a href='profile?id="+user.id+"'>"+user.username+"</a></h3>\n" +
@@ -97,7 +127,8 @@ function sendFriendRequest(event) {
             idFriend: button.id
         },
         success: function () {
-            showAlertModal("SUCCESS", "The request has been send", ICONS.info);
+            sentRequests.push(button.id);
+            showAlertModal("SUCCESS", "The request has been sent", ICONS.info);
             $(button).replaceWith("<button type='button' id='"+button.id+"'" +
                 "                           class='btn btn-warning' onclick='deleteFriendRequest(event)'>" +
                 "                           <i class='fas fa-user-times'></i></button>")
@@ -120,6 +151,7 @@ function deleteFriendRequest(event) {
            idFriend: button.id
        },
        success: function () {
+           sentRequests.splice(sentRequests.indexOf(button.id), 1);
            showAlertModal("SUCCESS", "The request has been deleted", ICONS.info);
            $(button).replaceWith("<button type='button' id='"+button.id+"'" +
                "                           class='btn btn-primary' onclick='sendFriendRequest(event)'>" +
@@ -143,11 +175,38 @@ function deleteFriend(event) {
             idFriend: button.id
         },
         success: function () {
-            $(button.parentNode.parentNode.parentNode).remove();
             friends.splice(friends.indexOf(button.id), 1);
+            showAlertModal("SUCCESS", "You have removed this friend", ICONS.info);
+            $(button).replaceWith("<button type='button' id='"+button.id+"'" +
+                "                           class='btn btn-primary' onclick='sendFriendRequest(event)'>" +
+                "                           <i class='fas fa-user-plus'></i></button>")
         },
         error: function () {
             showAlertModal("ERROR", "Impossible to delete this friend. Retry later", ICONS.alert)
         }
+    });
+}
+
+function acceptFriendRequest(event) {
+    let button = event.target;
+    if(event.target.tagName == "I"){
+        button = event.target.parentNode;
+    }
+    $.ajax({
+       type: "POST",
+       url: "/acceptFriendRequest",
+       data: {
+           idUser: button.id
+       },
+       success: function () {
+           friends.push(button.id);
+           showAlertModal("SUCCESS", "You have accepted this request", ICONS.info);
+           $(button).replaceWith("<button type='button' id='"+button.id+"'" +
+               "                           class='btn btn-danger' onclick='deleteFriend(event)'>" +
+               "                           <i class='fas fa-user-minus'></i></button>")
+       },
+       error: function () {
+
+       }
     });
 }
