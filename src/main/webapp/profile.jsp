@@ -17,11 +17,6 @@
 <div class="background-photo">
     <jsp:include page="profileMenu.html"></jsp:include>
     <div class="container profile profile-view" id="profile">
-        <c:if test="${param.get('id') != null && user.getId() != param.get('id')}">
-            <button class="btn btn-primary float-right" type="button"><i class="fa fa-user-plus" aria-hidden="true"></i>Add
-                as a friend
-            </button>
-        </c:if>
         <form method="POST" enctype="multipart/form-data">
             <div class="profile-center">
                 <div></div>

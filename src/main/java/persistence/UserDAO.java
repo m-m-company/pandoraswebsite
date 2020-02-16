@@ -308,4 +308,36 @@ public class UserDAO {
         }
         return null;
     }
+
+    public boolean acceptFriendRequest(int from, int to) {
+        Connection connection = DbAccess.getConnection();
+        String query = "UPDATE friend_request SET accepted=true WHERE \"from\"=? AND \"to\"=?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, from);
+            statement.setInt(2, to);
+            if(statement.executeUpdate() != 0){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean refuseFriendRequest(int from, int to) {
+        Connection connection = DbAccess.getConnection();
+        String query = "DELETE FROM friend_request WHERE \"from\"=? AND \"to\"=?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, from);
+            statement.setInt(2, to);
+            if(statement.executeUpdate() != 0){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }

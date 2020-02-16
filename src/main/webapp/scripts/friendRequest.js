@@ -18,14 +18,43 @@ $(document).ready(() => {
                     "        </div>\n" +
                     "    </div>")
             });
+        },
+        error: function () {
+            showAlertModal("ERROR", "Impossible to show the requests. Retry later", ICONS.alert);
         }
     })
 });
 
 function acceptRequest(event) {
-    console.log(event.target.id);
+    $.ajax({
+        type: "POST",
+        url: "/acceptFriendRequest",
+        data: {
+            idUser: event.target.id
+        },
+        success: function () {
+            $(event.target.parentNode.parentNode.parentNode).remove();
+            showAlertModal("SUCCESS", "You have a new friend. Now you can see his profile", ICONS.info);
+        },
+        error: function () {
+            showAlertModal("ERROr", "Impossible to add a new friend. Retry later", ICONS.alert)
+        }
+    });
 }
 
 function refuseRequest(event) {
-
+    $.ajax({
+       type: "POST",
+       url: "refuseFriendRequest",
+       data: {
+           idUser: event.target.id
+       },
+       success: function () {
+           $(event.target.parentNode.parentNode.parentNode).remove();
+           showAlertModal("SUCCESS", "You have refused this request", ICONS.info)
+       },
+       error: function () {
+           showAlertModal("ERROR", "Impossible to refuse this request. Retry later", ICONS.alert)
+       }
+    });
 }
