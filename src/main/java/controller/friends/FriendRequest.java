@@ -14,6 +14,8 @@ public class FriendRequest extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher rd = req.getRequestDispatcher("header.jsp");
         rd.include(req, resp);
+        rd = req.getRequestDispatcher("friendMenu.html");
+        rd.include(req,resp);
         rd = req.getRequestDispatcher("friendRequestPage.html");
         rd.include(req, resp);
         rd = req.getRequestDispatcher("footer.html");

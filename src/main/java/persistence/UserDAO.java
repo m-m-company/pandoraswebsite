@@ -277,11 +277,14 @@ public class UserDAO {
 
     public boolean deleteFriendRequest(int userID, int friendID) {
         Connection connection = DbAccess.getConnection();
-        String query = "DELETE FROM friend_request WHERE \"from\"=? AND \"to\"=?";
+        String query = "DELETE FROM friend_request WHERE (\"from\"=? AND \"to\"=?) OR (\"from\"=? AND \"to\"=?)";
         try {
             statement = connection.prepareStatement(query);
             statement.setInt(1, userID);
             statement.setInt(2, friendID);
+            statement.setInt(3, friendID);
+            statement.setInt(4, userID);
+
             if(statement.executeUpdate() != 0){
                 return true;
             }
@@ -325,19 +328,21 @@ public class UserDAO {
         return false;
     }
 
-    public boolean refuseFriendRequest(int from, int to) {
+    public ArrayList<User> getSentFriendRequests(int id) {
         Connection connection = DbAccess.getConnection();
-        String query = "DELETE FROM friend_request WHERE \"from\"=? AND \"to\"=?";
+        String query = "SELECT public.user.* FROM public.user, friend_request WHERE public.user.id = friend_request.to AND friend_request.from = ?";
+        ArrayList<User> requests = new ArrayList<>();
         try {
             statement = connection.prepareStatement(query);
-            statement.setInt(1, from);
-            statement.setInt(2, to);
-            if(statement.executeUpdate() != 0){
-                return true;
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                requests.add(createSimpleFriend(resultSet));
             }
+            return requests;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return null;
     }
 }
