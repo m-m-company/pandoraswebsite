@@ -5,3 +5,16 @@ function showAlertModal(title, text, icon) {
     $("#alertIcon").removeClass().addClass(icon);
     $("#alertModal").modal();
 }
+
+function showConfirmModal(title, text, icon, event, fun) {
+    let button = event.target;
+    if(event.target.tagName == "I"){
+        button = event.target.parentNode;
+    }
+    sessionStorage.setItem("idToProcess", button.id);
+    $("#confirmIcon").removeClass().addClass(icon);
+    $("#confirmTitle").text(title);
+    $("#confirmContent").text(text);
+    document.getElementById("confirmBtn").onclick = () => fun();
+    $("#confirmModal").modal();
+}

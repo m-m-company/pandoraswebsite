@@ -71,8 +71,7 @@ function populateContainer(users) {
                     img = text;
                 },
                 error: function () {
-                    //TODO: modal
-                    alert("Impossibile caricare l'immagine. Riprova più tardi");
+                    showAlertModal("Image error", "Impossible to load the image of "+user.username, ICONS.alert)
                 },
                 async: false
             });
@@ -90,7 +89,7 @@ function populateContainer(users) {
         let icon = "fas fa-user-plus";
         if (friends.includes(user.id)){
             btnClass = "btn btn-danger";
-            f = "deleteFriend(event)";
+            f = "showConfirmModal(\"Danger!\", \"Are you sure to delete this friend?\", ICONS.alert, event, deleteFriend)";
             icon = "fas fa-user-minus";
         }
         if (receivedRequests.includes(user.id)){
@@ -100,7 +99,7 @@ function populateContainer(users) {
         }
         if (sentRequests.includes(user.id)){
             btnClass = "btn btn-warning";
-            f = "deleteFriendRequest(event)";
+            f = "showConfirmModal(\"Danger!\", \"Are you sure to cancel this request?\", ICONS.alert, event, deleteFriendRequest)";
             icon = "fas fa-user-times";
         }
         $(usersContainer).append("<div class=\"col-md-6 col-lg-4 item\">\n" +
@@ -140,20 +139,17 @@ function sendFriendRequest(event) {
 }
 
 function deleteFriendRequest(event) {
-    let button = event.target;
-    if(event.target.tagName == "I"){
-        button = event.target.parentNode;
-    }
+    let userId = sessionStorage.getItem("idToProcess")
     $.ajax({
        type: "POST",
        url: "/deleteFriendRequest",
        data: {
-           idFriend: button.id
+           idFriend: userId
        },
        success: function () {
-           sentRequests.splice(sentRequests.indexOf(button.id), 1);
+           sentRequests.splice(sentRequests.indexOf(userId), 1);
            showAlertModal("SUCCESS", "The request has been deleted", ICONS.info);
-           $(button).replaceWith("<button type='button' id='"+button.id+"'" +
+           $("#"+userId).replaceWith("<button type='button' id='"+userId+"'" +
                "                           class='btn btn-primary' onclick='sendFriendRequest(event)'>" +
                "                           <i class='fas fa-user-plus'></i></button>")
        },
@@ -164,20 +160,17 @@ function deleteFriendRequest(event) {
 }
 
 function deleteFriend(event) {
-    let button = event.target;
-    if(event.target.tagName == "I"){
-        button = event.target.parentNode;
-    }
+    let userId = sessionStorage.getItem("idToProcess");
     $.ajax({
         type: "POST",
         url: "/deleteFriend",
         data: {
-            idFriend: button.id
+            idFriend: userId
         },
         success: function () {
-            friends.splice(friends.indexOf(button.id), 1);
+            friends.splice(friends.indexOf(userId), 1);
             showAlertModal("SUCCESS", "You have removed this friend", ICONS.info);
-            $(button).replaceWith("<button type='button' id='"+button.id+"'" +
+            $("#"+userId).replaceWith("<button type='button' id='"+userId+"'" +
                 "                           class='btn btn-primary' onclick='sendFriendRequest(event)'>" +
                 "                           <i class='fas fa-user-plus'></i></button>")
         },
