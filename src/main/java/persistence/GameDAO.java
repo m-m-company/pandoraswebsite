@@ -3,6 +3,7 @@ package persistence;
 
 import model.Game;
 import model.Review;
+import utility.Pair;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -99,29 +100,23 @@ public class GameDAO {
         return null;
     }
 
-    public ArrayList<Game> getAllGamesFromCategory(String cat) {
+    public ArrayList<Pair<Integer,String>> getAllGamesFromCategory(int tag) {
+        ArrayList<Pair<Integer,String>> games = new ArrayList<>();
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT game.* FROM game, categories, tag " +
+        String query = "SELECT game.id, game.name FROM game, categories " +
                 "WHERE game.id = categories.id_game AND " +
-                "      categories.id_tag = tag.id AND tag.name = ?";
-        String category = "%"+cat+"%";
+                "      categories.id_tag = ?";
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1, category);
+            statement.setInt(1, tag);
             ResultSet result = statement.executeQuery();
-            if (result.isClosed())
-                return null;
-            ArrayList<Game> games = new ArrayList<Game>();
             while (result.next()) {
-                games.add(DAOFactory.getInstance().makeGameDAO().createSimpleGame(result));
+                games.add(new Pair<>(result.getInt("id"), result.getString("name")));
             }
-
-            return games;
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return games;
     }
 
     public ArrayList<Game> getGamesFromNameLike(String gameName) {

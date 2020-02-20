@@ -1,7 +1,7 @@
 package controller;
 
-import model.Game;
 import persistence.DAOFactory;
+import utility.Pair;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,39 +10,39 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.TreeMap;
 
+@WebServlet(value = "/", name = "homepage")
 public class Homepage extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ArrayList<Game> bestSellers = DAOFactory.getInstance().makePurchaseDAO().getBestThreeSoldGames();
-        req.setAttribute("firstGameBestSellers", bestSellers.get(0));
-        req.setAttribute("secondGameBestSellers", bestSellers.get(1));
-        req.setAttribute("thirdGameBestSellers", bestSellers.get(2));
-        setGamesCategory("shooter", req);
-        setGamesCategory("arcade", req);
-        setGamesCategory("azione", req);
-        setGamesCategory("avventura", req);
+        setBestsellers(req);
+        setCategory(req);
         RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
         rd.forward(req, resp);
     }
 
-    private void setGamesCategory(String category, HttpServletRequest req)
+    private void setBestsellers(HttpServletRequest req){
+        ArrayList<Pair<Integer,String>> bestSellers = DAOFactory.getInstance().makePurchaseDAO().getBestSellers();
+        req.setAttribute("firstGameBestSellers", bestSellers.get(0));
+        req.setAttribute("secondGameBestSellers", bestSellers.get(1));
+        req.setAttribute("thirdGameBestSellers", bestSellers.get(2));
+    }
+
+    private void setCategory(HttpServletRequest req){
+        ArrayList<String> categories = DAOFactory.getInstance().makeTagDao().getTagsList();
+        req.setAttribute("categories", categories);
+        for(int id = 1; id <= categories.size(); ++id){
+            setGamesCategory(id, req);
+        }
+    }
+
+    private void setGamesCategory(int tag, HttpServletRequest req)
     {
-        ArrayList<Game> games = null;
-        games = DAOFactory.getInstance().makeGameDAO().getAllGamesFromCategory(category);
-        if(games == null)
-            return;
-        ArrayList<Integer> lengthGamesDiv6 = new ArrayList<Integer>();
-        for (int i = 0; i < games.size() / 6; i++)
-            lengthGamesDiv6.add(i);
-        StringBuilder sb1 = new StringBuilder("lengthGamesDiv6");
-        sb1.append(category);
-        StringBuilder sb2 = new StringBuilder(category);
-        sb2.append("Games");
-        req.setAttribute(sb1.toString(), lengthGamesDiv6);
-        req.setAttribute(sb2.toString(), games);
+        ArrayList<Pair<Integer,String>> games =
+                DAOFactory.getInstance().makeGameDAO().getAllGamesFromCategory(tag);
+        String category = "category-"+tag;
+        req.setAttribute(category, games);
     }
 }
