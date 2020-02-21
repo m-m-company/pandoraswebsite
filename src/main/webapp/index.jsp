@@ -18,88 +18,88 @@
 </head>
 
 <body>
-<jsp:include page="header.jsp" />
-<h1 class="text-center">Best sellers</h1>
-<div class="carousel slide bestSellers-size-slide" data-ride="carousel" id="carousel-1">
-    <div class="carousel-inner bestSellers-size-inner" role="listbox">
-        <div class="carousel-item bestSellers-size-item active">
-            <a href="/GameDataSheet?gameId=${firstGameBestSeller.getFirst()}"><img class="d-block bestSellers-size-img" src=""></a><!--TODO:front image-->
-        </div>
-        <div class="carousel-item bestSellers-size-item">
-            <a href="/GameDataSheet?gameId=${secondGameBestSellers.getFirst()}"><img class="d-block bestSellers-size-img " src=""></a><!--TODO:front image-->
-        </div>
-        <div class="carousel-item bestSellers-size-item">
-            <a href="/GameDataSheet?gameId=${thirdGameBestSellers.getFirst()}"><img class="d-block bestSellers-size-img " src=""></a><!--TODO:front image-->
-        </div>
-        <div>
-            <a class="carousel-control-prev" href="#carousel-1" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carousel-1" role="button" data-slide="next">
-                <span class="carousel-control-next-icon"></span>
-                <span class="sr-only">Next</span>
-            </a>
-        </div>
-        <ol class="carousel-indicators">
-            <li data-target="#carousel-1" data-slide-to="0" class="active"></li>
-            <li data-target="#carousel-1" data-slide-to="1"></li>
-            <li data-target="#carousel-1" data-slide-to="2"></li>
-        </ol>
-    </div>
-</div>
-<div class="categories-container"> <!--TODO: qui dentro va fatto un foreach sull'array dei tag -->
-    <c:forEach items="${categories}" var="tagName">
-        <div class="category-games border rounded">
-            <h2>${tagName}</h2>
-            <div class="container-fluid category-games-container-fluid-size">
-                <div id="multi-item-shooter" class="carousel slide carousel-multi-item category-games-multi-item-size" data-ride="carousel">
-
-                    <div class="controls-top bs">
-                        <a class="btn-floating" href="#multi-item-shooter" data-slide="prev"><i class="fa fa-chevron-left color-arrow"></i></a>
-                        <a class="btn-floating" href="#multi-item-shooter" data-slide="next"><i class="fa fa-chevron-right color-arrow"></i></a>
-                    </div>
-
-                    <ol class="carousel-indicators">
-                        <c:forEach items="${lengthGamesDiv6Shooter}" var="indexGame">
-                            <c:if test="${indexGame == 0}">
-                                <li data-target="#multi-item-shooter" data-slide-to="${indexGame}" class="active"></li>
-                            </c:if>
-                            <c:if test="${indexGame != 0}">
-                                <li data-target="#multi-item-shooter" data-slide-to="${indexGame}"></li>
-                            </c:if>
-                        </c:forEach>
-                    </ol>
-
-                    <c:set var="index" scope="request" value="${0}"></c:set>
-                    <c:set var="active" scope="request" value="active"></c:set>
-                    <div class="carousel-inner category-games-inner-size" role="listbox">
-                        <c:forEach items="${categoryShooter}" var="game">
-                        <c:if test="${index > 5}">
-                            <c:set var="active" scope="request" value=""></c:set>
-                        </c:if>
-                        <c:if test="${index%6 == 0}">
-                        <c:if test="${index > 0}">
-                    </div> <!-- row -->
-                </div> <!-- item -->
-                </c:if>
-                <div class="carousel-item ${active} category-games-item" >
-                    <div class="row category-games-row">
-                        </c:if>
-                        <div class="col-md-2 clearfix d-none d-md-block image-game-div" >
-                            <a href="/GameDataSheet?gameId=${game.getFirst()}"><img class="card-img-top image-game" src=""></a><!--TODO: img-->
-                        </div>
-                        <c:set var="index" scope="request" value="${index + 1}"></c:set>
-
-                        </c:forEach>
-                    </div> <!-- row -->
-                </div> <!-- item -->
+    <jsp:include page="header.jsp" />
+    <h1 class="text-center">Best sellers</h1>
+    <div class="carousel slide bestSellers-size-slide" data-ride="carousel" id="carousel-1">
+        <div class="carousel-inner bestSellers-size-inner" role="listbox">
+            <div class="carousel-item bestSellers-size-item active">
+                <a href="/GameDataSheet?gameId=${firstGameBestSeller.getFirst()}"><img class="d-block bestSellers-size-img" src=""></a><!--TODO:front image-->
             </div>
+            <div class="carousel-item bestSellers-size-item">
+                <a href="/GameDataSheet?gameId=${secondGameBestSellers.getFirst()}"><img class="d-block bestSellers-size-img " src=""></a><!--TODO:front image-->
+            </div>
+            <div class="carousel-item bestSellers-size-item">
+                <a href="/GameDataSheet?gameId=${thirdGameBestSellers.getFirst()}"><img class="d-block bestSellers-size-img " src=""></a><!--TODO:front image-->
+            </div>
+            <div>
+                <a class="carousel-control-prev" href="#carousel-1" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carousel-1" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+            <ol class="carousel-indicators">
+                <li data-target="#carousel-1" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-1" data-slide-to="1"></li>
+                <li data-target="#carousel-1" data-slide-to="2"></li>
+            </ol>
         </div>
-    </c:forEach>
-</div>
+    </div>
+    <div class="categories-container"> <!--TODO: qui dentro va fatto un foreach sull'array dei tag -->
+        <c:forEach items="${categories}" var="tagName">
+            <div class="category-games border rounded">
+                <h2>${tagName}</h2>
+                <div class="container-fluid category-games-container-fluid-size">
+                    <div id="multi-item-shooter" class="carousel slide carousel-multi-item category-games-multi-item-size" data-ride="carousel">
 
-<jsp:include page="footer.html" />
+                        <div class="controls-top bs">
+                            <a class="btn-floating" href="#multi-item-shooter" data-slide="prev"><i class="fa fa-chevron-left color-arrow"></i></a>
+                            <a class="btn-floating" href="#multi-item-shooter" data-slide="next"><i class="fa fa-chevron-right color-arrow"></i></a>
+                        </div>
+
+                        <ol class="carousel-indicators">
+                            <c:forEach items="${lengthGamesDiv6Shooter}" var="indexGame">
+                                <c:if test="${indexGame == 0}">
+                                    <li data-target="#multi-item-shooter" data-slide-to="${indexGame}" class="active"></li>
+                                </c:if>
+                                <c:if test="${indexGame != 0}">
+                                    <li data-target="#multi-item-shooter" data-slide-to="${indexGame}"></li>
+                                </c:if>
+                            </c:forEach>
+                        </ol>
+
+                        <c:set var="index" scope="request" value="${0}"></c:set>
+                        <c:set var="active" scope="request" value="active"></c:set>
+                        <div class="carousel-inner category-games-inner-size" role="listbox">
+                            <c:forEach items="${categoryShooter}" var="game">
+                            <c:if test="${index > 5}">
+                                <c:set var="active" scope="request" value=""></c:set>
+                            </c:if>
+                            <c:if test="${index%6 == 0}">
+                            <c:if test="${index > 0}">
+                        </div> <!-- row -->
+                    </div> <!-- item -->
+                    </c:if>
+                    <div class="carousel-item ${active} category-games-item" >
+                        <div class="row category-games-row">
+                            </c:if>
+                            <div class="col-md-2 clearfix d-none d-md-block image-game-div" >
+                                <a href="/GameDataSheet?gameId=${game.getFirst()}"><img class="card-img-top image-game" src=""></a><!--TODO: img-->
+                            </div>
+                            <c:set var="index" scope="request" value="${index + 1}"></c:set>
+
+                            </c:forEach>
+                        </div> <!-- row -->
+                    </div> <!-- item -->
+                </div>
+            </div>
+        </c:forEach>
+    </div>
+
+    <jsp:include page="footer.html" />
 </body>
 <div id="alertModal" class="modal fade" role="dialog" tabindex="-1">
     <div class="modal-dialog" role="document">
