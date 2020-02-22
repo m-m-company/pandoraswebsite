@@ -7,6 +7,7 @@ import utility.Pair;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GameDAO {
 
@@ -100,23 +101,36 @@ public class GameDAO {
         return null;
     }
 
-    public ArrayList<Pair<Integer,String>> getAllGamesFromCategory(int tag) {
-        ArrayList<Pair<Integer,String>> games = new ArrayList<>();
+    public HashMap<String, ArrayList<Game>> getTagsAndGames(){
+        HashMap<String, ArrayList<Game>> tagsAndGames = new HashMap<>();
+        ArrayList<String> tags = DAOFactory.getInstance().makeTagDao().getTagsList();
+        for (String tag:tags) {
+            ArrayList<Game> games = DAOFactory.getInstance().makeGameDAO().getGamesFromCategory(tag);
+            tagsAndGames.put(tag,games);
+        }
+        return tagsAndGames;
+    }
+
+    public ArrayList<Game> getGamesFromCategory(String tag) {
+        ArrayList<Game> games = new ArrayList<>();
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT game.id, game.name FROM game, categories " +
-                "WHERE game.id = categories.id_game AND " +
-                "      categories.id_tag = ?";
+        String query = "SELECT game.* FROM game, categories, tag WHERE tag.name=? AND game.id = categories.id_game AND categories.id_tag = tag.id LIMIT 10";
         try {
             statement = connection.prepareStatement(query);
-            statement.setInt(1, tag);
-            ResultSet result = statement.executeQuery();
-            while (result.next()) {
-                games.add(new Pair<>(result.getInt("id"), result.getString("name")));
+            statement.setString(1,tag);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                Game g = new Game();
+                g.setId(resultSet.getInt("id"));
+                g.setName(resultSet.getString("name"));
+                g.setFrontImage(resultSet.getString("front_img"));
+                games.add(g);
             }
+            return games;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return games;
+        return null;
     }
 
     public ArrayList<Game> getGamesFromNameLike(String gameName) {

@@ -58,24 +58,26 @@ public class PurchaseDAO {
 
 //    public TreeMap<Date, Integer>
 
-    public ArrayList<Pair<Integer,String>> getBestSellers() {
-        ArrayList<Pair<Integer,String>> bestSellers = new ArrayList<>();
+    public ArrayList<Game> getBestSellers() {
+        ArrayList<Game> games = new ArrayList<>();
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT g.id, g.name FROM game AS g WHERE g.id IN " +
-                "(SELECT p.id_game FROM purchase AS p GROUP BY p.id_game " +
-                "ORDER BY count(p.id_game) LIMIT 3)";
-        try
-        {
+        String query = "SELECT game.*, count(purchase.id) as p FROM purchase, game WHERE game.id = purchase.id_game GROUP BY game.id ORDER BY p LIMIT 3";
+        try {
             statement = connection.prepareStatement(query);
-            ResultSet result = statement.executeQuery();
-            while(result.next()) {
-                bestSellers.add(new Pair<>(result.getInt("id"), result.getString("name")));
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next())
+            {
+                Game g = new Game();
+                g.setName(resultSet.getString("name"));
+                g.setFrontImage(resultSet.getString("front_img"));
+                g.setId(resultSet.getInt("id"));
+                games.add(g);
             }
-        } catch (SQLException e)
-        {
+            return games;
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        return bestSellers;
+        return null;
     }
 
     public void insertNewPurchase(Acquisto acquisto) {
