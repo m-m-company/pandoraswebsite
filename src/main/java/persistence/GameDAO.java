@@ -193,4 +193,20 @@ public class GameDAO {
         statement.executeUpdate();
     }
 
+    public ArrayList<String> getExternalLinks(int idGame) {
+        ArrayList<String> externalLinks = new ArrayList<>();
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT link FROM external_links WHERE id_game=?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idGame);
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next()){
+                externalLinks.add(resultSet.getString("link"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return externalLinks;
+    }
 }

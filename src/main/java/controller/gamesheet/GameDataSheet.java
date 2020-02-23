@@ -36,8 +36,12 @@ public class GameDataSheet extends HttpServlet {
         }
 
         ArrayList<Integer> totalSize = new ArrayList<Integer>();
-        /*for(int i = 0; i < game.getPreviewsVID().size()+game.getPreviewsIMG().size();i++)
-            totalSize.add(i);*/
+        ArrayList<String> previews = game.getPreviews(this.getServletContext());
+        ArrayList<String> externalLinks = DAOFactory.getInstance().makeGameDAO().getExternalLinks(gameId);
+        for(int i = 0; i < previews.size()+externalLinks.size();i++)
+            totalSize.add(i);
+        req.setAttribute("previews", previews);
+        req.setAttribute("externalLinks", externalLinks);
         ArrayList<String> tags = DAOFactory.getInstance().makeTagDao().getTagsForGame(game.getId());
         req.setAttribute("tags", tags);
         req.setAttribute("game", game);

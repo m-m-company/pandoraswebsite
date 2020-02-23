@@ -2,6 +2,8 @@ package model;
 
 import persistence.DAOFactory;
 
+import javax.servlet.ServletContext;
+import java.io.File;
 import java.sql.Date;
 import java.util.ArrayList;
 
@@ -132,6 +134,17 @@ public class Game {
 
     public void setRelease(Date release) {
         this.release = release;
+    }
+
+    public ArrayList<String> getPreviews(ServletContext servletContext){
+        ArrayList<String> previews = new ArrayList<>();
+        String directory = servletContext.getRealPath(File.separator);
+        directory += File.separator+"gameFiles"+File.separator+name+File.separator+"previews";
+        File f = new File(directory);
+        for (File e: f.listFiles()) {
+            previews.add("gameFiles/"+name+"/previews/"+e.getName());
+        }
+        return previews;
     }
 
 }

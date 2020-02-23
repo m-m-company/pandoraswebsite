@@ -24,8 +24,8 @@
         <div class="col-xl-7" style="width: 60%;">
             <div class="carousel slide" data-ride="carousel" id="carousel-1">
                 <div class="carousel-inner" role="listbox">
-                    <%--<c:set var="index" scope="request" value="${0}"></c:set>
-                    <c:forEach items="${game.previewsIMG}" var="img">
+                    <c:set var="index" scope="request" value="${0}"></c:set>
+                    <c:forEach items="${previews}" var="img">
                         <c:if test="${index == 0}">
                             <div class="carousel-item size-div-preview active">
                         </c:if>
@@ -36,19 +36,19 @@
                             </div>
 
                         <c:set var="index" scope="request" value="${index + 1}"></c:set>
-                    </c:forEach>--%>
+                    </c:forEach>
 
-                    <%--<c:forEach items="${game.previewsVID}" var="video">
+                    <c:forEach items="${externalLinks}" var="link">
                         <c:if test="${index == 0}">
                             <div class="carousel-item size-div-preview active">
                         </c:if>
                         <c:if test="${index > 0}">
                             <div class="carousel-item size-div-preview">
                         </c:if>
-                            <iframe src="${video}" class="size-div-preview" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <iframe src="${link}" class="size-div-preview" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>
                         <c:set var="index" scope="request" value="${index + 1}"></c:set>
-                    </c:forEach>--%>
+                    </c:forEach>
 
                 </div>
                 <div><a class="carousel-control-prev" href="#carousel-1" role="button" data-slide="prev"><span class="carousel-control-prev-icon"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#carousel-1" role="button"
