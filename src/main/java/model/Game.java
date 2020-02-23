@@ -18,11 +18,12 @@ public class Game {
     private int idDeveloper;
     private String description;
     private String specifics;
+    private Date release;
 
     public Game() {
     }
 
-    public Game(int id, String name, String frontImage, String paymentEmail, String supportEmail, double price, double sale, Date date, int idDeveloper, String description, String specifics) {
+    public Game(int id, String name, String frontImage, String paymentEmail, String supportEmail, double price, double sale, Date date, int idDeveloper, String description, String specifics, Date release) {
         this.id = id;
         this.name = name;
         this.frontImage = frontImage;
@@ -34,6 +35,7 @@ public class Game {
         this.idDeveloper = idDeveloper;
         this.description = description;
         this.specifics = specifics;
+        this.release = release;
     }
 
     public int getId() {
@@ -124,23 +126,12 @@ public class Game {
         this.specifics = specifics;
     }
 
-    public ArrayList<String> getTags(){
-        return DAOFactory.getInstance().makeTagDao().getTagsForGame(this.getId());
+    public Date getRelease() {
+        return release;
     }
 
-    public String getTagsString(){
-        StringBuilder s = new StringBuilder();
-        getTags().forEach(tag->{
-            s.append(tag).append(",");
-        });
-        return s.toString();
+    public void setRelease(Date release) {
+        this.release = release;
     }
 
-    public Integer getBestScoreOfIdUser(int user){
-        return DAOFactory.getInstance().makeScoreDAO().getBestScoreIdUserGame(user,this.getId());
-    }
-
-    public Integer getHoursPlayedOfIdUser(int user){
-        return DAOFactory.getInstance().makeHoursPlayedDAO().getHoursPlayedByIdUserGame(user, this.getId());
-    }
 }

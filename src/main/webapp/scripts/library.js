@@ -128,7 +128,6 @@ function insertComments(game) {
                 }
                 let p = commentList.children[i].children[0].children[0].children[0].children[1].children[0].children[0].children[2];
                 $(p).html(data[i].comment);
-                console.log(p.parentNode);
                 populateComment(data[i].author, username, src, p.parentNode, data[i].id);
             }
         }

@@ -59,42 +59,19 @@ public class GameDAO {
         int id_developer = result.getInt("id_developer");
         String description = result.getString("description");
         String specifics = result.getString("specifics");
-        return new Game(id, name, front_img, payment_email, support_email, price, sale, release_date, id_developer, description, specifics);
+        return new Game(id, name, front_img, payment_email, support_email, price, sale, release_date, id_developer, description, specifics, release_date);
     }
 
     public Game getGameById(int id) {
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT * FROM public.game WHERE id = ?::integer";
+        String query = "SELECT * FROM public.game WHERE id = ?";
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1, Integer.toString(id));
+            statement.setInt(1, id);
             ResultSet result = statement.executeQuery();
-            if (result.isClosed())
-                return null;
-            Game game = new Game();
-            while (result.next()) {
-                game.setId(id);
-                createSimpleGame(result);
+            if(result.next()){
+                return createSimpleGame(result);
             }
-            return game;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public ArrayList<Review> getReviews(Game g) {
-        Connection connection = DbAccess.getConnection();
-        ArrayList<Review> reviews = new ArrayList<>();
-        String query = "select r.* from public.reviews as r, public.game as g WHERE r.id_game = g.id AND g.id = ?";
-        try {
-            statement = connection.prepareStatement(query);
-            statement.setInt(1, g.getId());
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                reviews.add(DAOFactory.getInstance().makeReviewDAO().createSimpleReview(resultSet));
-            }
-            return reviews;
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -185,35 +162,9 @@ public class GameDAO {
         }
     }
 
-    public void insertPreview(int id, String imageName) {
-        Connection connection = DbAccess.getConnection();
-        String query = "INSERT INTO public.external_links(id, id_game, link) VALUES (default,?,?)";
-        try {
-            statement = connection.prepareStatement(query);
-            statement.setInt(1, id);
-            statement.setString(2, imageName);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void insertVideoLink(int id, String link) {
-        Connection connection = DbAccess.getConnection();
-        String query = "INSERT INTO external_links(id, id_game, link) VALUES(default,?,?)";
-        try {
-            statement = connection.prepareStatement(query);
-            statement.setInt(1, id);
-            statement.setString(2, link);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public boolean isGamePurchased(int gameId, int userId) {
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT idgame FROM public.libreria WHERE iduser = ? and idgame = ?;";
+        String query = "SELECT id FROM library WHERE id_user=? AND id_game=?";
         try {
             statement = connection.prepareStatement(query);
             statement.setInt(1, userId);
@@ -225,7 +176,6 @@ public class GameDAO {
         }
         return false;
     }
-    //
 
     private void insertTag(Connection connection, String tag, int id_game) throws SQLException {
         String query = "INSERT INTO categories(id, id_game, id_tag) VALUES (default, ?, ?)";

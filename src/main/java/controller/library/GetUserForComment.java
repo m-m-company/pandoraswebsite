@@ -28,8 +28,11 @@ public class GetUserForComment extends HttpServlet {
         User user = null;
         user = DAOFactory.getInstance().makeUserDAO().getUserById(id);
         String actualUser = "false";
-        if(user.getId() == ((User) req.getSession().getAttribute("user")).getId()){
-            actualUser = "true";
+        User sessionUser = ((User) req.getSession().getAttribute("user"));
+        if(sessionUser != null){
+            if(user.getId() == sessionUser.getId()){
+                actualUser = "true";
+            }
         }
         ArrayList<String> data = new ArrayList<>();
         data.add(String.valueOf(user.getId()));
