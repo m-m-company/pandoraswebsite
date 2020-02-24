@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 @WebServlet(value = "/getUserForComment", name = "getUserForComment")
 public class GetUserForComment extends HttpServlet {
@@ -24,11 +25,27 @@ public class GetUserForComment extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
-        this.log(Integer.toString(id));
         User user = null;
         user = DAOFactory.getInstance().makeUserDAO().getUserById(id);
+        String actualUser = "false";
+        User sessionUser = ((User) req.getSession().getAttribute("user"));
+        if(sessionUser != null){
+            if(user.getId() == sessionUser.getId()){
+                actualUser = "true";
+            }
+        }
+        ArrayList<String> data = new ArrayList<>();
+        data.add(String.valueOf(user.getId()));
+        data.add(user.getUsername());
+        data.add(actualUser);
+        if(user.isGoogleUser()){
+            data.add(DAOFactory.getInstance().makeUserDAO().getGoogleUrlImage(user.getId()));
+        }
+        else{
+            data.add(String.valueOf(user.getImage()));
+        }
         Gson gson = new Gson();
-        String response = gson.toJson(user);
+        String response = gson.toJson(data);
         PrintWriter printWriter = resp.getWriter();
         resp.setContentType("application/json");
         printWriter.print(response);

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>friends</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/boxedThings.css">
+</head>
+
+<body>
+    <div class="team-boxed">
+        <div class="container">
+            <div class="intro text-center">
+                <h2 class="text-center">Friends</h2>
+                <form style="display: inline-block" class="form-inline md-form form-sm active-cyan-2 mt-2" method="post" onsubmit="searchUsers(event)">
+                    <input class="form-control form-control-sm mr-3 w-75" type="text" id="usernameSearched" placeholder="Search for an user"
+                           aria-label="Search">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                </form>
+            </div>
+            <div class="row people" id="container-users">
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="scripts/alertUtility.js"></script>
+    <script src="scripts/friends.js"></script>
+    <div id="alertModal" class="modal fade" role="dialog" tabindex="-1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header"><i id="alertIcon" class="fas fa-exclamation-triangle" style="padding-top: 0.5rem"></i>
+                    <h4 class="modal-title" id="alertTitle"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">x</span></button>
+                </div>
+                <div class="modal-body">
+                    <p id="alertContent"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button" data-dismiss="modal">Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="confirmModal" class="modal fade" role="dialog" tabindex="-1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header"><i id="confirmIcon" class="fas fa-exclamation-triangle" style="padding-top: 0.5rem"></i>
+                    <h4 class="modal-title" id="confirmTitle"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">x</span></button>
+                </div>
+                <div class="modal-body">
+                    <p id="confirmContent"></p>
+                </div>
+                <div class="modal-footer">
+                    <button id="confirmBtn" class="btn btn-danger" type="button" data-dismiss="modal">Yes</button>
+                    <button class="btn btn-dark" type="button" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

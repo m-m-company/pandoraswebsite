@@ -8,13 +8,12 @@ import java.util.Arrays;
 import java.util.Date;
 
 public class User {
+
 	private int id;
 	private String username;
 	private String email;
 	private String password;
 	private String description;
-	private ArrayList<User> friends;
-	private ArrayList<Game> library;
 	private boolean image;
 	private boolean googleUser;
 
@@ -58,12 +57,6 @@ public class User {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public ArrayList<User> getFriends() {
-		return friends;
-	}
-	public void setFriends(ArrayList<User> friends) {
-		this.friends = friends;
-	}
 	public boolean getImage() {
 		return image;
 	}
@@ -76,9 +69,6 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public void setLibrary(ArrayList<Game> library) {
-		this.library = library;
-	}
 
 	public boolean isGoogleUser() {
 		return googleUser;
@@ -88,28 +78,4 @@ public class User {
 		this.googleUser = googleUser;
 	}
 
-	public boolean addFriend(User u)
-	{
-		for(User user: friends)
-		{
-			if(user.getId() == u.getId())
-				return false;
-		}
-		this.friends.add(u);
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "User{" +
-				"id=" + id +
-				", username='" + username + '\'' +
-				", password='" + password + '\'' +
-				", description='" + description + '\'' +
-				", friends=" + friends +
-				", library=" + library +
-				", image=" + image +
-				", email='" + email + '\'' +
-				'}';
-	}
 }

@@ -1,8 +1,11 @@
 package model;
 
+import persistence.DAOFactory;
+
+import javax.servlet.ServletContext;
+import java.io.File;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Game {
 
@@ -17,11 +20,12 @@ public class Game {
     private int idDeveloper;
     private String description;
     private String specifics;
+    private Date release;
 
     public Game() {
     }
 
-    public Game(int id, String name, String frontImage, String paymentEmail, String supportEmail, double price, double sale, Date date, int idDeveloper, String description, String specifics) {
+    public Game(int id, String name, String frontImage, String paymentEmail, String supportEmail, double price, double sale, Date date, int idDeveloper, String description, String specifics, Date release) {
         this.id = id;
         this.name = name;
         this.frontImage = frontImage;
@@ -33,6 +37,7 @@ public class Game {
         this.idDeveloper = idDeveloper;
         this.description = description;
         this.specifics = specifics;
+        this.release = release;
     }
 
     public int getId() {
@@ -123,4 +128,30 @@ public class Game {
         this.specifics = specifics;
     }
 
+    public Date getRelease() {
+        return release;
+    }
+
+    public void setRelease(Date release) {
+        this.release = release;
+    }
+
+    public ArrayList<String> getPreviews(ServletContext servletContext){
+        ArrayList<String> previews = new ArrayList<>();
+        String directory = servletContext.getRealPath(File.separator);
+        directory += File.separator+"gameFiles"+File.separator+name+File.separator+"previews";
+        File f = new File(directory);
+        for (File e: f.listFiles()) {
+            previews.add("gameFiles/"+name+"/previews/"+e.getName());
+        }
+        return previews;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Game){
+            return id == ((Game) obj).id;
+        }
+        return false;
+    }
 }

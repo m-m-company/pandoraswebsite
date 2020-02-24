@@ -12,7 +12,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap.min.js"></script>
-    <script src="scripts/gameDataSheetScript.js"></script>
+    <script src="scripts/gameDataSheet.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/gameDataSheet.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css">
@@ -25,7 +25,7 @@
             <div class="carousel slide" data-ride="carousel" id="carousel-1">
                 <div class="carousel-inner" role="listbox">
                     <c:set var="index" scope="request" value="${0}"></c:set>
-                    <c:forEach items="${game.previewsIMG}" var="img">
+                    <c:forEach items="${previews}" var="img">
                         <c:if test="${index == 0}">
                             <div class="carousel-item size-div-preview active">
                         </c:if>
@@ -38,14 +38,14 @@
                         <c:set var="index" scope="request" value="${index + 1}"></c:set>
                     </c:forEach>
 
-                    <c:forEach items="${game.previewsVID}" var="video">
+                    <c:forEach items="${externalLinks}" var="link">
                         <c:if test="${index == 0}">
                             <div class="carousel-item size-div-preview active">
                         </c:if>
                         <c:if test="${index > 0}">
                             <div class="carousel-item size-div-preview">
                         </c:if>
-                            <iframe src="${video}" class="size-div-preview" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                            <iframe src="${link}" class="size-div-preview" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                         </div>
                         <c:set var="index" scope="request" value="${index + 1}"></c:set>
                     </c:forEach>
@@ -73,15 +73,17 @@
                     <label class="d-block label-game-info">Data Rilascio : ${game.release}</label>
                     <label class="d-block label-game-info">Sviluppatore : <a href="/profile?id=${game.idDeveloper}">${developer}</a></label>
                 </div>
-                <form class="text-center" method="post" action="/help?emailTo=${game.helpEmail}&send=false">
-                    <button class="btn btn-primary border rounded background-color-orange" type="submit" id="richiediAssistenza">Richiedi assistenza</button>
-                </form>
+                <button class="btn btn-primary border rounded background-color-orange" type="submit" id="richiediAssistenza"><a href="/help?emailTo=${game.supportEmail}">Richiedi assistenza</a></button>
             </div>
         </div>
     </div>
     <div class="row" id="secondRow">
         <div class="col-xl-7" style="width: 60%;">
-            <p class="d-inline" id="pCategory">Questo gioco appartiene alla categoria :&nbsp;</p><!--<a href="/?category=${game.category}" style="font-size: 20px;">-->${game.category}<!--</a>-->
+            <ul class="d-inline" id="pCategory">Questo gioco appartiene alle categorie :
+                <c:forEach var="tagName" items="${tags}">
+                    <li class="d-inline">${tagName}</li>
+                </c:forEach>
+            </ul>
         </div>
         <div class="col float-left" style="width: 40%;">
             <div class="float-left">
@@ -126,12 +128,19 @@
                         onAuthorize: function(data, actions) {
                             return actions.payment.execute().then(function()
                             {
-                                // Show a confirmation message to the buyer
-                                var alert = window.alert('Pagamento avvenuto con successo!');
-                                $.post("/PaymentSuccess",
-                                    {
-                                        data:JSON.stringify({idUser: ${userId}, idGame: ${game.id}, price: ${game.price}})
-                                    });
+                                showAlertModal("SUCCESS", "Your payment has been registered", ICONS.alert);
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/paymentSuccess",
+                                    data: {
+                                        idUser: ${user.id},
+                                        idGame: ${game.id},
+                                        price: ${game.price}
+                                    },
+                                    success: function () {
+                                        window.location.replace("/library");
+                                    }
+                                });
                             });
                         }
                     }, '#paypal-button');
@@ -144,19 +153,46 @@
                 </c:if>
             </c:if>
             <c:if test="${not logged}">
-                <a href="#Login" class="background-color-orange border rounded" type="button" id="btnLogin2">Login</a>
+                <a href="#login" data-toggle="modal" class="background-color-orange border rounded" type="button" id="btnLogin2">Login</a>
             </c:if>
         </div>
     </div>
     <div class="row" id="thirdRow">
         <div class="col">
-            <c:forEach items="${reviews}" var="review">
-                <div class="border rounded" id="divReviews">
-                    <label class="d-block color-orange" style="font-size: 20px;"><a href="/profile?id=${review.author}">${review.username}</a></label>
-                    <label class="d-block color-orange" style="font-size: 20px;">${review.stars}</label>
-                    <p class="p-review">${review.comment}</p>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Comments and reviews</h3>
                 </div>
-            </c:forEach>
+                <div class="card-body" style="height: auto; width: auto">
+                    <ul class="list-group" id="commentList">
+                        <li class="list-group-item" style="margin-bottom:6px;">
+                            <div class="media">
+                                <div class="media-body">
+                                    <div class="media" style="overflow:visible;">
+                                        <div><img class="mr-3" style="width: 25px; height:25px;"
+                                                  src="assets/logo.png"></div>
+                                        <div class="media-body" style="overflow:visible;">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <a href="#">Loading...</a>
+                                                    <div>
+                                                        <span></span>
+                                                        <span></span>
+                                                        <span></span>
+                                                        <span></span>
+                                                        <span></span>
+                                                    </div>
+                                                    <p style="display: inline"></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row" id="fourthRow">

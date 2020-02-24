@@ -1,6 +1,8 @@
 package controller.library;
 
 import com.google.gson.Gson;
+import model.Game;
+import persistence.DAOFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,19 +25,9 @@ public class GetPreviewGame extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ArrayList<String> files= new ArrayList<>();
         String game = req.getParameter("name");
-        File directory = new File(this.getServletContext().getRealPath(File.separator)+File.separator+"gameFiles"+File.separator+game);
-        this.log(String.valueOf(directory.exists()));
-        for (File f : Objects.requireNonNull(directory.listFiles())){
-            if (f.isDirectory()){
-                for (File k : Objects.requireNonNull(f.listFiles())){
-                    byte[] bytes = Files.readAllBytes(k.toPath());
-                    String encoding = Base64.getEncoder().encodeToString(bytes);
-                    files.add(encoding);
-                }
-            }
-        }
+        Game g = DAOFactory.getInstance().makeGameDAO().getGameByName(game);
         Gson gson = new Gson();
-        String json = gson.toJson(files);
+        String json = gson.toJson(g.getPreviews(this.getServletContext()));
         PrintWriter printWriter = resp.getWriter();
         resp.setContentType("application/json");
         printWriter.print(json);

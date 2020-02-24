@@ -13,23 +13,19 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-@WebServlet(value="/Search")
+@WebServlet(value="/searchGames", name = "searchGames")
 public class SearchGame extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String gameName = req.getParameter("ricerca");
-        if(gameName != null)
-        {
-            ArrayList<Game> games = null;
-            games = DAOFactory.getInstance().makeGameDAO().getGamesFromNameLike(gameName);
-            req.setAttribute("games", games);
-            RequestDispatcher rd = req.getRequestDispatcher("searchGame.jsp");
-            rd.forward(req, resp);
-        }
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doGet(req, resp);
+        String gameName = req.getParameter("gameName");
+        String category = req.getParameter("category");
+        String price = req.getParameter("price");
+        String rating = req.getParameter("rating");
+        ArrayList<Game> games = DAOFactory.getInstance().makeGameDAO().getFilterGames(gameName, category, price, rating);
+        this.log(games.toString());
+        req.setAttribute("games", games);
+        req.getRequestDispatcher("searchGame.jsp").forward(req, resp);
     }
+
 }

@@ -22,10 +22,8 @@ public class DownloadGame extends HttpServlet {
         gameName = DAOFactory.getInstance().makeGameDAO().getGameById(Integer.parseInt(req.getParameter("id"))).getName();
         String directory = this.getServletContext().getRealPath(File.separator);
         directory += File.separator+"gameFiles"+File.separator+gameName;
-        System.out.println(directory);
         String filePath = "";
         File f = new File(directory);
-        System.out.println(f.exists());
         for (File e: f.listFiles()) {
             if (e.getName().contains(".jar")){
                 filePath = e.getAbsolutePath();

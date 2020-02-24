@@ -16,22 +16,25 @@ public class GoogleLogin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String token = req.getParameter("token");
-        if(!(DAOFactory.getInstance().makeUserDAO().googleIdAlreadyExists(token))){
-            if(!GoogleToken.getInstance().verifyToken(token)){
-                //TODO: da gestire
-                this.log("verifica del token fallita");
+        if(GoogleToken.getInstance().verifyToken(token)){
+            String id = GoogleToken.getInstance().getId();
+            String url = GoogleToken.getInstance().getUrlImage();
+            if(!(DAOFactory.getInstance().makeUserDAO().googleIdAlreadyExists(id))){
+                String email = GoogleToken.getInstance().getEmail();
+                if(DAOFactory.getInstance().makeUserDAO().getUserByEmail(email) == null){
+                    String username = GoogleToken.getInstance().getUsername();
+                    String description = "Ciao, sono " + username;
+                    DAOFactory.getInstance().makeUserDAO().insertUser(email, username, "", description, true);
+                    DAOFactory.getInstance().makeUserDAO().insertGoogleUser(id, email, url);
+                }
             }
-            String email = GoogleToken.getInstance().getEmail();
-            if(DAOFactory.getInstance().makeUserDAO().getUserByEmail(email) == null){
-                String username = GoogleToken.getInstance().getUsername();
-                String description = "Ciao, sono " + username;
-                DAOFactory.getInstance().makeUserDAO().insertUser(email, username, "", description, true);
-                DAOFactory.getInstance().makeUserDAO().insertGoogleUser(token, email);
+            else{
+                DAOFactory.getInstance().makeUserDAO().updateGoogleUrl(url, id);
             }
             resp.setStatus(201);
-        } else {
-            //TODO: da gestire
-            this.log("email già presente nel database");
+        }
+        else{
+            resp.setStatus(403);
         }
     }
 

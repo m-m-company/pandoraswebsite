@@ -6,37 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>LibraryGamePage</title>
     <link rel="stylesheet" href="css/Community-ChatComments.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/Simple-Slider.css">
+    <script src="https://www.youtube.com/iframe_api"></script>
 </head>
 
 <body>
-<h1 class="text-center" id="title">Nome gioco</h1>
+<h1 class="text-center" id="title">Game Name</h1>
 <button id="download" class="btn btn-success">Download!</button>
-<div class="simple-slider">
-    <div class="swiper-container">
-        <div class="swiper-wrapper" id="carousel">
-        </div>
-        <div class="swiper-pagination"></div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
+<div class="carousel slide" data-ride="carousel" id="carousel-1">
+    <div class="carousel-inner" role="listbox" id="slides">
+
+    </div>
+    <div><a class="carousel-control-prev" href="#carousel-1" role="button" data-slide="prev"><span
+            class="carousel-control-prev-icon shadow"></span><span class="sr-only">Previous</span></a><a
+            class="carousel-control-next" href="#carousel-1" role="button"
+            data-slide="next"><span class="carousel-control-next-icon shadow"></span><span class="sr-only">Next</span></a>
     </div>
 </div>
 <div class="container">
     <div class="row">
         <div class="col">
-            <h1>Descrizione</h1>
+            <h1>Description</h1>
             <p class="text-justify" id="description"></p>
         </div>
         <div class="col">
-            <h1>Specifiche Tecniche</h1>
+            <h1>Specifications</h1>
             <p id="specs" class="text-justify"></p>
         </div>
     </div>
     <div class="row">
         <div class="col-6">
-            <h3>Classifica generale:</h3>
+            <h3>General ranks:</h3>
             <ol type="I" id="ranks">
 
             </ol>
@@ -46,7 +48,7 @@
         <div class="col">
             <div class="card">
                 <div class="card-header">
-                    <h3>Commenti e recensioni</h3>
+                    <h3>Comments and reviews</h3>
                 </div>
                 <div class="card-body" style="height: auto; width: auto">
                     <ul class="list-group" id="commentList">
@@ -59,7 +61,7 @@
                                         <div class="media-body" style="overflow:visible;">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <a href="#">Sara Doe</a>
+                                                    <a href="#">Loading...</a>
                                                     <div>
                                                         <span></span>
                                                         <span></span>
@@ -67,7 +69,7 @@
                                                         <span></span>
                                                         <span></span>
                                                     </div>
-                                                    <p> <br>
+                                                    <p style="display: inline"></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -81,19 +83,21 @@
                             <div class="row">
                                 <div class="col-7">
                                     <textarea class="form-control" id="commentContent" name="content"
-                                    placeholder="Inserisci qui il tuo commento" required></textarea>
+                                              placeholder="Insert here your comment" required></textarea>
                                 </div>
                                 <div class="col-3">
-                                    <label>Inserisci le tue stelle:</label>
+                                    <label>Insert your stars:</label>
                                 </div>
                                 <div class="col-2">
-                                    <input type="number" min="0" max="5" step="1" class="form-control" id="commentStars"/>
+                                    <input type="number" value="0" min="0" max="5" step="1" class="form-control"
+                                           id="commentStars"/>
                                 </div>
                             </div>
                             <div class="row">
                                 <button class="btn btn-light"
                                         style="margin-left: 601px;margin-top: 10px;background-color: rgb(255,124,11);"
-                                        type="button" id="addComment">Aggiungi commento</button>
+                                        type="button" id="addComment">Submit the review
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -102,7 +106,7 @@
         </div>
     </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.jquery.min.js"></script>
+<script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
 <script src="scripts/Simple-Slider.js"></script>
 </body>
 

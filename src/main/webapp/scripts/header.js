@@ -1,19 +1,9 @@
 $(document).ready(()=>{
     if(Cookies.get("logged") === "false" || Cookies.get("logged") === undefined){
-        $("#addGameLink").attr("href", "#Login");
-        $("#addGameLink").attr("data-toggle", "modal");
-        $("#libraryLink").attr("href", "#Login");
-        $("#libraryLink").attr("data-toggle", "modal");
-        $("#profileLink").attr("href", "#Login");
-        $("#profileLink").attr("data-toggle", "modal");
+        $("#upload").attr("href", "#login");
+        $("#upload").attr("data-toggle", "modal");
     }
-    let urlString = window.location;
-    let url = new URL(urlString);
-    let c = url.searchParams.get("registered");
-    if(c === "true"){
-        alert("REGISTRAZIONE EFFETTUATA");
-    }
-    //TODO : testami
+
     $("#loginBtn").click((event)=>{
         $.ajax({
             type: "POST",
@@ -32,7 +22,6 @@ $(document).ready(()=>{
         })
     })
 });
-
 function onLoad() {
     gapi.load('auth2', function() {
         gapi.auth2.init();
@@ -62,16 +51,12 @@ function googleSignIn(googleUser) {
                },
                success: function () {
                     window.location.replace("/");
-               },
-               error: function () {
-                    alert("Something has gone wrong with google login");
                }
             });
         },
         error: function () {
-            alert("NOPE");
-            //TODO: da gestire se l'email è già presente nel database
+            showAlertModal("Email already exists", "This email has been already used for sign in", ICONS.info);
+            signOut();
         }
     });
 }
-

@@ -29,18 +29,20 @@ public class GoogleToken {
     }
 
     public boolean verifyToken(String token) {
-        System.out.println("entro");
         try {
             GoogleIdToken idToken = verifier.verify(token);
             if (idToken != null){
                 payload = idToken.getPayload();
-                System.out.println("true");
                 return true;
             }
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public String getId(){
+        return payload.getSubject();
     }
 
     public String getEmail() {

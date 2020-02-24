@@ -3,6 +3,8 @@ package model;
 import java.sql.Date;
 
 public class Review {
+
+    private int id;
     private String username;
     private int author;
     private int idGame;
@@ -19,12 +21,21 @@ public class Review {
 
     private Date date;
 
-    public Review(int author, int idGame, int stars, Date date, String comment) {
+    public Review(int id, int author, int idGame, int stars, Date date, String comment) {
+        this.id = id;
         this.author = author;
         this.idGame = idGame;
         this.stars = stars;
         this.date = date;
         this.comment = comment;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Review() {}

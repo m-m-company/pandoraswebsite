@@ -3,6 +3,6 @@ $(document).ready(function () {
     let url = new URL(urlString);
     let c = url.searchParams.get("gameNameAlreadyExists");
     if(c === "true"){
-        alert("IL NOME DEL GIOCO E' GIA' STATO UTILIZZATO");
+       showAlertModal("Error Game Name", "The game name already exists", ICONS.alert);
     }
 });

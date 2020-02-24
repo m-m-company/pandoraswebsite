@@ -3,6 +3,7 @@ package controller.gamesheet;
 import model.Game;
 import model.Review;
 import model.Score;
+import model.User;
 import persistence.DAOFactory;
 
 import javax.servlet.RequestDispatcher;
@@ -15,30 +16,34 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
-@WebServlet(value="/GameDataSheet")
+@WebServlet(value="/GameDataSheet", name = "gameDataSheet")
 public class GameDataSheet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int gameId = Integer.parseInt(req.getParameter("gameId"));
-        DAOFactory factory = DAOFactory.getInstance();
-        Game game = null;
-        //Game game = factory.makeGameDAO().getGameFromIdWithPreviews(gameId);
-        String usernameDeveloper = null;
-        usernameDeveloper = factory.makeUserDAO().getUserById(game.getIdDeveloper()).getUsername();
-        ArrayList<Review> reviews = factory.makeReviewDAO().getReviewsByIdGame(gameId);
-        ArrayList<Score> scores = factory.makeScoreDAO().getScoresFromIdGame(gameId);
-        if(req.getSession().getAttribute("userId") != null) {
-            boolean canBuy = false;
-            canBuy = factory.makeGameDAO().isGamePurchased(gameId,(int) req.getSession().getAttribute("userId"));
-            req.setAttribute("canBuy", canBuy);
-        }
+        Game game = DAOFactory.getInstance().makeGameDAO().getGameById(gameId);
+        String usernameDeveloper = (DAOFactory.getInstance().makeUserDAO().getUserById(game.getIdDeveloper())).getUsername();
+        ArrayList<Review> reviews = DAOFactory.getInstance().makeReviewDAO().getReviewsByIdGame(gameId);
+        ArrayList<Score> scores = DAOFactory.getInstance().makeScoreDAO().getScoresFromIdGame(gameId);
         sortScores(scores);
         if(scores.size() >= 10)
             scores = (ArrayList<Score>) scores.subList(0,9);
+        User user = (User) req.getSession().getAttribute("user");
+        if(user != null) {
+            boolean canBuy = DAOFactory.getInstance().makeGameDAO().isGamePurchased(gameId, user.getId());
+            req.setAttribute("canBuy", canBuy);
+        }
 
         ArrayList<Integer> totalSize = new ArrayList<Integer>();
-        /*for(int i = 0; i < game.getPreviewsVID().size()+game.getPreviewsIMG().size();i++)
-            totalSize.add(i);*/
+        ArrayList<String> previews = game.getPreviews(this.getServletContext());
+        ArrayList<String> externalLinks = DAOFactory.getInstance().makeGameDAO().getExternalLinks(gameId);
+        for(int i = 0; i < previews.size()+externalLinks.size();i++)
+            totalSize.add(i);
+        req.setAttribute("previews", previews);
+        req.setAttribute("externalLinks", externalLinks);
+        ArrayList<String> tags = DAOFactory.getInstance().makeTagDao().getTagsForGame(game.getId());
+        req.setAttribute("tags", tags);
         req.setAttribute("game", game);
         req.setAttribute("totalSize", totalSize);
         req.setAttribute("developer", usernameDeveloper);
@@ -48,8 +53,8 @@ public class GameDataSheet extends HttpServlet {
         rd.forward(req, resp);
     }
 
-    private void sortScores(ArrayList<Score> scores)
-    {
+    private void sortScores(ArrayList<Score> scores) {
         Collections.sort(scores, (a, b) -> a.getValue() > b.getValue() ? -1 : a.getUsername().compareTo(b.getUsername()));
     }
+
 }

@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class EncryptDecryptAES128 {
-    private static final String secretKey               = "SoT70lApANcAL4Ca"; //TODO: Boh, la prima cosa ch'è m'è venuta in mente
+    private static final String secretKey               = "SoT70lApANcAL4Ca";
     private static final String characterEncoding       = "UTF-8";
     private static final String cipherTransformation    = "AES/CBC/PKCS5PADDING";
     private static final String aesEncryptionAlgorithem = "AES";

@@ -15,13 +15,6 @@ import java.io.IOException;
 @WebServlet(value = "/library", name = "library")
 public class Library extends HttpServlet {
 
-    private void refreshGame(HttpServletRequest req){
-        User u = (User) req.getSession().getAttribute("user");
-        //u.setLibrary(DAOFactory.getInstance().makeUserDAO().refreshLibrary(u));
-        this.log(String.valueOf(u.getLibrary()));
-        req.getSession().setAttribute("user",u);
-    }
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher rd = req.getRequestDispatcher("header.jsp");
@@ -30,7 +23,6 @@ public class Library extends HttpServlet {
             rd = req.getRequestDispatcher("errorNotLogged.html");
         }
         else{
-            refreshGame(req);
             rd = req.getRequestDispatcher("library.jsp");
         }
         rd.include(req, resp);

@@ -7,35 +7,33 @@
     <title>gameUpload</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/genericForm.css">
+    <script src="scripts/alertUtility.js"></script>
     <script src="scripts/formGameUpload.js"></script>
     <script src="scripts/checkGameName.js"></script>
 </head>
 
 <body>
-<div class="register-photo" style="background-image: url(Assets/backgroundFormGameUpload.jpg)">
+<div class="register-photo" style="background-image: url(Assets/background4.jpg)">
     <div class="form-container" style="max-width: 700px;">
         <form method="post" enctype="multipart/form-data">
-            <h2 class="text-center"><strong>Inserisci i dati del gioco</strong></h2>
+            <h2 class="text-center"><strong>Insert game datas</strong></h2>
             <div class="form-group"><input class="form-control" type="text" name="name"
-                                           placeholder="Inserisci il nome del gioco"
+                                           placeholder="Insert the game name"
                                            required autofocus></div>
             <div class="form-group"><textarea class="form-control" name="description"
-                                              placeholder="Inserisci una descrizione dettagliata del gioco"></textarea>
+                                              placeholder="Insert the game description"></textarea>
             </div>
             <div class="form-group"><textarea class="form-control" name="specifics"
-                                              placeholder="Inserisci le specifiche tecniche del gioco"></textarea></div>
+                                              placeholder="Insert the specifics"></textarea></div>
             <div class="form-group text-center"><label
-                    class="text-monospace text-center text-sm-center text-md-center text-lg-center text-xl-center">Seleziona
-                il file JAR del gioco</label></div>
+                    class="text-monospace text-center text-sm-center text-md-center text-lg-center text-xl-center">Select the game jar</label></div>
             <div class="form-group text-center"><input type="file" name="gameFile" required=""></div>
-            <div class="form-group text-center"><label class="text-monospace">Seleziona l'immagine copertina del
-                gioco</label></div>
+            <div class="form-group text-center"><label class="text-monospace">Select the main preview image</label></div>
             <div class="form-group text-center"><input type="file" name="frontImage" required></div>
-            <div class="form-group text-center"><label class="text-monospace">Seleziona immagini o video da mostrare
-                come anteprime (opzionale)</label></div>
+            <div class="form-group text-center"><label class="text-monospace">Select the previews (optional)</label></div>
             <div class="form-group text-center"><input type="file" name="previewFiles" multiple></div>
-            <div class="form-group text-center"><label class="text-monospace">Inserisci link esterni come anteprime
-                (opzionale)</label></div>
+            <div class="form-group text-center"><label class="text-monospace">Insert links to external previews
+                (optional)</label></div>
             <div class="form-group text-center">
                 <div class="form-row">
                     <div class="col"><input class="form-control" type="text" name="link-1"
@@ -50,25 +48,24 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group text-center"><label class="text-monospace">Inserisci il prezzo del gioco</label>
+            <div class="form-group text-center"><label class="text-monospace">Insert the price of the game</label>
             </div>
             <div class="form-group text-center"><input class="form-control" name="price" type="number"
-                                                       placeholder="Inserisci il prezzo del gioco" min="0" step="0.1"
+                                                       placeholder="Game price" min="0" step="0.1"
                                                        required=""></div>
-            <div class="form-group text-center"><label class="text-monospace">Seleziona i tag</label></div>
+            <div class="form-group text-center"><label class="text-monospace">Select the tags</label></div>
             <div class="form-group text-center" id="tags">
             </div>
             <div class="form-group">
                 <div class="form-check">
                     <label class="form-check-label"><input class="form-check-input" type="checkbox">
                         <a target="_blank"
-                           href="https://www.privacypolicies.com/terms/view/cb295030ef5568133dec1aae0c6d0c7c"> Accetto i
-                            termini e le condizioni d'uso</a>
+                           href="https://www.privacypolicies.com/terms/view/cb295030ef5568133dec1aae0c6d0c7c"> I accept the T&C</a>
                     </label>
                 </div>
             </div>
             <div class="form-group">
-                <button class="btn btn-primary btn-block btn-next" type="submit">Inserisci!</button>
+                <button class="btn btn-primary btn-block btn-next" type="submit">Upload!</button>
             </div>
         </form>
     </div>
@@ -76,5 +73,21 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 </body>
-
+<div id="alertModal" class="modal fade" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header"><i id="alertIcon" class="fas fa-exclamation-triangle" style="padding-top: 0.5rem"></i>
+                <h4 class="modal-title" id="alertTitle"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">x</span></button>
+            </div>
+            <div class="modal-body">
+                <p id="alertContent"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" data-dismiss="modal">Okay</button>
+            </div>
+        </div>
+    </div>
+</div>
 </html>

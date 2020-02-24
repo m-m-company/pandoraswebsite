@@ -1,3 +1,11 @@
+.background-photo{
+  background-image: url(../Assets/backgroundProfile.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  padding: 80px 0;
+}
+
 div.container.profile {
   padding: 10px 20px;
 }
@@ -11,7 +19,9 @@ div.container.profile {
 }
 
 div.profile-center {
+  background-color: rgba(255,255,255,0.9);
   margin: 0 auto;
+  padding: 5%;
   width: 50%;
 }
 

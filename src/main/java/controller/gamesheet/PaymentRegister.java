@@ -1,12 +1,8 @@
 package controller.gamesheet;
 
 import com.google.gson.Gson;
-import model.Game;
-import model.Review;
-import model.Score;
-import model.User;
 import persistence.DAOFactory;
-import utility.Acquisto;
+import model.Purchase;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,27 +10,22 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileReader;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
 
-@WebServlet(value="/PaymentSuccess")
-public class PaymentRegister extends HttpServlet
-{
-    Gson gson = new Gson();
+@WebServlet(value="/paymentSuccess", name = "paymentSuccess")
+public class PaymentRegister extends HttpServlet {
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String json = req.getParameter("data");
-        Acquisto acquisto = gson.fromJson(json, Acquisto.class);
-        DAOFactory.getInstance().makePurchaseDAO().insertNewPurchase(acquisto);
-        RequestDispatcher rd = req.getRequestDispatcher("/library");
-        rd.forward(req,resp);
+        int idUser = Integer.parseInt(req.getParameter("idUser"));
+        int idGame = Integer.parseInt(req.getParameter("idGame"));
+        double price = Double.parseDouble(req.getParameter("price"));
+        if(DAOFactory.getInstance().makePurchaseDAO().insertNewPurchase(idUser, idGame, price)){
+            resp.setStatus(201);
+        }
+        else{
+            resp.setStatus(403);
+        }
     }
+
 }

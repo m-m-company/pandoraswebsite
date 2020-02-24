@@ -3,7 +3,6 @@ package persistence;
 import model.Game;
 import model.User;
 import org.apache.commons.io.IOUtils;
-import org.postgresql.util.PGbytea;
 import utility.EncryptDecryptAES128;
 
 import java.io.IOException;
@@ -15,25 +14,35 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class UserDAO {
+
     private PreparedStatement statement;
 
-    public ArrayList<User> getFriends(User user) {
-        ArrayList<User> friends = new ArrayList<User>();
+    public ArrayList<User> getFriends(int id) {
+        ArrayList<User> friends = new ArrayList<>();
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT u.* FROM public.user as u, friends as uf WHERE uf.id_user1 = ? and u.id = uf.id_user2";
+        String query = "SELECT u.* FROM public.user as u, friends as f WHERE f.id_user1 = ? and u.id = f.id_user2";
         try {
             statement = connection.prepareStatement(query);
-            statement.setInt(1, user.getId());
+            statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
-            if (resultSet.isClosed())
-                return null;
             while (resultSet.next()) {
-                friends.add(createSimpleUser(resultSet));
+                friends.add(createSimpleFriend(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return friends;
+    }
+
+    private User createSimpleFriend(ResultSet resultSet) throws SQLException {
+        User friend = new User();
+        friend.setId(resultSet.getInt("id"));
+        friend.setUsername(resultSet.getString("username"));
+        friend.setDescription(resultSet.getString("description"));
+        friend.setGoogleUser(resultSet.getBoolean("google_user"));
+        friend.setEmail(resultSet.getString("email"));
+        friend.setImage(resultSet.getBytes("profile_image") != null);
+        return friend;
     }
 
     public byte[] getProfilePicture(int id) {
@@ -104,7 +113,7 @@ public class UserDAO {
             statement = connection.prepareStatement(query);
             statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 return createSimpleUser(resultSet);
             }
         } catch (SQLException e) {
@@ -129,13 +138,14 @@ public class UserDAO {
         }
     }
 
-    public void insertGoogleUser(String token, String email) {
+    public void insertGoogleUser(String id, String email, String url) {
         Connection connection = DbAccess.getConnection();
-        String query = "INSERT INTO id_google(token, email) values(?,?)";
+        String query = "INSERT INTO id_google(email, url_image, id) values(?,?,?)";
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1, token);
-            statement.setString(2, email);
+            statement.setString(1, email);
+            statement.setString(2, url);
+            statement.setString(3, id);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -172,38 +182,12 @@ public class UserDAO {
         }
     }
 
-    public void addUserFriend(int from, int to) {
+    public boolean googleIdAlreadyExists(String id) {
         Connection connection = DbAccess.getConnection();
-        String query = "INSERT INTO friends(id, id_user1, id_user2, date) values(default, ?, ?, default)";
+        String query = "SELECT * FROM id_google WHERE id=?";
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1, Integer.toString(from));
-            statement.setString(2, Integer.toString(to));
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void changeProfileImageUser(int idUser, InputStream fileContent) {
-        Connection connection = DbAccess.getConnection();
-        String query = "UPDATE public.user SET profile_image = ? WHERE id = ?::integer";
-        try {
-            statement = connection.prepareStatement(query);
-            statement.setBytes(1, IOUtils.toByteArray(fileContent));
-            statement.setString(2, Integer.toString(idUser));
-            statement.executeUpdate();
-        } catch (SQLException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public boolean googleIdAlreadyExists(String token) {
-        Connection connection = DbAccess.getConnection();
-        String query = "SELECT * FROM id_google WHERE token=?";
-        try {
-            statement = connection.prepareStatement(query);
-            statement.setString(1, token);
+            statement.setString(1, id);
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()){
                 return true;
@@ -214,19 +198,151 @@ public class UserDAO {
         return false;
     }
 
-    public String getGoogleToken(String email) {
+    public void updateGoogleUrl(String url, String id) {
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT * FROM id_google WHERE email=?";
+        String query = "UPDATE id_google SET url_image=? WHERE id=?";
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1, email);
-            ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            return resultSet.getString("token");
+            statement.setString(1, url);
+            statement.setString(2, id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getGoogleUrlImage(int id) {
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT g.url_image FROM public.user as u, id_google as g WHERE u.id=? AND u.email=g.email";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet rs = statement.executeQuery();
+            if(rs.next()){
+                return rs.getString("url_image");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    public boolean deleteFriend(int idActual, int idFriend) {
+        Connection connection = DbAccess.getConnection();
+        String query = "DELETE FROM friends WHERE id_user1=? AND id_user2=?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idActual);
+            statement.setInt(2, idFriend);
+            return statement.executeUpdate() != 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public ArrayList<User> getUsersByUsername(String username, int id) {
+        ArrayList<User> users = new ArrayList<>();
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT * FROM public.user WHERE username ILIKE ? AND id<>?";
+        username = "%" + username + "%";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setString(1, username);
+            statement.setInt(2, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                users.add(createSimpleUser(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public boolean sendFriendRequest(int userID, int friendID) {
+        Connection connection = DbAccess.getConnection();
+        String query = "INSERT INTO friend_request(id, \"from\", \"to\", accepted) VALUES (default,?,?,default)";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, userID);
+            statement.setInt(2, friendID);
+            if(statement.executeUpdate() != 0){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean deleteFriendRequest(int userID, int friendID) {
+        Connection connection = DbAccess.getConnection();
+        String query = "DELETE FROM friend_request WHERE (\"from\"=? AND \"to\"=?) OR (\"from\"=? AND \"to\"=?)";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, userID);
+            statement.setInt(2, friendID);
+            statement.setInt(3, friendID);
+            statement.setInt(4, userID);
+
+            if(statement.executeUpdate() != 0){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public ArrayList<User> getFriendsRequests(int id) {
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT public.user.* FROM public.user, friend_request WHERE public.user.id = friend_request.from AND friend_request.to = ?";
+        ArrayList<User> requests = new ArrayList<>();
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                requests.add(createSimpleFriend(resultSet));
+            }
+            return requests;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public boolean acceptFriendRequest(int from, int to) {
+        Connection connection = DbAccess.getConnection();
+        String query = "UPDATE friend_request SET accepted=true WHERE \"from\"=? AND \"to\"=?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, from);
+            statement.setInt(2, to);
+            if(statement.executeUpdate() != 0){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public ArrayList<User> getSentFriendRequests(int id) {
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT public.user.* FROM public.user, friend_request WHERE public.user.id = friend_request.to AND friend_request.from = ?";
+        ArrayList<User> requests = new ArrayList<>();
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                requests.add(createSimpleFriend(resultSet));
+            }
+            return requests;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

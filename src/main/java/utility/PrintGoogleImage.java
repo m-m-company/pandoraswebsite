@@ -15,20 +15,15 @@ public class PrintGoogleImage extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        User u;
+        String url;
+        int id;
         if(req.getParameter("id") != null){
-            int userId = Integer.parseInt(req.getParameter("id"));
-            u = DAOFactory.getInstance().makeUserDAO().getUserById(userId);
-            String token = DAOFactory.getInstance().makeUserDAO().getGoogleToken(u.getEmail());
-            if(!(GoogleToken.getInstance().verifyToken(token))){
-                //TODO: da gestire
-                this.log("token non valido per stampare l'immagine");
-            }
+            id = Integer.parseInt(req.getParameter("id"));
         }
         else {
-            u = (User) req.getSession().getAttribute("user");
+            id = ((User) req.getSession().getAttribute("user")).getId();
         }
-        String url = GoogleToken.getInstance().getUrlImage();
+        url = DAOFactory.getInstance().makeUserDAO().getGoogleUrlImage(id);
         resp.setContentType("text/html");
         String c = req.getParameter("class");
         String width = req.getParameter("width");

@@ -12,7 +12,7 @@ function checkCode(event) {
            window.location.replace("/nextPage");
         },
         error : function () {
-            alert("CODICE ERRATO");
+            showAlertModal("Code error", "The code is incorrect", ICONS.alert);
             cont++;
             if(cont >= 3){
                 window.location.href = "http://www.google.it";
@@ -26,10 +26,10 @@ function resendCode(event) {
         type: "GET",
         url: "/sendCode",
         success: function () {
-            alert("CODICE REINVIATO");
+            showAlertModal("Resent", "The code is in your mailbox", ICONS.info);
         },
         error: function () {
-            alert("IMPOSSIBILE REINVIARE IL CODICE. CONTATTARE L'ASSISTENZA");
+            showAlertModal("Generic error", "There is a generic error, contact the customer care service", ICONS.alert);
         }
     });
 }

@@ -104,6 +104,7 @@ public class FormGameUpload extends HttpServlet {
             for (FileItem file : previewFiles) {
                 this.storeFile(file, name + File.separator + "previews");
             }
+            resp.sendRedirect("/GameDataSheet?gameId="+DAOFactory.getInstance().makeGameDAO().getGameByName(name).getId());
         }
     }
 

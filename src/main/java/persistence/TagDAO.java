@@ -44,4 +44,22 @@ public class TagDAO {
         }
         return null;
     }
+
+    public ArrayList<String> getTagsForGame(int id){
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT tag.name FROM categories, tag WHERE id_game=? AND id_tag = tag.id";
+        try {
+            ArrayList<String> tags = new ArrayList<>();
+            statement = connection.prepareStatement(query);
+            statement.setInt(1,id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                tags.add(resultSet.getString(1));
+            }
+            return tags;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
