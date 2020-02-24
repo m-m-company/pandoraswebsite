@@ -7,6 +7,7 @@ import utility.Pair;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class GameDAO {
@@ -29,6 +30,21 @@ public class GameDAO {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public ArrayList<Game> getAllGame() {
+        ArrayList<Game> games = new ArrayList<>();
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT * FROM game";
+        try {
+            statement = connection.prepareStatement(query);
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next())
+                games.add(createSimpleGame(resultSet));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return games;
     }
 
     public Game getGameByName(String name) {
@@ -208,5 +224,65 @@ public class GameDAO {
             e.printStackTrace();
         }
         return externalLinks;
+    }
+
+    private ArrayList<Game> getGamesFromRating(int starsNumber) {
+        ArrayList<Game> games = new ArrayList<>();
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT * FROM average_ratings WHERE avg >= ?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, starsNumber);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                games.add(createSimpleGame(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return games;
+    }
+
+    private ArrayList<Game> getGamesFromPrice(int min, int max) {
+        ArrayList<Game> games = new ArrayList<>();
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT * FROM game WHERE price>=? AND price<?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, min);
+            statement.setInt(2, max);
+            ResultSet resultSet = statement.executeQuery();
+            while(resultSet.next())
+                games.add(createSimpleGame(resultSet));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return games;
+    }
+
+    public ArrayList<Game> getFilterGames(String gameName, String category, String price, String rating) {
+        ArrayList<Game> games = getAllGame();
+        System.out.println(games.toString());
+        if(!gameName.equals("")){
+            games.retainAll(getGamesFromNameLike(gameName));
+        }
+        System.out.println(games.toString());
+        if(!category.equals("noCategory")){
+            games.retainAll(getGamesFromCategory(category));
+        }
+        System.out.println(games.toString());
+        if(!price.equals("noPrice")){
+            String[] p = price.split("-");
+            int min = Integer.parseInt(p[0]);
+            int max = Integer.parseInt(p[1]);
+            games.retainAll(getGamesFromPrice(min, max));
+        }
+        System.out.println(games.toString());
+        if(!rating.equals("noRating")){
+            int starsNumber = rating.charAt(rating.length() - 1);
+            games.retainAll(getGamesFromRating(starsNumber));
+        }
+        System.out.println(games.toString());
+        return games;
     }
 }

@@ -147,4 +147,11 @@ public class Game {
         return previews;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof Game){
+            return id == ((Game) obj).id;
+        }
+        return false;
+    }
 }

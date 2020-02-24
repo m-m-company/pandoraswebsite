@@ -17,7 +17,7 @@
 
 <body style="background-color: #284c67;">
     <jsp:include page="header.jsp"></jsp:include>
-    <h1 class="text-left d-block" id="h1GiochiRicercati">Ecco i giochi che hai ricercato:</h1>
+    <h1 class="text-left d-block" id="h1GiochiRicercati">Results :</h1>
     <c:set var="index" scope="request" value="${0}"></c:set>
     <c:forEach items="${games}" var="game">
         <c:if test="${index % 4 == 0}">

@@ -19,6 +19,7 @@
 
 <body>
 <jsp:include page="header.jsp"/>
+<jsp:include page="searchBar.jsp"/>
 <h1 class="text-center">Best sellers</h1>
 <div class="carousel slide bestSellers-size-slide" data-ride="carousel" id="carousel-1">
     <div class="carousel-inner bestSellers-size-inner" role="listbox">
