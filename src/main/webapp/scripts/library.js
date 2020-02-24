@@ -18,7 +18,7 @@ $(document).ready(function () {
         window.location.replace("/downloadGame?id=" + sessionStorage.getItem("gameID"));
     })
 });
-
+function onYouTubeIframeAPIReady() {}
 function showGame(event) {
     $.ajax({
         type: "GET",
@@ -51,18 +51,22 @@ function insertPreviews(game) {
             name: game.name
         },
         success: function (data) {
-            $("#carousel").empty();
-            data.map(function (b64) {
-                $("#carousel").append(
-                    "<div class=\"swiper-slide\"\n" +
-                    "                 style=\"background-image: url(data:image/*;base64," + b64 + ");\"></div>\n" +
-                    "            "
+            $("#slides").empty();
+            data.map(function (img, index) {
+                let active = "active";
+                if (index !==0 )
+                    active = "";
+                $("#slides").append(
+                    "<div class=\"carousel-item size-div-preview "+active+"\">" +
+                    "" +
+                    "<img class='w-100 h-50 d-block float-left size-div-preview' src='"+img+"'></img>" +
+                    "</div>"
                 )
             })
         },
         error: function () {
-            $("#carousel").empty();
-            $("#carousel").append("<h1 class='text-center'> No preview images </h1>");
+            $("#slides").empty();
+            $("#slides").append("<h1 class='text-center'> No preview images </h1>");
             $("#preview-swap").empty();
         }
     });
@@ -73,12 +77,24 @@ function insertPreviews(game) {
             gameID: game.id
         },
         success: function (data) {
-            data.map(function (link) {
-                $("#carousel").append(
-                    "<div class=\"swiper-slide\">" +
-                    "<iframe width=\"560\" height=\"315\" src=\"" + link + "\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>" +
-                    " </div>\n"
-                )
+            data.map(function (link, index) {
+                $("#carousel").append("<div class='swiper-slide text-center'> <div id='player-"+index+"'></div> </div>");
+                let player = new YT.Player('player-'+index,{
+                    height: '100%',
+                    width: '100%',
+                    videoId: 'heSDUYYwpa4',
+                    host: 'http://www.youtube.com',
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange
+                    }
+                });
+                function onPlayerReady() {
+
+                }
+                function onPlayerStateChange() {
+
+                }
             })
         }
     })

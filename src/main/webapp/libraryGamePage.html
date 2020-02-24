@@ -6,23 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>LibraryGamePage</title>
     <link rel="stylesheet" href="css/Community-ChatComments.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/Simple-Slider.css">
+    <script src="https://www.youtube.com/iframe_api"></script>
 </head>
 
 <body>
 <h1 class="text-center" id="title">Game Name</h1>
 <button id="download" class="btn btn-success">Download!</button>
-<div class="simple-slider">
-    <div class="swiper-container">
-        <div class="swiper-wrapper" id="carousel">
-        </div>
-        <div id="preview-swap">
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
-        </div>
+<div class="carousel slide" data-ride="carousel" id="carousel-1">
+    <div class="carousel-inner" role="listbox" id="slides">
+
+    </div>
+    <div><a class="carousel-control-prev" href="#carousel-1" role="button" data-slide="prev"><span
+            class="carousel-control-prev-icon shadow"></span><span class="sr-only">Previous</span></a><a
+            class="carousel-control-next" href="#carousel-1" role="button"
+            data-slide="next"><span class="carousel-control-next-icon shadow"></span><span class="sr-only">Next</span></a>
     </div>
 </div>
 <div class="container">
@@ -83,19 +83,21 @@
                             <div class="row">
                                 <div class="col-7">
                                     <textarea class="form-control" id="commentContent" name="content"
-                                    placeholder="Insert here your comment" required></textarea>
+                                              placeholder="Insert here your comment" required></textarea>
                                 </div>
                                 <div class="col-3">
                                     <label>Insert your stars:</label>
                                 </div>
                                 <div class="col-2">
-                                    <input type="number" value="0" min="0" max="5" step="1" class="form-control" id="commentStars"/>
+                                    <input type="number" value="0" min="0" max="5" step="1" class="form-control"
+                                           id="commentStars"/>
                                 </div>
                             </div>
                             <div class="row">
                                 <button class="btn btn-light"
                                         style="margin-left: 601px;margin-top: 10px;background-color: rgb(255,124,11);"
-                                        type="button" id="addComment">Submit the review</button>
+                                        type="button" id="addComment">Submit the review
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -104,7 +106,7 @@
         </div>
     </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.jquery.min.js"></script>
+<script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
 <script src="scripts/Simple-Slider.js"></script>
 </body>
 
