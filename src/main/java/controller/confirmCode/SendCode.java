@@ -29,7 +29,7 @@ public class SendCode extends HttpServlet {
         String secretCode = this.generateCode();
         this.log(secretCode); //TODO: delete
         req.getSession().setAttribute("secretCode", secretCode);
-        //new Thread(new EmailSender("Your code is: "+ secretCode, (String) req.getSession().getAttribute("email"))).start();
+        new Thread(new EmailSender("Your code is: "+ secretCode, "Control Code",(String) req.getSession().getAttribute("email"))).start();
         resp.sendRedirect("/controlCode");
     }
 
