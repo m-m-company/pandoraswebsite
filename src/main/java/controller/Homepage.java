@@ -21,18 +21,12 @@ public class Homepage extends HttpServlet {
         setBestsellers(req);
         req.setAttribute("hashMapTagsAndGames", DAOFactory.getInstance().makeGameDAO().getTagsAndGames());
         RequestDispatcher rd = req.getRequestDispatcher("index.jsp");
-        setFiltersData(req);
         rd.forward(req, resp);
     }
 
     private void setBestsellers(HttpServletRequest req){
         ArrayList<Game> bestSellers = DAOFactory.getInstance().makePurchaseDAO().getBestSellers();
         req.setAttribute("bestSellers", bestSellers);
-    }
-
-    private void setFiltersData(HttpServletRequest req){
-        ArrayList<String> tags = DAOFactory.getInstance().makeTagDao().getTagsList();
-        req.setAttribute("tags", tags);
     }
 
 }

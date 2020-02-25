@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 @WebServlet(value = "/getTags", name = "getTags")
 public class GetTags extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ArrayList<String> tags = DAOFactory.getInstance().makeTagDao().getTagsList();
@@ -26,4 +27,5 @@ public class GetTags extends HttpServlet {
         printWriter.close();
         resp.setStatus(201);
     }
+
 }
