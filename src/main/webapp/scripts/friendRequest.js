@@ -5,7 +5,7 @@ $(document).ready(() => {
         success: (data) => {
             $("#loading").remove();
             if (data.length === 0){
-                $("#rowRequests").append("<h3 class='text-center'>You don't have any request</h3>");
+                $("#rowRequests").append("<h3 style='margin-left: 20px' class='text-center'>You don't have any request</h3>");
             }
             data.map((user) => {
                 $("#rowRequests").append("<div class=\"col-12 col-sm-6 col-md-5 col-lg-3 user-item\">\n" +
@@ -32,7 +32,7 @@ $(document).ready(() => {
         url: '/getSentFriendRequests',
         success: (data)=>{
             if (data.length === 0){
-                $("#rowSent").append("<h3 class='text-center'>You don't have any request</h3>");
+                $("#rowSent").append("<h3 style='margin-left: 20px' class='text-center'>You don't have any request</h3>");
             }
             data.map((user) => {
                 $("#rowSent").append("<div class=\"col-12 col-sm-6 col-md-5 col-lg-3 user-item\">\n" +
