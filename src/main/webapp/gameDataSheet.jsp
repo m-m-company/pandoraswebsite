@@ -23,71 +23,36 @@
     <div class="row" id="firstRow">
         <div class="col-xl-7" style="width: 60%;">
             <div class="carousel slide" data-ride="carousel" id="carousel-1">
-                <div class="carousel-inner" role="listbox">
-                    <c:set var="index" scope="request" value="${0}"></c:set>
-                    <c:forEach items="${previews}" var="img">
-                        <c:if test="${index == 0}">
-                            <div class="carousel-item size-div-preview active">
-                        </c:if>
-                        <c:if test="${index > 0}">
-                            <div class="carousel-item size-div-preview">
-                        </c:if>
-                                <img class="w-100 d-block float-left size-div-preview" src="${img}">
-                            </div>
-
-                        <c:set var="index" scope="request" value="${index + 1}"></c:set>
-                    </c:forEach>
-
-                    <c:forEach items="${externalLinks}" var="link">
-                        <c:if test="${index == 0}">
-                            <div class="carousel-item size-div-preview active">
-                        </c:if>
-                        <c:if test="${index > 0}">
-                            <div class="carousel-item size-div-preview">
-                        </c:if>
-                            <iframe src="${link}" class="size-div-preview" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                        </div>
-                        <c:set var="index" scope="request" value="${index + 1}"></c:set>
-                    </c:forEach>
+                <div class="carousel-inner" role="listbox" id="slides">
 
                 </div>
                 <div><a class="carousel-control-prev" href="#carousel-1" role="button" data-slide="prev"><span class="carousel-control-prev-icon"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#carousel-1" role="button"
                         data-slide="next"><span class="carousel-control-next-icon"></span><span class="sr-only">Next</span></a></div>
-                <ol class="carousel-indicators">
-                    <c:forEach items="${totalSize}" var="i">
-                        <c:if test="${i == 0}">
-                            <li data-target="#carousel-1" data-slide-to="${i}" class="active"></li>
-                        </c:if>
-                        <c:if test="${i > 0}">
-                            <li data-target="#carousel-1" data-slide-to="${i}"></li>
-                        </c:if>
-                    </c:forEach>
+                <ol id="indicators" class="carousel-indicators">
+
                 </ol>
             </div>
         </div>
         <div class="col float-left" style="width: 40%;">
-            <h1 class="text-center color-orange" >${game.name}</h1>
+            <h1 class="text-center color-orange" id="gameName"></h1>
             <div>
-                <textarea readonly class="border rounded" style="font-size: 20px; width: 100%; background-color: #e9ecef !important; resize: none;" rows="5">${game.description}</textarea>
+                <textarea readonly class="border rounded" style="font-size: 20px; width: 100%; background-color: #e9ecef !important; resize: none;" rows="5" id="gameDescription"></textarea>
                 <div>
-                    <label class="d-block label-game-info">Data Rilascio : ${game.release}</label>
-                    <label class="d-block label-game-info">Sviluppatore : <a href="/profile?id=${game.idDeveloper}">${developer}</a></label>
+                    <label class="d-block label-game-info" id="releaseDate">Release Date: </label>
+                    <label class="d-block label-game-info">Developer : <a id="devLink"></a></label>
                 </div>
-                <button class="btn btn-primary border rounded background-color-orange" type="submit" id="richiediAssistenza"><a href="/help?emailTo=${game.supportEmail}">Richiedi assistenza</a></button>
+                <button class="btn btn-primary border rounded background-color-orange" type="submit" id="richiediAssistenza"><a id="helpMail">Ask for Assistance</a></button>
             </div>
         </div>
     </div>
     <div class="row" id="secondRow">
         <div class="col-xl-7" style="width: 60%;">
-            <ul class="d-inline" id="pCategory">Questo gioco appartiene alle categorie :
-                <c:forEach var="tagName" items="${tags}">
-                    <li class="d-inline">${tagName}</li>
-                </c:forEach>
+            <ul class="d-inline" id="pCategory">This game belongs to this categories:
             </ul>
         </div>
         <div class="col float-left" style="width: 40%;">
             <div class="float-left">
-                <p id="prezzo"> PREZZO: ${game.price}€</p>
+                <p id="price"> Price: </p>
             </div>
             <c:if test="${logged}">
                 <c:if test="${canBuy}">
@@ -118,7 +83,7 @@
                             return actions.payment.create({
                                 transactions: [{
                                     amount: {
-                                        total: '${game.price}',
+                                        total: '${gamePrice}',
                                         currency: 'EUR'
                                     }
                                 }]
@@ -133,9 +98,8 @@
                                     type: "POST",
                                     url: "/paymentSuccess",
                                     data: {
-                                        idUser: ${user.id},
-                                        idGame: ${game.id},
-                                        price: ${game.price}
+                                        idGame: ${gameId},
+                                        price: ${gamePrice}
                                     },
                                     success: function () {
                                         window.location.replace("/library");
@@ -149,7 +113,7 @@
                 <!-- END PAYPAL PAYMENTS-->
             </c:if>
                 <c:if test="${not canBuy}">
-                    <h5 class="color-orange" id="giàAcquistato">Hai già acquistato questo gioco!</h5>
+                    <h5 class="color-orange" id="giàAcquistato">You've already got this game!</h5>
                 </c:if>
             </c:if>
             <c:if test="${not logged}">
@@ -204,16 +168,8 @@
                     <th class="th-color">Score</th>
                 </tr>
             </thead>
-            <tbody>
-                <c:set var="index" scope="request" value="${0}"></c:set>
-                <c:forEach items="${ranking}" var="rankI">
-                    <c:set var="index" scope="request" value="${index + 1}"></c:set>
-                    <tr>
-                        <td class="td-color">${index}</td>
-                        <td class="td-color">${rankI.username}</td>
-                        <td class="td-color">${rankI.value}</td>
-                    </tr>
-                </c:forEach>
+            <tbody id="ranks">
+
             </tbody>
         </table>
     </div>

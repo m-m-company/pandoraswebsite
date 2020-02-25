@@ -85,13 +85,9 @@ function insertPreviews(game) {
                         'onStateChange': onPlayerStateChange
                     }
                 });
-                function onPlayerReady() {
-
-                }
-                function onPlayerStateChange() {
-
-                }
-            })
+                function onPlayerReady() {}
+                function onPlayerStateChange() {}
+            });
             data[1].map(function (img) {
                 $("#slides").append(
                     "<div class=\"carousel-item size-div-preview\">" +

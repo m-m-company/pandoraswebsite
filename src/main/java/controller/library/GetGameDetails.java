@@ -3,6 +3,7 @@ package controller.library;
 import com.google.gson.Gson;
 import model.Game;
 import model.User;
+import persistence.DAOFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,13 +19,17 @@ public class GetGameDetails extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String name = req.getParameter("name");
-        User user = (User) req.getSession().getAttribute("user");
         Game game = null;
-        for(Game g : user.getLibrary()){
-            if(g.getName().equals(name)){
-                game = g;
-                break;
+        if (req.getParameter("idGame") != null){
+            game = DAOFactory.getInstance().makeGameDAO().getGameById(Integer.parseInt(req.getParameter("idGame")));
+        }else {
+            String name = req.getParameter("name");
+            User user = (User) req.getSession().getAttribute("user");
+            for (Game g : user.getLibrary()) {
+                if (g.getName().equals(name)) {
+                    game = g;
+                    break;
+                }
             }
         }
         Gson gson = new Gson();
