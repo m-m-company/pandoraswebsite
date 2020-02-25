@@ -14,7 +14,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-@WebServlet("/getGameLinks")
+@WebServlet(value = "/getGameLinks", name = "getGameLinks")
 public class GetGameLinks extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
