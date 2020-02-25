@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class ReviewDAO {
+
     private PreparedStatement statement;
 
     public Review createSimpleReview(ResultSet resultSet){
@@ -57,8 +58,7 @@ public class ReviewDAO {
         return null;
     }
 
-    public ArrayList<Review> getReviewsByIdGame(int id)
-    {
+    public ArrayList<Review> getReviewsByIdGame(int id) {
         Connection connection = DbAccess.getConnection();
         String query = "SELECT * FROM public.reviews WHERE id_game = ?";
         try {
@@ -100,24 +100,6 @@ public class ReviewDAO {
         return null;
     }
 
-    public ArrayList<Review> getReviewByIdUser(int id){
-        Connection connection = DbAccess.getConnection();
-        String query = "SELECT * FROM reviews WHERE id_user = ?";
-        try{
-            statement = connection.prepareStatement(query);
-            statement.setInt(1,id);
-            ResultSet resultSet = statement.executeQuery();
-            ArrayList<Review> reviews = new ArrayList<>();
-            while (resultSet.next()){
-                reviews.add(createSimpleReview(resultSet));
-            }
-            return reviews;
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public boolean deleteComment(int id) {
         Connection connection = DbAccess.getConnection();
         String query = "DELETE FROM reviews WHERE id=?";
@@ -149,4 +131,5 @@ public class ReviewDAO {
         }
         return false;
     }
+
 }

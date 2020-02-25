@@ -1,10 +1,8 @@
 package controller.profile;
 
-import com.google.gson.Gson;
 import model.Game;
 import model.User;
 import persistence.DAOFactory;
-import utility.Pair;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,8 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
-@WebServlet("/UserStats")
+@WebServlet(value = "/UserStats", name = "userStats")
 public class UserStats extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         User u = (User)req.getSession().getAttribute("user");
@@ -56,4 +55,5 @@ public class UserStats extends HttpServlet {
         RequestDispatcher rd = req.getRequestDispatcher("userStats.jsp");
         rd.include(req,resp);
     }
+
 }

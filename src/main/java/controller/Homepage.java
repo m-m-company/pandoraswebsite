@@ -2,7 +2,6 @@ package controller;
 
 import model.Game;
 import persistence.DAOFactory;
-import utility.Pair;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;

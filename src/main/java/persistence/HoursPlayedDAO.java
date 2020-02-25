@@ -12,8 +12,7 @@ public class HoursPlayedDAO {
 
     private PreparedStatement statement;
 
-    public TreeMap<String, Integer> getHoursPlayedFromIdUser(int id)
-    {
+    public TreeMap<String, Integer> getHoursPlayedFromIdUser(int id) {
         Connection connection = DbAccess.getConnection();
         String query = "SELECT *  FROM public.hours_played, game WHERE hours_played.id_game= game.id " +
                                                                 "AND hours_played.id_user = ?::integer";
@@ -36,6 +35,7 @@ public class HoursPlayedDAO {
         }
         return null;
     }
+
     public ArrayList<Integer> getTotalHoursPlayedByUser(int id){
         Connection connection = DbAccess.getConnection();
         String query = "SELECT sum(value) FROM hours_played WHERE id_user = ? GROUP BY hours_played.id_game";
@@ -73,19 +73,4 @@ public class HoursPlayedDAO {
         return null;
     }
 
-    public Integer getHoursPlayedByIdUserGame(int user, int game) {
-        Connection connection = DbAccess.getConnection();
-        String query = "SELECT sum(hours_played.value) FROM hours_played WHERE id_user=? AND id_game = ?";
-        try {
-            statement = connection.prepareStatement(query);
-            statement.setInt(1,user);
-            statement.setInt(2,game);
-            ResultSet resultSet = statement.executeQuery();
-            resultSet.next();
-            return resultSet.getInt(1);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
 }

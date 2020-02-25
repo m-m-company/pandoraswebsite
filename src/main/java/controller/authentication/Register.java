@@ -81,7 +81,7 @@ public class Register extends HttpServlet {
                 resp.sendRedirect("/sendCode");
             }
             else{
-                resp.sendRedirect("/register?emailAlreadyExists=true"); //SI SCRIVE COSI?
+                resp.sendRedirect("/register?emailAlreadyExists=true");
             }
         }
         else{

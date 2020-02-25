@@ -29,23 +29,6 @@ public class Help extends HttpServlet
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
 	{
-		getPage(req, resp);
-	}
-	
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
-	{
-		String name = req.getParameter("name");
-		String email = req.getParameter("email");
-		String content = req.getParameter("content");
-		String text = "This email is from " + name + "(" + email + ")\n" + content;
-		String subject = req.getParameter("subject");
-		new Thread(new EmailSender(text, subject,"pandorasjar2019@gmail.com")).start();
-		resp.sendRedirect("/");
-	}
-
-	private void getPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
-	{
 		String to = req.getParameter("emailTo");
 		if(to == null)
 		{
@@ -68,4 +51,17 @@ public class Help extends HttpServlet
 		rd = req.getRequestDispatcher("footer.html");
 		rd.include(req, resp);
 	}
+	
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
+	{
+		String name = req.getParameter("name");
+		String email = req.getParameter("email");
+		String content = req.getParameter("content");
+		String text = "This email is from " + name + "(" + email + ")\n" + content;
+		String subject = req.getParameter("subject");
+		new Thread(new EmailSender(text, subject,"pandorasjar2019@gmail.com")).start();
+		resp.sendRedirect("/");
+	}
+
 }

@@ -3,7 +3,6 @@ package controller.library;
 import com.google.gson.Gson;
 import model.Score;
 import persistence.DAOFactory;
-import utility.Pair;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Comparator;
 
 @WebServlet(value = "/getRank", name = "getRank")
 public class GetRank extends HttpServlet {

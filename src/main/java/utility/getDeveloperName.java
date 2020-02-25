@@ -13,6 +13,7 @@ import java.io.PrintWriter;
 
 @WebServlet(value = "/getDeveloperName", name = "getDeveloperName")
 public class getDeveloperName extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String name = DAOFactory.getInstance().makeUserDAO().getUserById(Integer.parseInt(req.getParameter("idDeveloper"))).getUsername();
@@ -26,4 +27,5 @@ public class getDeveloperName extends HttpServlet {
         resp.setStatus(201);
 
     }
+
 }

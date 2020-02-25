@@ -16,8 +16,9 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.TreeMap;
 
-@WebServlet(value = "/devStats")
+@WebServlet(value = "/devStats", name = "devStats")
 public class DevStats extends HttpServlet {
+
     private ArrayList<Integer> createAverageStarring(User loggedUser) {
         ArrayList<Integer> averages = new ArrayList<>();
         averages.add(null);
@@ -135,4 +136,5 @@ public class DevStats extends HttpServlet {
         rd = req.getRequestDispatcher("devStats.jsp");
         rd.include(req, resp);
     }
+
 }

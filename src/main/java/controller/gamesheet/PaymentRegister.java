@@ -1,10 +1,8 @@
 package controller.gamesheet;
 
-import com.google.gson.Gson;
+import model.User;
 import persistence.DAOFactory;
-import model.Purchase;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +15,7 @@ public class PaymentRegister extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int idUser = Integer.parseInt(req.getParameter("idUser"));
+        int idUser = ((User) req.getSession().getAttribute("user")).getId();
         int idGame = Integer.parseInt(req.getParameter("idGame"));
         double price = Double.parseDouble(req.getParameter("price"));
         if(DAOFactory.getInstance().makePurchaseDAO().insertNewPurchase(idUser, idGame, price)){

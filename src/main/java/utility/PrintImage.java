@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("/printImage")
+@WebServlet(value = "/printImage", name = "printImage")
 public class PrintImage extends HttpServlet {
 
     @Override

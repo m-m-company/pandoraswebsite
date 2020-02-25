@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 @WebServlet(name = "getComments", value = "/getComments")
 public class GetComments extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ArrayList<Review> reviews = DAOFactory.getInstance().makeReviewDAO().getReviewsByIdGame(Integer.parseInt(req.getParameter("idGame")));
@@ -27,4 +28,5 @@ public class GetComments extends HttpServlet {
         printWriter.close();
         resp.setStatus(201);
     }
+
 }

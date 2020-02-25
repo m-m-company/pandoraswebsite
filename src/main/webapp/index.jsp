@@ -61,7 +61,7 @@
     </div>
 </div>
 <c:forEach var="tagName" items="${hashMapTagsAndGames.keySet()}">
-<div class="categories-container"> <!--TODO: qui dentro va fatto un foreach sull'array dei tag -->
+<div class="categories-container">
     <div class="category-games border rounded">
         <h2>${tagName}</h2>
         <div class="container-fluid category-games-container-fluid-size">

@@ -1,8 +1,6 @@
 package controller.gamesheet;
 
 import model.Game;
-import model.Review;
-import model.Score;
 import model.User;
 import persistence.DAOFactory;
 
@@ -13,8 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 
 @WebServlet(value="/GameDataSheet", name = "gameDataSheet")
 public class GameDataSheet extends HttpServlet {
@@ -32,10 +28,6 @@ public class GameDataSheet extends HttpServlet {
         }
         RequestDispatcher rd = req.getRequestDispatcher("gameDataSheet.jsp");
         rd.forward(req, resp);
-    }
-
-    private void sortScores(ArrayList<Score> scores) {
-        Collections.sort(scores, (a, b) -> a.getValue() > b.getValue() ? -1 : a.getUsername().compareTo(b.getUsername()));
     }
 
 }

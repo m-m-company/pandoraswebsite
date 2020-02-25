@@ -27,7 +27,6 @@ public class SendCode extends HttpServlet {
 
     private void sendEmail(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String secretCode = this.generateCode();
-        this.log(secretCode); //TODO: delete
         req.getSession().setAttribute("secretCode", secretCode);
         new Thread(new EmailSender("Your code is: "+ secretCode, "Control Code",(String) req.getSession().getAttribute("email"))).start();
         resp.sendRedirect("/controlCode");

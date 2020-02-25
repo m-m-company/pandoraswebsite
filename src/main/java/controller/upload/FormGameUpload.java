@@ -25,7 +25,7 @@ public class FormGameUpload extends HttpServlet {
     private String filePath;
 
     @Override
-    public void init() throws ServletException {
+    public void init() {
         filePath = this.getServletContext().getRealPath(File.separator) + File.separator + "gameFiles";
     }
 
