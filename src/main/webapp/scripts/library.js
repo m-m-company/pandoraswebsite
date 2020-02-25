@@ -65,9 +65,7 @@ function insertPreviews(game) {
             })
         },
         error: function () {
-            $("#slides").empty();
-            $("#slides").append("<h1 class='text-center'> No preview images </h1>");
-            $("#preview-swap").empty();
+            $("#slides").empty().append("<h1 class='text-center'> No preview images </h1>");
         }
     });
     $.ajax({
@@ -77,12 +75,10 @@ function insertPreviews(game) {
             gameID: game.id
         },
         success: function (data) {
-            data.map(function (link, index) {
-                $("#carousel").append("<div class='swiper-slide text-center'> <div id='player-"+index+"'></div> </div>");
+            data[0].map(function (link, index) {
+                $("#slides").append("<div class='carousel-item size-div-preview text-center'> <div id='player-"+index+"'></div> </div>");
                 let player = new YT.Player('player-'+index,{
-                    height: '100%',
-                    width: '100%',
-                    videoId: 'heSDUYYwpa4',
+                    videoId: link,
                     host: 'http://www.youtube.com',
                     events: {
                         'onReady': onPlayerReady,
@@ -95,6 +91,14 @@ function insertPreviews(game) {
                 function onPlayerStateChange() {
 
                 }
+            })
+            data[1].map(function (img) {
+                $("#slides").append(
+                    "<div class=\"carousel-item size-div-preview\">" +
+                    "" +
+                    "<img class='w-100 h-50 d-block float-left size-div-preview' src='"+img+"'></img>" +
+                    "</div>"
+                )
             })
         }
     })
