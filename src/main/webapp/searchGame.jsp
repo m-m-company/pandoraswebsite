@@ -25,7 +25,7 @@
             </div>
             <div class="row row-games">
         </c:if>
-            <div class="col-xl-3" style="height: 100%;"><a href="/GameDataSheet?gameId=${game.id}"><img style="width: 100%;height: 100%;" src="${game.frontImage}"></a></div>
+            <div class="col-xl-3" style="height: 100%;"><a href="/GameDataSheet?gameId=${game.id}"><img style="width: 100%;height: 100%;" src="gameFiles/${game.getName()}/${game.frontImage}"></a></div>
         <c:set var="index" scope="request" value="${index + 1}"></c:set>
     </c:forEach>
     </div>

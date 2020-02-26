@@ -20,11 +20,16 @@
 <c:if test="${isFriend == true}">
     <div class="profile-card">
         <div class="profile-back"></div>
-        <c:if test="${toShow.getImage()}">
-            <img class="rounded-circle profile-pic" src="/printImage?id=${toShow.getId()}">
+        <c:if test="${toShow.isGoogleUser()}">
+            <jsp:include page="/printGoogleImage?class=rounded-circle profile-pic"></jsp:include>
         </c:if>
-        <c:if test="${!toShow.getImage()}">
-            <img class="rounded-circle profile-pic" src="https://www.gravatar.com/avatar/1234566?size=200&d=mm">
+        <c:if test="${!toShow.isGoogleUser()}">
+            <c:if test="${toShow.getImage()}">
+                <img class="rounded-circle profile-pic" src="/printImage?id=${toShow.getId()}">
+            </c:if>
+            <c:if test="${!toShow.getImage()}">
+                <img class="rounded-circle profile-pic" src="https://www.gravatar.com/avatar/1234566?size=200&d=mm">
+            </c:if>
         </c:if>
         <h3 class="profile-name">${toShow.getUsername()}</h3>
         <p class="profile-bio">${toShow.getDescription()}</p>

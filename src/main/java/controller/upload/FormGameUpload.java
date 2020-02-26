@@ -78,7 +78,9 @@ public class FormGameUpload extends HttpServlet {
                 } else if (i.getFieldName().equals("previewFiles")) {
                     previewFiles.add(i);
                 } else if (i.getFieldName().contains("link")) {
-                    externalLinks.add(i.getString());
+                    if (!i.getString().equals("")){
+                        externalLinks.add(i.getString());
+                    }
                 } else if (i.getFieldName().equals("price")) {
                     price = Double.parseDouble(i.getString());
                 } else if (i.getFieldName().contains("tag")) {
