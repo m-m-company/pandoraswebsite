@@ -83,7 +83,6 @@
         </c:forEach>
     </div>
     <!-- script for charts -->
-    <%-- FIXME: Can't move this on an external file 'cause of the ${}, can we fix it? --%>
     <script>
         $("#menu-toggle").click(function (e) {
             e.preventDefault();

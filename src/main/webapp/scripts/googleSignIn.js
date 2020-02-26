@@ -27,13 +27,12 @@ function googleSignIn(googleUser) {
                     window.location.replace("/");
                 },
                 error: function () {
-                    alert("Something has gone wrong with google login");
+                    showAlertModal("ERROR", "Something has gone wrong with google login", ICONS.alert);
                 }
             });
         },
         error: function () {
-            alert("NOPE");
-            //TODO: da gestire se l'email è già presente nel database
+            showAlertModal("ERROR", "There is an error with login from google. Retry later", ICONS.alert)
         }
     });
 }

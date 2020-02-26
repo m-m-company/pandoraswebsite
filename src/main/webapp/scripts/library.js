@@ -24,7 +24,7 @@ function showGame(event) {
         type: "GET",
         url: "/getGameDetails",
         data: {
-            name: event.target.id //TODO : check on other browser
+            name: event.target.id
         },
         success: function (game) {
             sessionStorage.setItem("gameID", game.id);

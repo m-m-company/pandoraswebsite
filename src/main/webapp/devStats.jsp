@@ -94,7 +94,6 @@
 </div>
 
 <!-- script for charts -->
-<%-- FIXME: same as userStats --%>
 <script>
     $("#menu-toggle").click(function (e) {
         e.preventDefault();

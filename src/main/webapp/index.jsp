@@ -32,7 +32,7 @@
                 <div class="carousel-item bestSellers-size-item">
                     </c:if>
                 <a href="/GameDataSheet?gameId=${best.getId()}"><img class="d-block bestSellers-size-img"
-                                                                                   src="gameFiles/${best.getName()}/${best.getFrontImage()}"></a><!--TODO:front image-->
+                                                                                   src="gameFiles/${best.getName()}/${best.getFrontImage()}"></a>
             </div>
                 <c:set value="${1+bI}" var="bI"></c:set>
         </c:forEach>
