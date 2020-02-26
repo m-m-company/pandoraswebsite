@@ -160,7 +160,7 @@ function insertTags(id) {
             idGame: id
         },
         success: function (data) {
-            data.map(tag => $("#pCategory").append("<li class=\"d-inline\">"+tag+"</li>"))
+            data.map(tag => $("#pCategory").append("<li class=\"d-inline\">"+tag+" </li>"))
         }
     })
 }
