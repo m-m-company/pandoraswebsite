@@ -251,7 +251,7 @@ public class UserDAO {
             statement.setInt(2, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
-                users.add(createSimpleUser(resultSet));
+                users.add(createSimpleFriend(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
