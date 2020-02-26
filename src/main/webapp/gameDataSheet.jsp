@@ -37,7 +37,10 @@
         <div class="col float-left" style="width: 40%;">
             <h1 class="text-center color-orange" id="gameName"></h1>
             <div>
+                <label>Description:</label>
                 <textarea readonly class="border rounded" style="font-size: 20px; width: 100%; background-color: #e9ecef !important; resize: none;" rows="5" id="gameDescription"></textarea>
+                <label>Hardware specifics</label>
+                <textarea readonly class="border rounded" style="font-size: 20px; width: 100%; background-color: #e9ecef !important; resize: none;" rows="5" id="gameSpecs"></textarea>
                 <div>
                     <label class="d-block label-game-info" id="releaseDate">Release Date: </label>
                     <label class="d-block label-game-info">Developer : <a id="devLink"></a></label>

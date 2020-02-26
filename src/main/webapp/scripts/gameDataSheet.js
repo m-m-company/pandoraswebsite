@@ -177,6 +177,7 @@ function insertGameData(id) {
             $("#gameDescription").text(data.description);
             $("#releaseDate").text($("#releaseDate").text() + data.release);
             $("#devLink").attr("href", "/profile?id=" + data.idDeveloper);
+            £("#gameSpecs").text(data.specifics);
             $.ajax({
                 type: "GET",
                 url: "getDeveloperName",
