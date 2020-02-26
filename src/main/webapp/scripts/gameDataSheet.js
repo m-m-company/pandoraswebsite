@@ -134,7 +134,7 @@ function insertPreviewsExternalLinks(id) {
                 $("#slides").append(
                     "<div class=\"carousel-item size-div-preview\">" +
                     "" +
-                    "<img class='w-100 h-50 d-block float-left size-div-preview' src='"+img+"'></img>" +
+                    "<img class='w-100 h-100 d-block float-left size-div-preview' src='"+img+"'></img>" +
                     "</div>"
                 )
             });
