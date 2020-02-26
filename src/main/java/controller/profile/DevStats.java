@@ -71,6 +71,13 @@ public class DevStats extends HttpServlet {
         User loggedUser = (User) req.getSession().getAttribute("user");
         rd = req.getRequestDispatcher("header.jsp");
         rd.include(req, resp);
+        if ((Boolean)req.getSession().getAttribute("logged") == null || !(Boolean)req.getSession().getAttribute("logged")) {
+            rd = req.getRequestDispatcher("errorNotLogged.html");
+            rd.include(req,resp);
+            rd = req.getRequestDispatcher("footer.html");
+            rd.include(req, resp);
+            return;
+        }
         ArrayList<Game> uploadedGames = new ArrayList<>(DAOFactory.getInstance().makeGameDAO().getUploadedGamesById(loggedUser.getId()));
         req.setAttribute("uploadedGames", uploadedGames);
 

@@ -18,6 +18,17 @@ public class UserStats extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        if ((Boolean)req.getSession().getAttribute("logged") == null || !(Boolean)req.getSession().getAttribute("logged")) {
+            RequestDispatcher rd = req.getRequestDispatcher("header.jsp");
+            rd.include(req,resp);
+            rd = req.getRequestDispatcher("errorNotLogged.html");
+            rd.include(req,resp);
+            rd = req.getRequestDispatcher("footer.html");
+            rd.include(req, resp);
+            return;
+        }
+
         User u = (User)req.getSession().getAttribute("user");
         ArrayList<Game> userLibrary = DAOFactory.getInstance().makeUserDAO().getGames(u);
         ArrayList<TreeMap<String, Integer>> scoresArray = new ArrayList<>();

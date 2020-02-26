@@ -86,6 +86,13 @@ public class Profile extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		RequestDispatcher rd = req.getRequestDispatcher("header.jsp");
 		rd.include(req, resp);
+		if ((Boolean)req.getSession().getAttribute("logged") == null || !(Boolean)req.getSession().getAttribute("logged")) {
+			rd = req.getRequestDispatcher("errorNotLogged.html");
+			rd.include(req,resp);
+			rd = req.getRequestDispatcher("footer.html");
+			rd.include(req, resp);
+			return;
+		}
 		if (setUserToShow(req))
 			rd = req.getRequestDispatcher("profile.jsp");
 		else
