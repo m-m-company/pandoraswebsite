@@ -93,7 +93,7 @@ function insertPreviewsFromServer(id) {
                 $("#slides").append(
                     "<div class=\"carousel-item size-div-preview "+active+"\">" +
                     "" +
-                    "<img class='w-100 h-50 d-block float-left size-div-preview' src='"+img+"'></img>" +
+                    "<img class='w-100 h-100 d-block float-left size-div-preview' src='"+img+"'></img>" +
                     "</div>"
                 )
             });
@@ -177,7 +177,7 @@ function insertGameData(id) {
             $("#gameDescription").text(data.description);
             $("#releaseDate").text($("#releaseDate").text() + data.release);
             $("#devLink").attr("href", "/profile?id=" + data.idDeveloper);
-            £("#gameSpecs").text(data.specifics);
+            $("#gameSpecs").text(data.specifics);
             $.ajax({
                 type: "GET",
                 url: "getDeveloperName",
