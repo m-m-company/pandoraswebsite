@@ -14,7 +14,12 @@ $(document).ready(()=>{
             },
             success: function () {
                 $("#errorLabel").hide();
-                window.location.replace(window.location);
+                let loc = window.location.toString();
+                if (loc.includes("registered")){
+                    loc = "/";
+                }
+                console.log(loc);
+                window.location.replace(loc);
             },
             error: function () {
                 $("#errorLabel").show();
