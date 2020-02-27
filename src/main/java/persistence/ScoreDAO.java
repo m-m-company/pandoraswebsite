@@ -54,4 +54,20 @@ public class ScoreDAO {
         return null;
     }
 
+    public int getBestScoreFromGame(int idUser, int idGame) {
+        Connection connection = DbAccess.getConnection();
+        String query = "SELECT max(score.score) FROM score WHERE id_user = ? AND id_game = ?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, idUser);
+            statement.setInt(2, idGame);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

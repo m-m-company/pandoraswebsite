@@ -155,4 +155,12 @@ public class Game {
         return false;
     }
 
+    public ArrayList<String> getTagsString() { //It's used in friendPage.jsp
+        return DAOFactory.getInstance().makeTagDao().getTagsForGame(id);
+    }
+
+    public int getBestScoreOfIdUser(int idUser) {
+        return DAOFactory.getInstance().makeScoreDAO().getBestScoreFromGame(idUser, id);
+    }
+
 }

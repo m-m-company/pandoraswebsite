@@ -48,7 +48,7 @@
                                     <c:forEach var="game" items="${friendLibrary}">
                                         <div class="col-md-6 col-lg-4 item">
                                             <div class="box">
-                                                <img class="rounded-circle" src="${game.getFrontImage()}"/>
+                                                <img class="rounded-circle" src="gameFiles/${game.getName()}/${game.frontImage}"/>
                                                 <h3 class="name"><a href="${pageContext.request.contextPath}/GameDataSheet?id=${game.getId()}">${game.getName()}</a></h3>
                                                 <p class="title">${game.getTagsString()}</p>
                                                 <p class="description">Hours played:${game.getHoursPlayedOfIdUser(toShow.getId())}.<br> Best score: ${game.getBestScoreOfIdUser(toShow.getId())}.</p>
