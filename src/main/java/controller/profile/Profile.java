@@ -46,7 +46,8 @@ public class Profile extends HttpServlet{
 		return returnValue;
 	}
 
-	private void takeData(HttpServletRequest req, User user, byte[] image) {
+	private byte[] takeData(HttpServletRequest req, User user) {
+		byte[] image = new byte[0];
 		DiskFileItemFactory diskFileItemFactory = new DiskFileItemFactory();
 		ServletFileUpload servletFileUpload = new ServletFileUpload(diskFileItemFactory);
 		try {
@@ -80,6 +81,7 @@ public class Profile extends HttpServlet{
 		} catch (FileUploadException e) {
 			e.printStackTrace();
 		}
+		return image;
 	}
 
 	@Override
@@ -105,9 +107,12 @@ public class Profile extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		User user = (User) req.getSession().getAttribute("user");
-		byte[] image = null;
-		takeData(req, user, image);
-		DAOFactory.getInstance().makeUserDAO().changeUserDetails(user, image);
+		byte[] image = takeData(req, user);
+		if(image.length != 0){
+			this.log(Arrays.toString(image));
+			DAOFactory.getInstance().makeUserDAO().changeProfileImage(user.getId(), image);
+		}
+		DAOFactory.getInstance().makeUserDAO().changeUserDetails(user);
 		resp.sendRedirect("/profile");
 	}
 

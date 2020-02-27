@@ -165,17 +165,29 @@ public class UserDAO {
         }
     }
 
-    public void changeUserDetails(User u, byte[] image) {
+    public void changeProfileImage(int id, byte[] image) {
         Connection connection = DbAccess.getConnection();
-        String query = "UPDATE public.user SET username = ?, email = ?, description = ?, password = ?, profile_image = ? WHERE id = ?";
+        String query = "UPDATE public.user SET profile_image = ? WHERE id = ?";
+        try {
+            statement = connection.prepareStatement(query);
+            statement.setBytes(1, image);
+            statement.setInt(2, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void changeUserDetails(User u) {
+        Connection connection = DbAccess.getConnection();
+        String query = "UPDATE public.user SET username = ?, email = ?, description = ?, password = ? WHERE id = ?";
         try {
             statement = connection.prepareStatement(query);
             statement.setString(1, u.getUsername());
             statement.setString(2, u.getEmail());
             statement.setString(3, u.getDescription());
             statement.setString(4, EncryptDecryptAES128.getInstance().encrypt(u.getPassword()));
-            statement.setBytes(5, image);
-            statement.setInt(6, u.getId());
+            statement.setInt(5, u.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
