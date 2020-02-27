@@ -14,18 +14,17 @@ public class HoursPlayedDAO {
 
     public TreeMap<String, Integer> getHoursPlayedFromIdUser(int id) {
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT *  FROM public.hours_played, game WHERE hours_played.id_game= game.id " +
-                                                                "AND hours_played.id_user = ?::integer";
+        String query = "SELECT sum(hours_played.value), game.name  FROM public.hours_played, game WHERE hours_played.id_game= game.id AND hours_played.id_user = ? GROUP BY game.name";
 
         try {
             statement = connection.prepareStatement(query);
-            statement.setString(1,Integer.toString(id));
+            statement.setInt(1,id);
             ResultSet result = statement.executeQuery();
             if(result.isClosed())
                 return null;
             TreeMap<String, Integer> hours = new TreeMap<>();
             while(result.next()) {
-                hours.put("'"+result.getString("name")+"'", result.getInt("value"));
+                hours.put("'"+result.getString(2)+"'", result.getInt(1));
             }
 
             return hours;
@@ -38,14 +37,20 @@ public class HoursPlayedDAO {
 
     public ArrayList<Integer> getTotalHoursPlayedByUser(int id){
         Connection connection = DbAccess.getConnection();
-        String query = "SELECT sum(value) FROM hours_played WHERE id_user = ? GROUP BY hours_played.id_game";
+        String query = "SELECT sum(value),library.id_game FROM library LEFT JOIN hours_played on library.id_game = hours_played.id_game WHERE library.id_user = ? GROUP BY library.id_game ORDER BY library.id_game";
         try{
             statement = connection.prepareStatement(query);
             statement.setInt(1,id);
             ArrayList<Integer> total = new ArrayList<>();
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
-                total.add(resultSet.getInt(1));
+                int k = 0;
+                try {
+                    k = resultSet.getInt(1);
+                }catch (Exception e){
+                    k = 0;
+                }
+                total.add(k);
             }
             return total;
         }catch (SQLException e){
