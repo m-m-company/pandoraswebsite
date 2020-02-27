@@ -55,7 +55,9 @@
                             <p class="text-center">Hours Played</p>
                             <p class="text-center">Total:
                                 <c:if test="${totalGameHoursPlayed.size() != 0}">
-                                    ${totalGameHoursPlayed.get(k)}
+                                    <c:if test="${totalGameHoursPlayed.size() > k}">
+                                        ${totalGameHoursPlayed.get(k)}
+                                    </c:if>
                                 </c:if>
                                 <c:if test="${totalGameHoursPlayed.size() != 0}">
                                     0

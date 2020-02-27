@@ -53,7 +53,13 @@
                     <div class="col">
                         <div class="bg-dark border rounded border-info">
                             <p class="text-center">Review starrings</p>
-                            <p class="text-center">Average: ${averageStarring.get(Integer.parseInt(i))}</p>
+                            <c:if test="${averageStarring.size() > i}">
+                                <p class="text-center">Average: ${averageStarring.get(Integer.parseInt(i))}</p>
+                            </c:if>
+                            <c:if test="${averageStarring.size() <= i}">
+                                <p class="text-center">Average: 0</p>
+                            </c:if>
+
                         </div>
                     </div>
                     <div class="col-7">
@@ -66,7 +72,12 @@
                     <div class="col">
                         <div class="bg-dark border rounded border-info">
                             <p class="text-center">Sells</p>
-                            <p class="text-center">Total: ${sellsPerGame.get(Integer.parseInt(i))}</p>
+                            <c:if test="${sellsPerGame.size() > i}">
+                                <p class="text-center">Total: ${sellsPerGame.get(Integer.parseInt(i))}</p>
+                            </c:if>
+                            <c:if test="${sellsPerGame.size() < i}">
+                                <p class="text-center">Total: 0</p>
+                            </c:if>
                         </div>
                     </div>
                     <div class="col-7">
