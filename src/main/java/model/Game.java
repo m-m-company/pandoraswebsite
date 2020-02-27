@@ -155,6 +155,10 @@ public class Game {
         return false;
     }
 
+    public Integer getHoursPlayedOfIdUser(int id){
+        return DAOFactory.getInstance().makeHoursPlayedDAO().getHoursPlayedIdUserGame(id, this.id);
+    }
+
     public ArrayList<String> getTagsString() { //It's used in friendPage.jsp
         return DAOFactory.getInstance().makeTagDao().getTagsForGame(id);
     }
