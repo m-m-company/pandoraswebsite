@@ -1,3 +1,4 @@
+<%@ page import="java.util.ArrayList" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -53,13 +54,7 @@
                     <div class="col">
                         <div class="bg-dark border rounded border-info">
                             <p class="text-center">Review starrings</p>
-                            <c:if test="${averageStarring.size() > i}">
                                 <p class="text-center">Average: ${averageStarring.get(Integer.parseInt(i))}</p>
-                            </c:if>
-                            <c:if test="${averageStarring.size() <= i}">
-                                <p class="text-center">Average: 0</p>
-                            </c:if>
-
                         </div>
                     </div>
                     <div class="col-7">
@@ -72,12 +67,7 @@
                     <div class="col">
                         <div class="bg-dark border rounded border-info">
                             <p class="text-center">Sells</p>
-                            <c:if test="${sellsPerGame.size() > i}">
                                 <p class="text-center">Total: ${sellsPerGame.get(Integer.parseInt(i))}</p>
-                            </c:if>
-                            <c:if test="${sellsPerGame.size() < i}">
-                                <p class="text-center">Total: 0</p>
-                            </c:if>
                         </div>
                     </div>
                     <div class="col-7">
@@ -135,7 +125,7 @@
             data: {
                 labels: ${sellsKeys}[c],
                 datasets: [{
-                    label: 'Avg. starring',
+                    label: 'Sells',
                     backgroundColor: 'rgb(173, 216, 240)',
                     borderColor: 'rgb(255, 165, 0)',
                     data: ${sellsValues}[c]
@@ -152,7 +142,7 @@
             data: {
                 labels: ${pricesKeys}[c],
                 datasets: [{
-                    label: 'Avg. starring',
+                    label: 'Avg. price',
                     backgroundColor: 'rgb(173, 216, 240)',
                     borderColor: 'rgb(255, 165, 0)',
                     data: ${pricesValues}[c]
