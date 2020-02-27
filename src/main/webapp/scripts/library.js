@@ -1,3 +1,4 @@
+let alreadyDone = false;
 $(document).ready(function () {
     $("#gameDetails").hide();
     $("#addComment").click(function (event) {
@@ -31,7 +32,7 @@ function showGame(event) {
             $("#gameDetails").show();
             $("#title").text(game.name);
             $("#description").text(game.description);
-            $("#specs").text(game.description);
+            $("#specs").text(game.specifics);
             insertPreviews(game);
             insertRank(game);
             insertComments(game);
@@ -59,7 +60,7 @@ function insertPreviews(game) {
                 $("#slides").append(
                     "<div class=\"carousel-item size-div-preview "+active+"\">" +
                     "" +
-                    "<img class='w-100 h-50 d-block float-left size-div-preview' src='"+img+"'></img>" +
+                    "<img class='w-100 h-100 d-block float-left size-div-preview' src='"+img+"'></img>" +
                     "</div>"
                 )
             })
@@ -170,11 +171,12 @@ function populateComment(idAuthor, username, src, div, idReview) {
             else {
                 src.src = data[3];
             }
-            if (data[2] === "true") {
+            if (data[2] === "true" && !alreadyDone) {
                 $(div).append("<button type=\"button\" class=\"btn btn-dark btn-sm fa fa-edit\" id='" + idReview + "' onclick='modifyComment(event)'>\n" +
                     "                                                </button>");
                 $(div).append("<button type=\"button\" class=\"btn btn-danger btn-sm fa fa-trash\" id='" + idReview + "' onclick='deleteComment(event)'>\n" +
-                    "                                                </button>")
+                    "                                                </button>");
+                alreadyDone = true;
             }
         },
         error: function () {
