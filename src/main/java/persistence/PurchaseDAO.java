@@ -89,7 +89,7 @@ public class PurchaseDAO {
     public Collection<? extends Integer> getSellsByIdUser(int id) {
         Connection connection = DbAccess.getConnection();
         ArrayList<Integer> sells = new ArrayList<>();
-        String query = "SELECT COUNT(*), game.id FROM purchase, game WHERE id_game = game.id AND game.id_developer = ? GROUP BY game.id ORDER BY game.id";
+        String query = "SELECT COUNT(purchase.id), game.id FROM game LEFT JOIN purchase  ON purchase.id_game = game.id WHERE game.id_developer = ? GROUP BY game.id ORDER BY game.id";
         try {
             statement = connection.prepareStatement(query);
             statement.setInt(1, id);

@@ -41,15 +41,21 @@ public class ReviewDAO {
         ArrayList<Integer> averages = new ArrayList<>();
         Connection connection = DbAccess.getConnection();
         String query =
-                "SELECT AVG(reviews.stars), reviews.id_game FROM reviews, game " +
-                "WHERE id_developer = ? AND id_game = game.id " +
-                "GROUP BY reviews.id_game ORDER BY reviews.id_game";
+                "SELECT AVG(reviews.stars), game.id FROM game LEFT JOIN   reviews  on game.id = reviews.id_game" +
+                        "                WHERE id_developer = ?" +
+                        "                GROUP BY game.id ORDER BY game.id";
         try {
             statement = connection.prepareStatement(query);
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()){
-                averages.add(resultSet.getInt(1));
+                Integer k = 0;
+                try {
+                    k = resultSet.getInt(1);
+                }catch (Exception e){
+                    k = 0;
+                }
+                averages.add(k);
             }
             return averages;
         } catch (SQLException e) {

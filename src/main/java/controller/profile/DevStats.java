@@ -24,6 +24,7 @@ public class DevStats extends HttpServlet {
         averages.add(null);
         averages.add(null);
         averages.addAll(DAOFactory.getInstance().makeReviewDAO().getAvgReviewsByIdUser(loggedUser.getId()));
+        this.log("AVERAGES STARRING" + averages);
         return averages;
     }
 
@@ -32,6 +33,7 @@ public class DevStats extends HttpServlet {
         sells.add(null);
         sells.add(null);
         sells.addAll(DAOFactory.getInstance().makePurchaseDAO().getSellsByIdUser(loggedUser.getId()));
+        this.log("SELLS" + sells);
         return sells;
     }
 
