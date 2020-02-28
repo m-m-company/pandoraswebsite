@@ -207,7 +207,7 @@ function insertRank(id) {
                 $("#fourthRow").show();
                 data.map((rank, index) => {
                     $("#ranks").append("<tr>\n" +
-                        "                   <td class=\"td-color\">" + index + "</td>\n" +
+                        "                   <td class=\"td-color\">" + index+1 + "</td>\n" +
                         "                   <td class=\"td-color\">" + rank.username + "</td>\n" +
                         "                   <td class=\"td-color\">" + rank.value + "</td>\n" +
                         "               </tr>")
