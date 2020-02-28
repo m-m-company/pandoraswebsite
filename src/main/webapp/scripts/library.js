@@ -1,5 +1,3 @@
-let alreadyDone = false;
-
 function resetCommentList(){
     $("#commentList").empty().append("<li class=\"list-group-item\" style=\"margin-bottom:6px;\">\n" +
         "                            <div class=\"media\">\n" +
@@ -209,7 +207,7 @@ function populateComment(idAuthor, username, src, div, idReview) {
             } else {
                 src.src = data[3];
             }
-            if (data[2] === "true" && !alreadyDone) {
+            if (data[2] === "true") {
                 $(div).append("<button type=\"button\" class=\"btn btn-dark btn-sm fa fa-edit\" id='" + idReview + "' onclick='modifyComment(event)'>\n" +
                     "                                                </button>");
                 $(div).append("<button type=\"button\" class=\"btn btn-danger btn-sm fa fa-trash\" id='" + idReview + "' onclick='deleteComment(event)'>\n" +
@@ -225,7 +223,6 @@ function populateComment(idAuthor, username, src, div, idReview) {
 
 function modifyComment(event) {
     let p = event.target.parentNode.children[2];
-    console.log(p);
     let text = $(p).html();
     $(p).replaceWith("<input type='text' placeholder='Insert your comment' value='" + text + "'>");
     event.target.onclick = updateComment;
@@ -241,7 +238,8 @@ function updateComment(event) {
             content: $(event.target.parentNode.children[2]).val()
         },
         success: function () {
-            window.location.reload()
+            resetCommentList();
+            insertComments(sessionStorage.getItem("gameID"));
         },
         error: function () {
             showAlertModal("Comment error", "Impossible to modify the preview, retry.", ICONS.alert);
